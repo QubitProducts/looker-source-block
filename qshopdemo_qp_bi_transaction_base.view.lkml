@@ -1,4 +1,4 @@
-#File uploaded: Mon Apr 09 11:03:11 GMT 2018
+#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_transaction_base {
   #version 1.1
   sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_transaction] ;;
