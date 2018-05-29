@@ -1,8 +1,6 @@
 ### **Who is this Looker Source Block for?**
 
-At Qubit we’re all about personalization.  Delivering persuasive techniques (such as scarcity, social proof, urgency and abandonment recovery) and creating useful customer segments requires massive amounts of data - and to be as nuanced and persuasive as possible that data needs to be more than just conversions; you need to looking at every possible event and interaction for site visitors across all your digital channels.
-
-We collect and ingest highly granular, low-latency behavioral, quantitative and qualitative data to make this possible, making that data available to you through Qubit Data Exchange Live Tap. Live Tap provides full access to all the data in your Qubit data layer through a cloud-based high performance query platform, which combines high speed, low latency, data exploration, and analysis. LiveTap is powered by Google BigQuery, which delivers unparalleled scale and performance for even the most taxing queries on your largest dataset.
+Qubit provides Personalization software to implement individualization at scale. We collect and ingest highly granular, low-latency behavioral, quantitative and qualitative data to make this possible, making that data available to customers through Qubit Data Exchange Live Tap. Live Tap provides full access to all the data in your Qubit data layer through a cloud-based high performance query platform, which combines high speed, low latency, data exploration, and analysis and is powered by Google BigQuery, opening up this data source to most popular BI and data integration tools.
 
 Why Use the Looker Qubit Source Block?
 
