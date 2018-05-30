@@ -95,14 +95,10 @@ If you are a Qubit partner and plan to use your own instance of Looker for conne
 4. Under the repository name, click Clone or download.
 5. In the Clone with HTTPs section, click  to copy the clone URL for the repository.
 6. Open the Mac OS X or Linux terminal application (or use PuTTy if on Microsoft Windows)
-7. At the terminal type 
+7. At the terminal type "git clone" and then paste the URL you copied in Step 5. It will look like this, with your GitHub username instead of YOUR-USERNAME:
 
-```git clone
+```git clone https://github.com/YOUR-USERNAME/QubitProducts/looker-source-block
 ```
-
-and then paste the URL you copied in Step 5. It will look like this, with your GitHub username instead of YOUR-USERNAME:
-
-git clone https://github.com/YOUR-USERNAME/QubitProducts/looker-source-block
 
 For instructions on how to sync any upstream changes Qubit makes to the Qubit Looker source block see the Github documentation on * [forking a repo](https://help.github.com/articles/fork-a-repo/ "Forking a Repo")
 
