@@ -96,18 +96,21 @@ git clone git://github.com/QubitProducts/looker-source-block.git
 
 find . -type f -print0 | xargs -0 perl -pi -e 's/studio/TRACKING_ID/g'
 find . -type f -print0 | xargs -0 perl -pi -e 's/37299/PROJECT_ID/g'
-for f in *.l*; do mv $f ${f/TRACKING_ID/qshopdemo}; done```
+for f in *.l*; do mv $f ${f/TRACKING_ID/qshopdemo}; done
+```
 
 for example, for the tracking ID "mydemoshop" and client project ID "30999" you would run the commands:
 
 ```find . -type f -print0 | xargs -0 perl -pi -e 's/studio/mydemoshop/g'
 find . -type f -print0 | xargs -0 perl -pi -e 's/37299/30999/g'
-for f in *.l*; do mv $f ${f/TRACKING_ID/mydemoshop}; done```
+for f in *.l*; do mv $f ${f/TRACKING_ID/mydemoshop}; done
+```
 
 Finally, commit your changes back to the git repo.
 
 ```git add .
-git commit -m "added our tracking ID and project ID"```
+git commit -m "added our tracking ID and project ID"
+```
 
 ### **Extending the Qubit Source Block With Additional Fields, Views etc**
 
