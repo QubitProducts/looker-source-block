@@ -106,12 +106,14 @@ To configure the connection from your Looker instance to Qubit Live Tap on Googl
 * **Project Name** - Qubit Project Name
 * **Dataset** - Qubit Dataset  (the connection will work for all datasets in the project, not just the one specified) 
 * **OAuth Credentials Email** - Service Account Name
-* **OAuth Credentials JSON key** - upload P12 Key File
+* **OAuth Credentials JSON/P12 File** - upload JSON key file
 * **Max Billing Tier** - 1 
 
 Select **Test These Settings** to ensure the setup works, then press **Save**
 
-The remaining connection settings can be left in their default state.  
+The remaining connection settings can be left in their default state, see the screenshot below for an example connection setting.
+
+
 
 
 
