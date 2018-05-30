@@ -79,7 +79,7 @@ In addition, three industry-specific product business views are provided for eCo
 
 * Product Interaction and Sales (for e-Commerce Industry customers, included in this Looker source block and as shown in the diagram below)
 
-![image alt text](image_1.png)
+![Live Tap Retail Datamodel](/images/retail_livetap_datamodel.jpeg)
 
 * Package Interaction and Sales (for Travel Industry customers, available from your Qubit representative)
 
