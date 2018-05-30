@@ -99,6 +99,7 @@ If you are a Qubit partner and plan to use your own instance of Looker for conne
 
 ```git clone
 ```
+
 and then paste the URL you copied in Step 5. It will look like this, with your GitHub username instead of YOUR-USERNAME:
 
 git clone https://github.com/YOUR-USERNAME/QubitProducts/looker-source-block
@@ -117,7 +118,7 @@ for example, for the tracking ID "mydemoshop" and client project ID "30999" you 
 ```find . -type f -print0 | xargs -0 perl -pi -e 's/studio/mydemoshop/g'
 find . -type f -print0 | xargs -0 perl -pi -e 's/37299/30999/g'
 for f in *.l*; do mv $f ${f/TRACKING_ID/mydemoshop}; done
-```
+``` 
 
 Finally, commit your changes back to the git repo.
 
@@ -127,7 +128,7 @@ git commit -m "added our tracking ID and project ID"
 
 ### **Extending the Qubit Source Block With Additional Fields, Views etc**
 
-All of the example Looker reports and business models, along with the underlying Live Tap Business Views we provide to customers, as getting-started educational material, is designed to be amended, extended, or customized by customers or Qubit partners. This can be done on the understanding that only the QProtocol event tables we ingest data into are formally maintained and supported.
+All of the example Looker reports and business models, along with the underlying Live Tap Business Views we provide to cus tomers, as getting-started educational material, is designed to be amended, extended, or customized by customers or Qubit partners. This can be done on the understanding that only the QProtocol event tables we ingest data into are formally maintained and supported.
 
 Qubit will support customers customizing or extending our supplied business views and Looker content on a 'best-endeavours' basis if the guidelines in this section are followed. It is also important to keep regressions that might be introduced by customized content or by any subsequent changes or upgrades we make to the base example content we ship for Live Tap, to an absolute minimum, .
 
