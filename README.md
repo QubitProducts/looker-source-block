@@ -113,10 +113,7 @@ Select **Test These Settings** to ensure the setup works, then press **Save**
 
 The remaining connection settings can be left in their default state, see the screenshot below for an example connection setting.
 
-
-
-
-
+![Connection to Live Tap](https://github.com/QubitProducts/looker-source-block/blob/master/connection_details.png)
 
 ### **Customizing the Qubit Source Block for Client-Specific Live Tap datasets**
 
