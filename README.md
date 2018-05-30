@@ -87,7 +87,16 @@ In addition, three industry-specific product business views are provided for eCo
 
 When brought together, these core views plus any industry-specific ones make up the Industry Business Models described in the next section.
 
-### **Creating a Looker Connection to your Qubit Live Tap dataset**
+### **Using this Repo with your Own Looker Instance, and Qubit-Hosted Live Tap Data**
+
+If you are a Qubit retail vertical customer hosting your own instance of Looker and wish to use this repo to connect to your Live Tap dataset hosted by Qubit, the steps to do this are as follows:
+
+1. Set up the connection to Google BigQuery in Looker for your hosted Live Tap dataset
+2. Fork this GitHub Repo
+3. Clone the forked repo to your desktop and replace the demo project details with your organization's, then commit changes
+4. Set up and configure your Looker project to use this forked, customized Looker repo
+
+## **1. Creating a Looker Connection to your Qubit Live Tap dataset**
 
 To connect your Looker instance to your Qubit Live Tap dataset you'll need admin rights on your Looker instance, and you will need the following information that can be provided by your Qubit representative 
 
@@ -115,25 +124,24 @@ The remaining connection settings can be left in their default state, see the sc
 
 ![Connection to Live Tap](https://github.com/QubitProducts/looker-source-block/blob/master/connection_details.png)
 
-### **Customizing the Qubit Source Block for Client-Specific Live Tap datasets**
+## **2. Forking the Qubit Source Block**
 
-If you are a Qubit partner and plan to use your own instance of Looker for connect to Qubit's QShopdemo training dataset the repo can be used "as is". If you are a Qubit retail vertical customer hosting your own instance of Looker and wish to use this repo to connect to your Live Tap dataset, fork this repo (so that you can sync any updates we make to it into your version) like this:
+Now you can fork the Qubit demo Looker repo so you have a copy in your own private Github repository.
 
 1. On GitHub, navigate to the QubitProducts/looker-source-block repository.
-2. In the top-right corner of the page, click Fork.
+2. In the top-right corner of the page, click **Fork**.
 3. On GitHub, navigate to your fork of the QubitProducts/looker-source-block repository.
-4. Under the repository name, click Clone or download.
-5. In the Clone with HTTPs section, click  to copy the clone URL for the repository.
+4. Under the repository name, click **Clone or download**.
+5. In the **Clone with HTTPs** section, click  to copy the clone URL for the repository.
 6. Open the Mac OS X or Linux terminal application (or use PuTTy if on Microsoft Windows)
 7. At the terminal type "git clone" and then paste the URL you copied in Step 5. It will look like this, with your GitHub username instead of YOUR-USERNAME:
 
 ```
 git clone https://github.com/YOUR-USERNAME/QubitProducts/looker-source-block
 ```
+## **3. Customizing the Qubit Source Block with Client-Specific Live Tap datasets**
 
-For instructions on how to sync any upstream changes Qubit makes to the Qubit Looker source block see the Github documentation on [forking a repo](https://help.github.com/articles/fork-a-repo/ "Forking a Repo")
-
-8. Now at the terminal run the following commands to replace all occurrences of our demo tracking ID and project ID in the repo LookML files with your own values:
+Now at the terminal run the following commands to replace all occurrences of our demo tracking ID and project ID in the repo LookML files with your own values:
 
 ```find . -type f -print0 | xargs -0 perl -pi -e 's/studio/TRACKING_ID/g'
 find . -type f -print0 | xargs -0 perl -pi -e 's/37299/PROJECT_ID/g'
@@ -146,12 +154,31 @@ for example, for the tracking ID "mydemoshop" and client project ID "30999" you 
 find . -type f -print0 | xargs -0 perl -pi -e 's/37299/30999/g'
 for f in *.l*; do mv $f ${f/TRACKING_ID/mydemoshop}; done
 ``` 
-
-Finally, commit your changes back to the git repo.
+Next, commit your changes back to the git repo.
 
 ```git add .
 git commit -m "added our tracking ID and project ID"
 ```
+## **4. Customizing the Qubit Source Block with Client-Specific Live Tap datasets**
+
+Before completing this final step, ensure that you have forked the GitHub repo and that you have repo URL.  You will also need appropriate permissions on Looker to set up projects.
+
+1. Log into Looker as an admin user
+2. Select **Develop** and then **Manage LookML Projects**
+3. Scroll to the bottom of the page and select **New LookML Project**
+4. Type in a name for your project. We recommend using the same project same name as the GitHub repo holding your files
+5. Select **Generate Model & Views and Save**. You’ll then be taken to the project page
+6. Select **Configure Git**. Type-in the URL of your Github repo, then select **Continue**
+7. Looker will now issue a deploy key.  Select the full content content of the key and copy it to your clipboard 
+8. Navigate to your repo in GitHub and select **Settings**
+9. In the page that's then displayed, select **Deploy Keys** and **Add Deploy Key** 
+10. Enter a title for the deploy key and paste the deploy key given by Looker
+11. When prompted, Select **Allow write access** and **Add key**
+12. Return to  Looker and on the page showing the deploy key, select **Continue Setup**
+13. Looker will now attempt to sync with GitHub repo’
+14. Select **Sync Development Mode**
+
+If successful, the response will be **Up to date with Production**.  This means that  all permissioned users should be able to see the Live Tap model on your Looker instance.
 
 ### **Extending the Qubit Source Block With Additional Fields, views and uploaded datasets**
 
