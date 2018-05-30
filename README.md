@@ -24,7 +24,7 @@ Looker has two unique features that are essential for conducting analysis on dat
 
 The semantic model for Live Tap in Looker joins together all of the Live Tap Business Views and presents brands’ Qubit data as subject areas, measures and dimensions - so you can use the Looker point-and-click functionality in a frictionless analysis environment.
 
-![image alt text](image_0.png)
+![Qubit Retail Live Tap Data Model](/images/retail_livetap_datamodel)
 
 ### **Live Tap Data Structure and Schema**
 
