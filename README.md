@@ -87,14 +87,27 @@ When brought together, these core views plus any industry-specific ones make up 
 
 ### **Customizing the Qubit Source Block for Client-Specific Live Tap Schemas**
 
-If you are a Qubit partner and plan to use your own instance of Looker for connect to Qubit's QShopdemo training dataset the repo can be used "as is". If you are a Qubit retail vertical customer hosting your own instance of Looker and wish to use this repo to connect to your Live Tap dataset, run the following commands from the Mac OS X or Linux terminal clone the repo and then search-and-replace all occurences of the demo tracking ID and project ID in the repo with the ones for your client project and tracking ID:
+If you are a Qubit partner and plan to use your own instance of Looker for connect to Qubit's QShopdemo training dataset the repo can be used "as is". If you are a Qubit retail vertical customer hosting your own instance of Looker and wish to use this repo to connect to your Live Tap dataset, fork this repo (so that you can sync any updates we make to it into your version) like this:
 
-```sudo apt-get install git # for Debian/Ubuntu users
-brew install git # for Mac OS X users with Homebrew installed
+1. On GitHub, navigate to the QubitProducts/looker-source-block repository.
+2. In the top-right corner of the page, click Fork.
+3. On GitHub, navigate to your fork of the QubitProducts/looker-source-block repository.
+4. Under the repository name, click Clone or download.
+5. In the Clone with HTTPs section, click  to copy the clone URL for the repository.
+6. Open the Mac OS X or Linux terminal application (or use PuTTy if on Microsoft Windows)
+7. At the terminal type 
 
-git clone git://github.com/QubitProducts/looker-source-block.git
+```git clone
+```
+and then paste the URL you copied in Step 5. It will look like this, with your GitHub username instead of YOUR-USERNAME:
 
-find . -type f -print0 | xargs -0 perl -pi -e 's/studio/TRACKING_ID/g'
+git clone https://github.com/YOUR-USERNAME/QubitProducts/looker-source-block
+
+For instructions on how to sync any upstream changes Qubit makes to the Qubit Looker source block see the Github documentation on * [forking a repo](https://help.github.com/articles/fork-a-repo/ "Forking a Repo")
+
+8. Now at the terminal run the following commands to replace all occurrences of our demo tracking ID and project ID in the repo LookML files with your own values:
+
+```find . -type f -print0 | xargs -0 perl -pi -e 's/studio/TRACKING_ID/g'
 find . -type f -print0 | xargs -0 perl -pi -e 's/37299/PROJECT_ID/g'
 for f in *.l*; do mv $f ${f/TRACKING_ID/qshopdemo}; done
 ```
