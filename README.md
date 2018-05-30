@@ -87,3 +87,43 @@ When brought together, these core views plus any industry-specific ones make up 
 
 ### **Customizing the Qubit Source Block for Client-Specific Live Tap Schemas**
 
+If you are a Qubit partner and plan to use your own instance of Looker for connect to Qubit's QShopdemo training dataset the repo can be used "as is". If you are a Qubit retail vertical customer hosting your own instance of Looker and wish to use this repo to connect to your Live Tap dataset, run the following commands from the Mac OS X or Linux terminal clone the repo and then search-and-replace all occurences of the demo tracking ID and project ID in the repo with the ones for your client project and tracking ID:
+
+```sudo apt-get install git # for Debian/Ubuntu users
+brew install git # for Mac OS X users with Homebrew installed
+
+git clone git://github.com/QubitProducts/looker-source-block.git
+
+find . -type f -print0 | xargs -0 perl -pi -e 's/studio/TRACKING_ID/g'
+find . -type f -print0 | xargs -0 perl -pi -e 's/37299/PROJECT_ID/g'
+for f in *.l*; do mv $f ${f/TRACKING_ID/qshopdemo}; done```
+
+for example, for the tracking ID "mydemoshop" and client project ID "30999" you would run the commands:
+
+```find . -type f -print0 | xargs -0 perl -pi -e 's/studio/mydemoshop/g'
+find . -type f -print0 | xargs -0 perl -pi -e 's/37299/30999/g'
+for f in *.l*; do mv $f ${f/TRACKING_ID/mydemoshop}; done```
+
+Finally, commit your changes back to the git repo.
+
+```git add .
+git commit -m "added our tracking ID and project ID"```
+
+### **Extending the Qubit Source Block With Additional Fields, Views etc**
+
+All of the example Looker reports and business models, along with the underlying Live Tap Business Views we provide to customers, as getting-started educational material, is designed to be amended, extended, or customized by customers or Qubit partners. This can be done on the understanding that only the QProtocol event tables we ingest data into are formally maintained and supported.
+
+Qubit will support customers customizing or extending our supplied business views and Looker content on a 'best-endeavours' basis if the guidelines in this section are followed. It is also important to keep regressions that might be introduced by customized content or by any subsequent changes or upgrades we make to the base example content we ship for Live Tap, to an absolute minimum, .
+
+As part of model release cycle, Qubit may modify the contents of this example Looker block or extend it with new fields, views or LookML dashboards. If you plan to clone this repo again in the future and incorporate those changes into your Looker repo you must ensure that your customizations are saved in the files ending with v01, or in a new file.
+
+If you make changes to _base files and then incorporate any such repo updates into your model they will be lost in the next release or update by Qubit. We also recommend that you do not suffix your custom files with _base.
+
+The following customization use cases are listed in order of complexity, and are intended to be followed by customers or partners looking to customize our example content; each link goes through to the relevant section in our docs site.
+
+* [Adding a new column to an example dashboard](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing#adding-a-new-column-to-an-example-dashboard "Adding a new column to an example dashboard")
+* [Adding a new derived field to the Live Tap Looker Model](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing#adding-a-new-derived-field-to-the-live-tap-looker-model "Adding a new derived field to the Live Tap Looker Model")
+* [Adding a new derived field to a business view and then to Live Tap Looker model](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing#adding-a-new-derived-field-to-a-business-view-and-then-to-live-tap-looker-model "Adding a new derived field to a business view and then to Live Tap Looker model")
+* [Adding an uploaded dataset as a new subject area to Live Tap Looker model](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing#adding-an-uploaded-dataset-as-a-new-subject-area-to-live-tap-looker-model "Adding an uploaded dataset as a new subject area to Live Tap Looker model")
+* [Adding uploaded dataset columns to the Live Tap Looker Model](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing#adding-uploaded-dataset-columns-to-the-live-tap-looker-model "Adding uploaded dataset columns to the Live Tap Looker Model")
+
