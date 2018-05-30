@@ -1,4 +1,4 @@
-### **Who is this Looker Source Block for?**
+# **Who is this Looker Source Block for?**
 
 Qubit provides Personalization software to implement individualization at scale. We collect and ingest highly granular, low-latency behavioral, quantitative and qualitative data to make this possible, making that data available to customers through Qubit Data Exchange Live Tap. Live Tap provides full access to all the data in your Qubit data layer through a cloud-based high performance query platform, which combines high speed, low latency, data exploration, and analysis and is powered by Google BigQuery, opening up this data source to most popular BI and data integration tools.
 
@@ -26,7 +26,7 @@ The semantic model for Live Tap in Looker joins together all of the Live Tap Bus
 
 ![Live Tap on Looker](https://github.com/QubitProducts/looker-source-block/blob/master/qubit_livetap_looker_screenshot.png)
 
-### **Live Tap Data Structure and Schema**
+# **Live Tap Data Structure and Schema**
 
 Looker’s Qubit Block is designed to work with the Qubit Live Tap retail schema; source blocks for gaming and travel industry customers can be obtained from your Qubit representative.
 
@@ -87,7 +87,7 @@ In addition, three industry-specific product business views are provided for eCo
 
 When brought together, these core views plus any industry-specific ones make up the Industry Business Models described in the next section.
 
-### **Using this Repo with your Own Looker Instance, and Qubit-Hosted Live Tap Data**
+# **Using this Repo with your Own Looker Instance, and Qubit-Hosted Live Tap Data**
 
 If you are a Qubit retail vertical customer hosting your own instance of Looker and wish to use this repo to connect to your Live Tap dataset hosted by Qubit, the steps to do this are as follows:
 
@@ -159,7 +159,7 @@ Next, commit your changes back to the git repo.
 ```git add .
 git commit -m "added our tracking ID and project ID"
 ```
-## **4. Customizing the Qubit Source Block with Client-Specific Live Tap datasets**
+## **4. Creating the Looker Project**
 
 Before completing this final step, ensure that you have forked the GitHub repo and that you have repo URL.  You will also need appropriate permissions on Looker to set up projects.
 
@@ -180,7 +180,7 @@ Before completing this final step, ensure that you have forked the GitHub repo a
 
 If successful, the response will be **Up to date with Production**.  This means that  all permissioned users should be able to see the Live Tap model on your Looker instance.
 
-### **Extending the Qubit Source Block With Additional Fields, views and uploaded datasets**
+# **Extending the Qubit Source Block With Additional Fields, views and uploaded datasets**
 
 All of the example Looker reports and business models, along with the underlying Live Tap Business Views we provide to cus tomers, as getting-started educational material, is designed to be amended, extended, or customized by customers or Qubit partners. This can be done on the understanding that only the QProtocol event tables we ingest data into are formally maintained and supported.
 
@@ -198,7 +198,7 @@ The following customization use cases are listed in order of complexity, and are
 * [Adding an uploaded dataset as a new subject area to Live Tap Looker model](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing#adding-an-uploaded-dataset-as-a-new-subject-area-to-live-tap-looker-model "Adding an uploaded dataset as a new subject area to Live Tap Looker model")
 * [Adding uploaded dataset columns to the Live Tap Looker Model](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing#adding-uploaded-dataset-columns-to-the-live-tap-looker-model "Adding uploaded dataset columns to the Live Tap Looker Model")
 
-### **What if I find an error? Suggestions for improvements?**
+## **What if I find an error? Suggestions for improvements?**
 
 Great! Blocks were designed for continuous improvement through the help of the entire Looker community, and we'd love your input. To log an error or improvement recommentation, simply create a "New Issue" in the corresponding Github repo for this Block. Please be as detailed as possible in your explanation, and we'll address it as quick as we can.
 
