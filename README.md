@@ -87,7 +87,36 @@ In addition, three industry-specific product business views are provided for eCo
 
 When brought together, these core views plus any industry-specific ones make up the Industry Business Models described in the next section.
 
-### **Customizing the Qubit Source Block for Client-Specific Live Tap Schemas**
+### **Creating a Looker Connection to your Qubit Live Tap dataset**
+
+To connect your Looker instance to your Qubit Live Tap dataset you'll need admin rights on your Looker instance, and you will need the following information that can be provided by your Qubit representative 
+
+* **Looker Connection Name** : e.g. client-connection-100000
+* **Qubit Project Name** :   e.g. qubit-client-10000
+* **Qubit Tracking ID** : e.g. the name of the BigQuery dataset you wish to analyze in Looker
+* **Service Account Name** : e.g. email address for a service account. This will start with qubit-client-bi@qubit-client
+* **JSON key file** : JSON file containing authentication details. 
+
+Your JSON key file can also be downloaded from the Qubit app from the Settings>Auth Keys menu.
+
+To configure the connection from your Looker instance to Qubit Live Tap on Google BigQuery go to the Admin panel in Looker, then select **Connections** and then **New Connection**, then enter the following details:
+
+* **Name** - Looker Connection Name 
+* **Dialect** - Google BigQuery (make sure you do not pick Standard SQL)
+* **Project Name** - Qubit Project Name
+* **Dataset** - Qubit Dataset  (the connection will work for all datasets in the project, not just the one specified) 
+* **OAuth Credentials Email** - Service Account Name
+* **OAuth Credentials JSON key** - upload P12 Key File
+* **Max Billing Tier** - 1 
+
+Select **Test These Settings** to ensure the setup works, then press **Save**
+
+The remaining connection settings can be left in their default state.  
+
+
+
+
+### **Customizing the Qubit Source Block for Client-Specific Live Tap datasets**
 
 If you are a Qubit partner and plan to use your own instance of Looker for connect to Qubit's QShopdemo training dataset the repo can be used "as is". If you are a Qubit retail vertical customer hosting your own instance of Looker and wish to use this repo to connect to your Live Tap dataset, fork this repo (so that you can sync any updates we make to it into your version) like this:
 
