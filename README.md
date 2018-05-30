@@ -34,10 +34,12 @@ Business Views are a set of BigQuery SQL views designed for use with Live Tap th
 
 * Removing columns and tables from the model that aren’t relevant for reporting and analysis work, for example by excluding from the qp_bi_view business view the following ecViewevent table columns that are either not relevant for reporting, or are not usually populated:
 
+```
 meta_* fields e.g. meta_batchTs
 context_* e.g. context_latestViewTs, context_latestSessionTs
 store_address*
 user_address*
+```
 
 * Combining data items from multiple underlying event tables into single views for segments, views, experiences, and other reporting entities, for example by creating the qp_bi_productview that combines together columns from the ecProduct, ecBasketItem, and ecBasketItemTransaction event tables
 
