@@ -87,7 +87,7 @@ In addition, three industry-specific product business views are provided for eCo
 
 When brought together, these core views plus any industry-specific ones make up the Industry Business Models described in the next section.
 
-# **Using this Repo with your Own Looker Instance, and Qubit-Hosted Live Tap Data**
+# **Using this Repo with your Own Looker Instance**
 
 If you are a Qubit retail vertical customer hosting your own instance of Looker and wish to use this repo to connect to your Live Tap dataset hosted by Qubit, the steps to do this are as follows:
 
@@ -107,6 +107,11 @@ To connect your Looker instance to your Qubit Live Tap dataset you'll need admin
 * **JSON key file** : JSON file containing authentication details. 
 
 Your JSON key file can also be downloaded from the Qubit app from the Settings>Auth Keys menu.
+
+This qubit-cs-bi service account must be permissioned correctly for the BigQuery project your Live Tap dataset is hosted in. 
+* To client project as **Project Viewer** (IAM)
+* As **Writer** to qubit_cs_bi_cache dataset in your BigQuery project
+* As **Viewer** to your Live Tap dataset (because real-time queries use decorators)
 
 To configure the connection from your Looker instance to Qubit Live Tap on Google BigQuery go to the Admin panel in Looker, then select **Connections** and then **New Connection**, then enter the following details:
 
