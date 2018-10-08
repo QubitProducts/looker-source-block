@@ -116,7 +116,7 @@ This qubit-cs-bi service account must be permissioned correctly for the BigQuery
 To configure the connection from your Looker instance to Qubit Live Tap on Google BigQuery go to the Admin panel in Looker, then select **Connections** and then **New Connection**, then enter the following details:
 
 * **Name** - Looker Connection Name 
-* **Dialect** - Google BigQuery (make sure you do not pick Standard SQL)
+* **Dialect** - Google BigQuery (Standard SQL)
 * **Project Name** - Qubit Project Name
 * **Dataset** - Qubit Dataset  (the connection will work for all datasets in the project, not just the one specified) 
 * **OAuth Credentials Email** - Service Account Name
@@ -125,9 +125,7 @@ To configure the connection from your Looker instance to Qubit Live Tap on Googl
 
 Select **Test These Settings** to ensure the setup works, then press **Save**
 
-The remaining connection settings can be left in their default state, see the screenshot below for an example connection setting.
-
-![Connection to Live Tap](https://github.com/QubitProducts/looker-source-block/blob/master/connection_details.png)
+The remaining connection settings can be left in their default state.
 
 ## **2. Forking the Qubit Source Block**
 
