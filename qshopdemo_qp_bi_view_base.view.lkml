@@ -1,9 +1,7 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_view_base {
 
  #version 1.1
- sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_view] ;;
-
+ sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_view` ;;
   dimension: view_id {
     type: string
     sql: ${TABLE}.view_id ;;
@@ -32,7 +30,7 @@ view: qshopdemo_qp_bi_view_base {
   }
 
   dimension: record_received_date {
-    sql: TIMESTAMP(${TABLE}.meta_recordDate) ;;
+    sql: CAST(${TABLE}.meta_recordDate as TIMESTAMP) ;;
     group_label: "View Meta Data"
     type: date
     description: "Date of view (in the timezone configured for the tracking ID, format yyyy-MM-dd). QP fields: meta_recordDate"
@@ -43,7 +41,7 @@ view: qshopdemo_qp_bi_view_base {
     type: number
     sql: ${TABLE}.context_entranceNumber ;;
     label: "Entrance Number"
-    group_label: "View Meta Data"    
+    group_label: "View Meta Data"
     description: "Entrance number of the visitor, in a lifetime. QP fields: context_entranceNumber"
   }
 
@@ -142,7 +140,7 @@ view: qshopdemo_qp_bi_view_base {
     group_label: "Visitor"
     description: "Number of conversions by the visitor up to the current view. QP fields: context_conversionNumber"
   }
-  
+
   dimension: returning_purchaser_yesno {
     type: string
     sql: IF(${TABLE}.context_conversionNumber IS NOT NULL, IF(${TABLE}.context_conversionNumber > 0, "yes", "no" ), NULL);;
@@ -275,7 +273,7 @@ view: qshopdemo_qp_bi_view_base {
 
  dimension: visitor_first_entry_date {
     type: date
-    sql: TIMESTAMP(DATE(${TABLE}.visitor_first_entry_date)) ;;
+    sql: ${TABLE}.visitor_first_entry_date ;;
     group_label: "Visitor"
     description: "Date at which a visitor had their first page view. QP fields: meta_recordDate, context_id"
   }
@@ -283,14 +281,14 @@ view: qshopdemo_qp_bi_view_base {
   dimension: visitor_first_entry_week {
     label: "Visitor First Entry Week"
     type: date_week
-    sql: DATE(${TABLE}.visitor_first_entry_date) ;;
+    sql: ${TABLE}.visitor_first_entry_date ;;
     group_label: "Visitor"
     description: "Week of year at which a visitor had their first page view. QP fields: meta_recordDate, context_id"
   }
 
   dimension: weeks_since_first_entry {
     type: number
-    sql: ROUND(ABS(DATEDIFF(MSEC_TO_TIMESTAMP(${TABLE}.meta_serverTs), TIMESTAMP((DATE(${qshopdemo_qp_bi_view_v01.visitor_first_entry_date} ))))) / 7, 0) ;;
+    sql: DATE_DIFF(CAST(${TABLE}.meta_serverTs AS DATE), CAST(TIMESTAMP(${qshopdemo_qp_bi_view_v01.visitor_first_entry_date}) AS DATE),WEEK) ;;
     group_label: "View Meta Data"
     value_format_name: decimal_0
     description: "Number of weeks between the first view of a visitor and the current view. QP fields: meta_ts, meta_recordDate, context_id"
@@ -299,65 +297,65 @@ view: qshopdemo_qp_bi_view_base {
   measure: view_visitors {
     label: "Unique Visitors"
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.context_id, 1000000) ;;
-    description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. QP fields: context_id"
+    sql: COUNT(DISTINCT ${TABLE}.context_id) ;;
+    description: "Count of unique visitor_ids. QP fields: context_id"
   }
-  
+
   measure: view_visitors_daily {
     label: "Daily Visitors"
     type: number
-    sql: COUNT(DISTINCT CONCAT(${TABLE}.context_id, ${TABLE}.meta_recordDate), 1000000) ;;
-    description: "Count of unique combinations of a visitor_id and page view date. If above 1.000.000, the result is approximated. QP fields: context_id, meta_recordDate"
+    sql: COUNT(DISTINCT CONCAT(${TABLE}.context_id, cast(${TABLE}.meta_recordDate as STRING))) ;;
+    description: "Count of unique combinations of a visitor_id and page view date. QP fields: context_id, meta_recordDate"
   }
 
   measure: views {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.view_id, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.view_id) ;;
     label: "Views"
-    description: "Count of unique combinations of a visitor_id and a view_number. If above 1.000.000, the result is approximated. QP fields: context_id, context_viewNumber"
+    description: "Count of unique combinations of a visitor_id and a view_number. QP fields: context_id, context_viewNumber"
   }
 
   measure: session_bounce_rate {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.views_in_session = 1, ${session_id},  NULL), 1000000) / COUNT(DISTINCT ${session_id}, 1000000) ;;
+    sql: COUNT(DISTINCT IF(${TABLE}.views_in_session = 1, ${session_id},  NULL)) / COUNT(DISTINCT ${session_id}) ;;
     value_format_name: percent_2
-    description: "Share of sessions that consisted of one view in all sessions. For counting, when figures are above 1.000.000, the result is approximated. QP fields: context_sessionViewNumber, context_sessionNumber, context_id"
+    description: "Share of sessions that consisted of one view in all sessions. QP fields: context_sessionViewNumber, context_sessionNumber, context_id"
   }
 
   measure: entrance_bounce_rate {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.views_in_entrance = 1, ${entrance_id}, NULL ), 1000000) / COUNT(DISTINCT ${entrance_id}, 1000000) ;;
+    sql: COUNT(DISTINCT IF(${TABLE}.views_in_entrance = 1, ${entrance_id}, NULL )) / COUNT(DISTINCT ${entrance_id}) ;;
     value_format_name: percent_2
-    description: "Share of entrances that consisted of one view in all entrances. For counting, when figures are above 1.000.000, the result is approximated. QP fields: context_entranceViewNumber, context_entranceNumber, context_id"
+    description: "Share of entrances that consisted of one view in all entrances. QP fields: context_entranceViewNumber, context_entranceNumber, context_id"
   }
 
   measure: visitor_bounce_rate {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.total_visitor_views = 1, ${context_id}, NULL ), 1000000) / COUNT(DISTINCT ${context_id}, 1000000) ;;
+    sql: COUNT(DISTINCT IF(${TABLE}.total_visitor_views = 1, ${context_id}, NULL )) / COUNT(DISTINCT ${context_id}) ;;
     value_format_name: percent_2
-    description: "Share of visitors that saw only a single page view in all visitors. For counting, when figures are above 1.000.000, the result is approximated. QP fields: context_viewNumber, context_id"
+    description: "Share of visitors that saw only a single page view in all visitors.QP fields: context_viewNumber, context_id"
   }
-  
+
   measure: exit_rate {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.last_view_in_session IS TRUE, ${context_id}, NULL ), 1000000) / COUNT(DISTINCT ${context_id}, 1000000) ;;
+    sql: COUNT(DISTINCT IF(${TABLE}.last_view_in_session IS TRUE, ${context_id}, NULL )) / COUNT(DISTINCT ${context_id}) ;;
     value_format_name: percent_2
-    description: "Share of visitors that had a last page view in all visitors. For counting, when figures are above 1.000.000, the result is approximated. QP fields: context_sessionViewNumber, context_id, context_sessionNumber"
+    description: "Share of visitors that had a last page view in all visitors. QP fields: context_sessionViewNumber, context_id, context_sessionNumber"
   }
-  
+
   measure: entrance_exit_rate {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.last_view_in_entrance IS TRUE, ${context_id}, NULL ), 1000000) / COUNT(DISTINCT ${context_id}, 1000000) ;;
+    sql: COUNT(DISTINCT IF(${TABLE}.last_view_in_entrance IS TRUE, ${context_id}, NULL )) / COUNT(DISTINCT ${context_id}) ;;
     value_format_name: percent_2
-    description: "Share of visitors that had a last page view in entrance in all visitors. For counting, when figures are above 1.000.000, the result is approximated. QP fields: context_sessionViewNumber, context_id, context_sessionNumber"
+    description: "Share of visitors that had a last page view in entrance in all visitors. QP fields: context_sessionViewNumber, context_id, context_sessionNumber"
   }
 
   measure: visitor_return_rate {
     type: number
-    sql:  COUNT(DISTINCT IF(${TABLE}.new_vs_returning = "returning", ${TABLE}.context_id , NULL), 1000000) / COUNT(DISTINCT ${context_id}, 1000000) ;;
+    sql:  COUNT(DISTINCT IF(${TABLE}.new_vs_returning = "returning", ${TABLE}.context_id , NULL)) / COUNT(DISTINCT ${context_id}) ;;
     group_label: "Return Rate"
     value_format_name: percent_2
-    description: "Share of visitors considered as returning visitors in all visitors. For counting, when figures are above 1.000.000, the result is approximated. QP fields: context_sessionNymber, context_id"
+    description: "Share of visitors considered as returning visitors in all visitors.  QP fields: context_sessionNymber, context_id"
   }
 
 }
