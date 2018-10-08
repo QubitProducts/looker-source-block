@@ -1,20 +1,19 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_experience_z_meta_data_base {
  #the reason we have a `z` in name is because
   derived_table: {
-    
+
     sql:
     SELECT
-      STRING(experienceId) experienceId,
+      CAST(experienceId AS STRING) experienceId,
       DATE(MAX(experience_last_paused_at)) experience_last_paused_at,
       DATE(MIN(experience_first_published_at)) experience_first_published_at
     FROM (
       SELECT
         *,
         MIN(iteration_published_at) OVER (PARTITION BY experienceId) AS experience_first_published_at,
-        STRING(DATE(iteration_paused_at)) iteration_paused_at_date,
-        STRING(DATE(iteration_published_at)) iteration_published_at_date,
-        TIMESTAMP_TO_MSEC(TIMESTAMP(iteration_paused_at)) AS iteration_paused_at_unix_ts,
+        CAST(DATE(iteration_paused_at) AS STRING) iteration_paused_at_date,
+        CAST(DATE(iteration_published_at) AS STRING) iteration_published_at_date,
+        UNIX_MILLIS(iteration_paused_at) AS iteration_paused_at_unix_ts,
         MAX(iteration_paused_at) OVER (PARTITION BY experienceId) AS experience_last_paused_at
       FROM (
         SELECT
@@ -28,18 +27,18 @@ view: qshopdemo_qp_bi_experience_z_meta_data_base {
             MAX(experienceName) AS experienceName,
             MAX(variationName) AS variationName,
             MAX(iterationName) AS iterationName,
-            TIMESTAMP(MIN(CASE
-                  WHEN iterationUpdatedAt > COALESCE(iterationStartedAt, MSEC_TO_TIMESTAMP(0)) AND iterationPausedAt IS NULL THEN iterationUpdatedAt
-                  WHEN iterationPausedAt > COALESCE(iterationStartedAt, MSEC_TO_TIMESTAMP(0))
-                AND iterationPausedAt > COALESCE(iterationPublishedAt, MSEC_TO_TIMESTAMP(0))
-                AND iterationPausedAt > COALESCE(iterationResumedAt, MSEC_TO_TIMESTAMP(0)) THEN iterationPausedAt
-                  ELSE TIMESTAMP('2030-01-01 00:00:00 UTC') END)) AS iteration_paused_at,
+            MIN(CASE
+                  WHEN iterationUpdatedAt > COALESCE(iterationStartedAt, TIMESTAMP_MILLIS(0)) AND iterationPausedAt IS NULL THEN iterationUpdatedAt
+                  WHEN iterationPausedAt > COALESCE(iterationStartedAt, TIMESTAMP_MILLIS(0))
+                AND iterationPausedAt > COALESCE(iterationPublishedAt, TIMESTAMP_MILLIS(0))
+                AND iterationPausedAt > COALESCE(iterationResumedAt, TIMESTAMP_MILLIS(0)) THEN iterationPausedAt
+                  ELSE TIMESTAMP('2030-01-01 00:00:00 UTC') END) AS iteration_paused_at,
             MIN(iterationPublishedAt) AS iteration_published_at_first,
             MIN(iterationStartedAt) AS iteration_started_at,
             MIN(iterationCreatedAt) AS iteration_created_at,
             MIN(iterationUpdatedAt) AS iteration_upadted_at
           FROM
-            TABLE_QUERY([qubit-client-37403:qshopdemo],'REGEXP_MATCH(table_id, r"aux_experience_iteration_variation_v01$")')
+            `qubit-client-37403.qshopdemo__v2.aux_experience_iteration_variation_v01`
           GROUP BY
             1,
             2,
@@ -58,17 +57,17 @@ view: qshopdemo_qp_bi_experience_z_meta_data_base {
 
       dimension: experience_id {
         type: string
-        sql: STRING(${TABLE}.experienceId) ;;
+        sql: CAST(${TABLE}.experienceId AS STRING) ;;
         hidden: yes
       }
 
-      
+
       dimension: experience_name {
         type: string
         sql: ${TABLE}.experienceName ;;
         hidden: yes
       }
-      
+
       dimension: current_experience_status {
         view_label: "Experiences"
         type: string
@@ -95,4 +94,3 @@ view: qshopdemo_qp_bi_experience_z_meta_data_base {
        }
 
     }
-    
