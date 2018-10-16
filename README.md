@@ -27,7 +27,7 @@ Contact your Qubit customer success manager if you are unsure on the above, or i
 
 # Data Architecture
 
-This model covers the common set of metrics, subject areas used in the Qubit platform. 
+This model covers the common set of metrics & subject areas used in the Qubit platform. 
 
 You are welcome to extend this model following the guide below, ensuring you are able to merge future releases of this block into your Looker set-up.
 
@@ -129,22 +129,17 @@ Before completing this final step, ensure that you have forked the GitHub repo a
 
 If successful, the response will be **Up to date with Production**.  This means that  all permissioned users should be able to see the Live Tap model on your Looker instance.
 
-# Extending the Qubit Source Block with Additional Fields, Views and Uploaded Datasets
-
+# Extending this block with additional fields, views and datasets
 This block is provided to help you get started and is designed to be amended, extended, or customized by customers or Qubit partners. 
 
-Qubit may upgrade the contents of this block and extend it with new fields and views. In order to make incorporating these updates into your Looker instance, ensure any customizations are saved in the files ending with v01 (not the 'base'), or in a new file.
+You may wish to add an extra calculated column of data, or integrate datasets you have uploaded into the Qubit platform.
 
-If you make changes to _base_ files and then merge in updates into your model they will be lost.
+For more information on extending this block, see the [Live Tap documentation](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing).
 
-The following customization use cases are listed in order of complexity, and are intended to be followed by customers or partners looking to customize our example content; each link goes through to the relevant section in our docs site.
 
-* [Adding a new column to an example dashboard](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing#adding-a-new-column-to-an-example-dashboard "Adding a new column to an example dashboard")
-* [Adding a new derived field to the Live Tap Looker Model](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing#adding-a-new-derived-field-to-the-live-tap-looker-model "Adding a new derived field to the Live Tap Looker Model")
-* [Adding a new derived field to a business view and then to Live Tap Looker model](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing#adding-a-new-derived-field-to-a-business-view-and-then-to-live-tap-looker-model "Adding a new derived field to a business view and then to Live Tap Looker model")
-* [Adding an uploaded dataset as a new subject area to Live Tap Looker model](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing#adding-an-uploaded-dataset-as-a-new-subject-area-to-live-tap-looker-model "Adding an uploaded dataset as a new subject area to Live Tap Looker model")
-* [Adding uploaded dataset columns to the Live Tap Looker Model](https://docs.qubit.com/content/using-qubit/vcdx-live-tap-extending-customizing#adding-uploaded-dataset-columns-to-the-live-tap-looker-model "Adding uploaded dataset columns to the Live Tap Looker Model")
+## Be ready for future updates to this block
+Qubit may upgrade the contents of this block and extend it with new fields and views. In order to make incorporating these updates into your Looker instance easy, ensure any customizations are saved in the files ending with v01 (not the 'base'), or in a new file. If you make changes to _base_ files and then merge in updates into your model your changes will be lost.
+
 
 ## Help & feedback
-
 Blocks were designed for continuous improvement through the help of the entire Looker community, and we’d love your input. To log an error or recommendation, simply create an github issue. Please be as detailed as possible in your explanation, and we’ll address it as quick as we can.
