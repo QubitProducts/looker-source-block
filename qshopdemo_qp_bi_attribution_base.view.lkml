@@ -1,6 +1,6 @@
 view: qshopdemo_qp_bi_attribution_base {
 
-  #version 2
+  # Qubit LookML | Retail | V2
   sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_attribution` ;;
 
   dimension: context_entrance_number {
@@ -75,7 +75,7 @@ view: qshopdemo_qp_bi_attribution_base {
     description: "IDs of orders processed in the same user session. QP fields: transaction_id "
   }
 
-  #first order
+  # first order
   dimension: lead_order_id {
     type: string
     sql: ${TABLE}.lead_order_id ;;

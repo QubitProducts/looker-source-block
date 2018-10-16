@@ -1,6 +1,6 @@
 view: qshopdemo_qp_bi_product_base {
 
- #version 2
+ # Qubit LookML | Retail | V2
   derived_table: {
     sql: SELECT
           meta_recordDate,
@@ -267,14 +267,12 @@ view: qshopdemo_qp_bi_product_base {
 
   measure: product_views {
     type: number
-    #LIKE accounts for namespaces - we have a lot of them and they look e.g. tracking_id_ecProduct
     sql: COUNT(DISTINCT(IF(${TABLE}.meta_type LIKE '%ecProduct', ${TABLE}.view_id,NULL)));;
     description: "Count of unique combinations of a visitor_id and a view_number.  Only for views flagged with 'Product Detail View' or 'Product Listing View' interaction type. QP fields: meta_type, context_id, context_viewNumber"
   }
 
   measure: basket_views {
     type: number
-    #LIKE accounts for namespaces - we have a lot of them and they look e.g. tracking_id_ecProduct
     sql: COUNT(DISTINCT(IF(${TABLE}.meta_type LIKE '%ecBasketItem', ${TABLE}.view_id,NULL)));;
     description: "Count of unique combinations of a visitor_id and a view_number.  Only for views flagged with 'View with Product in Basket' interaction type. QP fields: meta_type, context_id, context_viewNumber"
   }

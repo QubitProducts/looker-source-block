@@ -1,5 +1,5 @@
 view: qshopdemo_qp_bi_transaction_base {
-  #version 2
+  # Qubit LookML | Retail | V2
   sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_transaction` ;;
 
   dimension: basket_tax_base_value {

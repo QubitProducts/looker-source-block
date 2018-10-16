@@ -1,6 +1,6 @@
 view: qshopdemo_qp_bi_experience_base {
 
- #version 2
+ # Qubit LookML | Retail | V2
  derived_table: {
    sql: SELECT
     qp_bi_view_name,
