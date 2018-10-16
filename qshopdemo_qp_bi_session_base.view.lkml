@@ -107,12 +107,12 @@ view: qshopdemo_qp_bi_session_base {
   }
 
   dimension_group: time_data_points {
-    label: "Time Data Points"
+    label: ""
     type: time
     timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
     sql:  ${TABLE}.property_event_ts ;;
-    group_label: "Time Data Points"
-    description: "Timestamp of the start of the session. QP fields:  meta_serverTs (with applied UTC offset, also accounting for daylight saving time)"
+    group_label: "⏰ Date & Time"
+    description: "Timestamp of the start of the session. QP fields:  meta_serverTs (with applied UTC offset, for your timezone)"
   }
 
   dimension: meta_url {

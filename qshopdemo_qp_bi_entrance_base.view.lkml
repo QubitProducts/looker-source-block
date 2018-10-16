@@ -21,7 +21,6 @@ view: qshopdemo_qp_bi_entrance_base {
     sql: ${TABLE}.context_entranceNumber ;;
     label: "Entrance Number"
     description: "Entrance number of the visitor, in a lifetime. QP fields: context_entranceNumber"
-
   }
 
   dimension: context_id {
@@ -46,11 +45,11 @@ view: qshopdemo_qp_bi_entrance_base {
   }
 
   dimension_group: time_data_points {
-    label: "Time Data Points"
+    label: ""
     type: time
     timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
     sql:  ${TABLE}.property_event_ts ;;
-    group_label: "Time Data Points"
+    group_label: "⏰ Date & Time"
     description: "Timestamp of an entrance. QP field: meta_serverTs (with applied UTC offset for your timezone)"
   }
 

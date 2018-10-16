@@ -95,12 +95,12 @@ view: qshopdemo_qp_bi_experience_base {
   }
 
   dimension_group: time_data_points {
-    label: "Time Data Points"
+    label: ""
     type: time
     timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
     sql:  ${TABLE}.property_event_ts ;;
-    group_label: "Time Data Points"
-    description: "Timestamp of all views that happened on or after seeing an experience. QP field: meta_serverTs (with applied UTC offset, also accounting for daylight saving time)"
+    group_label: "⏰ Date & Time"
+    description: "Timestamp of all views that happened on or after seeing an experience. QP field: meta_serverTs (with applied UTC offset for your timezone)"
   }
 
 #Experience related dimensions
@@ -116,7 +116,6 @@ view: qshopdemo_qp_bi_experience_base {
     sql: ${TABLE}.experienceName ;;
     group_label: "Experience"
     description: "The assigned name of experience. QP fields: experienceName"
-
   }
 
   dimension: iteration_id {

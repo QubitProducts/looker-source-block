@@ -38,6 +38,15 @@ left join unnest(segment) as segment ;;
     hidden: yes
   }
 
+  dimension_group: time_data_points {
+    label: ""
+    type: time
+    timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
+    sql:  ${TABLE}.property_event_ts ;;
+    group_label: "⏰ Date & Time"
+    description: "Timestamp that a visitor was active & a member of a particular segment. QP fields: meta_serverTs (adjusted to timezone)"
+  }
+
   measure: segment_visitors {
     type: number
     sql: COUNT(DISTINCT IF(${TABLE}.segmentId IS NOT NULL,${TABLE}.context_id,NULL))  ;;
