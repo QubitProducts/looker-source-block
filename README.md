@@ -91,16 +91,16 @@ Now you can fork the Qubit demo Looker repo so you have a copy in your own priva
 6. Open the Mac OS X or Linux terminal application (or use PuTTy if on Microsoft Windows).
 7. At the terminal type `git clone` and then paste the URL you copied in Step 5. It will look like this, with your GitHub username instead of YOUR-USERNAME:
 
-  ```
-  git clone https://github.com/YOUR-USERNAME/QubitProducts/looker-source-block
-  ```
+```bash
+git clone https://github.com/YOUR-USERNAME/QubitProducts/looker-source-block
+```
 
 ## 3. Customizing the Qubit Source Block with Client-Specific Live Tap datasets
 
 Now at the terminal run the following commands to replace all occurrences of our demo ID (_qshopdemo_) and project ID in the repo LookML files with your own values:
 
 ```bash
-# replace qshopdemo placeholder with our actaul TRACKING_ID in all files
+# replace qshopdemo placeholder with our actual TRACKING_ID in all files
 find . -type f -print0 | xargs -0 perl -pi -e ‘s/qshopdemo/TRACKING_ID/g’
 
 # replace project ID placeholder with our actual PROJECT_ID in all files
@@ -110,12 +110,12 @@ find . -type f -print0 | xargs -0 perl -pi -e ‘s/37403/PROJECT_ID/g’
 for f in *.l*; do mv $f ${f/qshopdemo/TRACKING_ID}; done
 ```
 
-for example, for the tracking ID “my_qubit_shop” and client project ID "12345" you would run the commands:
+for example, for the tracking ID “shipping_global” and project ID "12345" you would run the commands:
 
 ```bash
-find . -type f -print0 | xargs -0 perl -pi -e ‘s/qshopdemo/my_qubit_shop/g’
+find . -type f -print0 | xargs -0 perl -pi -e ‘s/qshopdemo/shipping_global/g’
 find . -type f -print0 | xargs -0 perl -pi -e ‘s/37403/12345/g’
-for f in *.l*; do mv $f ${f/qshopdemo/my_qubit_shop}; done
+for f in *.l*; do mv $f ${f/qshopdemo/shipping_global}; done
 ```
 
 Next, commit your changes back to the git repo.
