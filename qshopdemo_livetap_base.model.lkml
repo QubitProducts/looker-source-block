@@ -1,4 +1,3 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 connection:      "qubit-client-37403"
 include:         "qshopdemo_qp_bi*.view"
 persist_for: "24 hours"
