@@ -100,18 +100,28 @@ Now you can fork the Qubit demo Looker repo so you have a copy in your own priva
 Now at the terminal run the following commands to replace all occurrences of our demo ID (_qshopdemo_) and project ID in the repo LookML files with your own values:
 
 ```
+# replace qshopdemo placeholder with our actaul TRACKING_ID in all files
+find . -type f -print0 | xargs -0 perl -pi -e ‘s/qshopdemo/TRACKING_ID/g’
 
+# replace project ID placeholder with our actual PROJECT_ID in all files
+find . -type f -print0 | xargs -0 perl -pi -e ‘s/37403/PROJECT_ID/g’
+
+# relabel our LookML filenames to our actual tracking ID
+for f in *.l*; do mv $f ${f/qshopdemo/TRACKING_ID}; done
 ```
 
-for example, for the tracking ID “my_qubit_shop” and client project ID “30999” you would run the commands:
+for example, for the tracking ID “my_qubit_shop” and client project ID "12345" you would run the commands:
 
 ```
-
+find . -type f -print0 | xargs -0 perl -pi -e ‘s/qshopdemo/my_qubit_shop/g’
+find . -type f -print0 | xargs -0 perl -pi -e ‘s/37403/12345/g’
+for f in *.l*; do mv $f ${f/qshopdemo/my_qubit_shop}; done
 ```
 
 Next, commit your changes back to the git repo.
 
-```git add .
+```
+git add .
 git commit -m "added our tracking ID and project ID"
 ```
 
