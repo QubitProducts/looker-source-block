@@ -1,8 +1,8 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
+#File uploaded: Tue Jan 30 23:40:53 GMT 2018
 view: qshopdemo_qp_bi_session_base {
 
  #version 1.1
- sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_session] ;;
+ sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_session` ;;
 
   view_label: "Sessions"
   dimension: app_name {
@@ -146,14 +146,14 @@ view: qshopdemo_qp_bi_session_base {
 
   measure: session_visitors {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.context_id, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.context_id) ;;
     description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. QP fields: context_id"
   }
-  
+
   measure: sessions {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.session_id, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.session_id) ;;
     description: "Count of unique combinations of a visitor_id and an session_number. If above 1.000.000, the result is approximated. QP fields: context_id, context_sessionNumber"
   }
-  
+
 }
