@@ -1,7 +1,6 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_transaction_base {
-  #version 1.1
-  sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_transaction] ;;
+  # Qubit LookML | Retail | V2
+  sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_transaction` ;;
 
   dimension: basket_tax_base_value {
     label: "Transaction Tax"
@@ -79,24 +78,24 @@ view: qshopdemo_qp_bi_transaction_base {
     hidden: yes
   }
 
-    dimension: transaction_total {
-      type: string
-      sql: ${TABLE}.transaction_total ;;
-      hidden: yes
-    }
+  dimension: transaction_total {
+    type: string
+    sql: ${TABLE}.transaction_total ;;
+    hidden: yes
+  }
 
   dimension: weeks_since_first_entry {
     type: number
-    sql: ROUND(DATEDIFF(${TABLE}.property_event_ts, TIMESTAMP((DATE(${qshopdemo_qp_bi_view_v01.visitor_first_entry_date} )))) / 7, 0) ;;
+    sql: DATE_DIFF(CAST(${TABLE}.property_event_ts AS DATE), CAST(TIMESTAMP(${qshopdemo_qp_bi_view_v01.visitor_first_entry_date}) AS DATE),WEEK);;
     label: "Weeks Since First Entry"
     group_label: "Time Since First Entry"
     value_format_name: decimal_0
     description: "Number of weeks between the first view of a visitor and a certain transaction. QP fields: meta_serverTs, meta_recordDate"
   }
-  
+
   dimension: days_since_first_entry {
     type: number
-    sql: DATEDIFF(${TABLE}.property_event_ts, TIMESTAMP((DATE(${qshopdemo_qp_bi_view_v01.visitor_first_entry_date} )))) ;;
+    sql: DATE_DIFF(CAST(${TABLE}.property_event_ts AS DATE), CAST(TIMESTAMP(${qshopdemo_qp_bi_view_v01.visitor_first_entry_date}) AS DATE),DAY) ;;
     label: "Days Since First Entry"
     group_label: "Time Since First Entry"
     value_format_name: decimal_0
@@ -104,20 +103,20 @@ view: qshopdemo_qp_bi_transaction_base {
   }
 
   dimension_group: time_data_points {
-    label: "Time Data Points"
+    label: ""
     type: time
     timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
     sql:  ${TABLE}.property_event_ts ;;
-    group_label: "Time Data Points"
-    description: "Timestamp of the transaction. QP fields:  meta_serverTs (with applied UTC offset, also accounting for daylight saving time)"
+    group_label: "⏰ Date & Time"
+    description: "Timestamp of the transaction. QP fields:  meta_serverTs (with applied UTC offset, for your timezone)"
   }
-  
+
   dimension_group: time_data_points_previous_transaction {
-    label: "Time Data Points - Previous Transaction"
+    label: "Previous Transaction"
     type: time
     timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
-    sql: MSEC_TO_TIMESTAMP(${TABLE}.previous_transaction_ts) ;;
-    group_label: "Time Data Points - Previous Transaction"
+    sql: ${TABLE}.previous_transaction_ts ;;
+    group_label: "Date & Time - Previous Transaction"
     description: "Timestamp of the previous transaction of the visitor. QP fields: meta_server_ts"
   }
 
@@ -135,42 +134,42 @@ view: qshopdemo_qp_bi_transaction_base {
 
   measure: converters {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.context_id, 1000000) ;;
-    description: "Count of unique visitor_ids on views that are labeled with any non-null transaction_id. If above 1.000.000, the result is approximated. QP fields: context_id, transaction_id"
+    sql: COUNT(DISTINCT ${TABLE}.context_id) ;;
+    description: "Count of unique visitor_ids on views that are labeled with any non-null transaction_id. "
   }
 
   measure: transactions {
     type: number
-    sql:  COUNT(DISTINCT ${transaction_id}, 10000000) ;;
+    sql:  COUNT(DISTINCT ${transaction_id}) ;;
     description: "Count of unique transaction_ids (always exact count). QP fields: transaction_id"
   }
 
   measure: average_order_value {
     type: number
-    sql:  SUM(${TABLE}.basket_total_baseValue) / COUNT(DISTINCT ${transaction_id} , 10000000) ;;
+    sql:  SUM(${TABLE}.basket_total_baseValue) / COUNT(DISTINCT ${transaction_id}) ;;
     value_format_name: decimal_2
     description: "Average of transaction value of all transactions. QP fields: basket_total_baseValue"
   }
 
   measure: revenue_per_converter {
     type: number
-    sql:  SUM(${TABLE}.basket_total_baseValue) / COUNT(DISTINCT ${TABLE}.context_id, 1000000) ;;
+    sql:  SUM(${TABLE}.basket_total_baseValue) / COUNT(DISTINCT ${TABLE}.context_id) ;;
     value_format_name: decimal_2
-    description: "Sum of transaction_total divided by count of unique visitor_ids. If count of visitor_ids is above 1.000.000, the result is approximated. Only for views that are labeled with any non-null transaction_id. QP fields: basket_total_baseValue, context_id"
+    description: "Sum of transaction_total divided by count of unique visitor_ids. Only for views that are labeled with any non-null transaction_id. QP fields: basket_total_baseValue, context_id"
   }
 
   measure: session_conversion_rate {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.session_id, 1000000) /  COUNT(DISTINCT ${qshopdemo_qp_bi_view_v01.session_id}, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.session_id) /  COUNT(DISTINCT ${qshopdemo_qp_bi_view_v01.session_id}) ;;
     value_format_name: percent_2
-    description: "Share of unique sessions containing views that are labeled with any non-null transaction_id in all sessions. For counting, when figures are above 1.000.000, the result is approximated. QP fields: context_sessionNumber, context_id"
+    description: "Share of unique sessions containing views that are labeled with any non-null transaction_id in all sessions. QP fields: context_sessionNumber, context_id"
   }
 
   measure: visitor_conversion_rate {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.context_id, 1000000) /  COUNT(DISTINCT ${qshopdemo_qp_bi_view_v01.context_id}, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.context_id) /  COUNT(DISTINCT ${qshopdemo_qp_bi_view_v01.context_id}) ;;
     value_format_name: percent_2
-    description: "Share of unique visitors on views that are labeled with any non-null transaction_id in all visitors. For counting, when figures are above 1.000.000, the result is approximated. QP fields: context_id"
+    description: "Share of unique visitors on views that are labeled with any non-null transaction_id in all visitors. QP fields: context_id"
   }
 
   measure: sum_of_transaction_total {
@@ -205,25 +204,25 @@ view: qshopdemo_qp_bi_transaction_base {
     type: number
     sql: ${qshopdemo_qp_bi_transaction_v01.sum_of_transaction_total} / ${qshopdemo_qp_bi_view_v01.view_visitors} ;;
     value_format_name: decimal_2
-    description: "Sum of transaction_total divided by count of unique visitor_ids. If count of visitor_ids is above 1.000.000, the result is approximated. QP fields: basket_total_baseValue, context_id"
+    description: "Sum of transaction_total divided by count of unique visitor_ids. QP fields: basket_total_baseValue, context_id"
   }
-  
+
   measure: sum_of_basket_quantity {
     type: sum
     sql: ${TABLE}.basket_quantity ;;
     description: "Number of items in a basket for a certain transaction (measure). QP fields: basket_quantity"
   }
-  
+
   measure: average_products_per_order {
     type: average
     sql: ${TABLE}.basket_quantity ;;
     value_format_name: decimal_2
     description: "Average quantity of items in the basket per transaction. QP fields: basket_quantity"
   }
-  
+
   measure: hours_since_previous_purchase {
     type: average
-    sql: (TIMESTAMP_TO_MSEC(${TABLE}.property_event_ts) - ${TABLE}.previous_transaction_ts) / (1000*60*60)  ;;
+    sql: TIMESTAMP_DIFF(${TABLE}.property_event_ts,${TABLE}.previous_transaction_ts,HOUR)  ;;
     value_format_name: decimal_2
     group_label: "Time Since Previous Purchase"
     description: "Number of hours between the current transaction and previous transaction by the same visitor. QP fields: property_event_ts"
@@ -231,7 +230,7 @@ view: qshopdemo_qp_bi_transaction_base {
 
   measure: days_since_previous_purchase {
     type: average
-    sql: (TIMESTAMP_TO_MSEC(${TABLE}.property_event_ts) - ${TABLE}.previous_transaction_ts) / (1000*60*60*24)  ;;
+    sql: TIMESTAMP_DIFF(${TABLE}.property_event_ts,${TABLE}.previous_transaction_ts,DAY)    ;;
     value_format_name: decimal_2
     group_label: "Time Since Previous Purchase"
     description: "Number of days between the current transaction and previous transaction by the same visitor. QP fields: property_event_ts"
@@ -239,25 +238,25 @@ view: qshopdemo_qp_bi_transaction_base {
 
   measure: weeks_since_previous_purchase {
     type: average
-    sql: (TIMESTAMP_TO_MSEC(${TABLE}.property_event_ts) - ${TABLE}.previous_transaction_ts) / (1000*60*60*24*7)  ;;
+    sql: DATE_DIFF(CAST(${TABLE}.property_event_ts AS DATE), CAST(${TABLE}.previous_transaction_ts AS DATE),WEEK)  ;;
     value_format_name: decimal_2
     group_label: "Time Since Previous Purchase"
     description: "Number of weeks between the current transaction and previous transaction by the same visitor. QP fields: property_event_ts"
   }
-  
+
   measure: shipping_cost {
     type: sum
     sql: ${TABLE}.basket_shippingPrice_baseValue ;;
     value_format_name: decimal_0
     label: "Shipping cost"
   }
-  
+
   dimension: days_since_previous_purchase_dimension {
     type: tier
     tiers: [5,10,20,30,40,50,60,70,80,90,100,150,200,250,300]
     style: integer
-    sql: (TIMESTAMP_TO_MSEC(${TABLE}.property_event_ts) - ${TABLE}.previous_transaction_ts) / (1000*60*60*24)  ;;
+    sql: TIMESTAMP_DIFF(${TABLE}.property_event_ts,${TABLE}.previous_transaction_ts,DAY)  ;;
     value_format_name: decimal_0
   }
-  
+
 }

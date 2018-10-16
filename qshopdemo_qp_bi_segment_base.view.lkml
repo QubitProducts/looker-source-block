@@ -1,8 +1,11 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_segment_base {
 
- #version 1.1
- sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_segment] ;;
+ # Qubit LookML | Retail | V2
+ derived_table: {
+   sql: select meta_recordDate, qp_bi_view_name, ts, property_event_ts, view_id, meta_ts, meta_serverTs, meta_trackingId, context_id, context_viewNumber, context_sessionNumber, context_conversionNumber, segment_rows, segment.segmentId as segmentId, segment.segmentName as segmentName
+        from  `qubit-client-37403.qshopdemo__v2.livetap_segment`
+        left join unnest(segment) as segment ;;
+ }
 
   dimension: segment_id {
     type: string
@@ -15,7 +18,6 @@ view: qshopdemo_qp_bi_segment_base {
     sql: ${TABLE}.segmentName ;;
     description: "The name of segment. QP fields: segmentName"
   }
-
 
   dimension: visitor_id {
     type: string
@@ -36,29 +38,38 @@ view: qshopdemo_qp_bi_segment_base {
     hidden: yes
   }
 
+  dimension_group: time_data_points {
+    label: ""
+    type: time
+    timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
+    sql:  ${TABLE}.property_event_ts ;;
+    group_label: "⏰ Date & Time"
+    description: "Timestamp that a visitor was active & a member of a particular segment. QP fields: meta_serverTs (adjusted to timezone)"
+  }
+
   measure: segment_visitors {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.segmentId IS NOT NULL,${TABLE}.context_id,NULL), 1000000)  ;;
-    description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. Only for views labeled with any non-null segment_id. QP fields: context_id"
+    sql: COUNT(DISTINCT IF(${TABLE}.segmentId IS NOT NULL,${TABLE}.context_id,NULL))  ;;
+    description: "Count of unique visitor_ids.  Only for views labeled with any non-null segment_id. QP fields: context_id"
   }
 
   measure: distinct_segments {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.segmentId, 1000000) ;;
-    description: "Count of unique segment_ids. If above 1.000.000, the result is approximated. QP fields: segmenId"
+    sql: COUNT(DISTINCT ${TABLE}.segmentId) ;;
+    description: "Count of unique segment_ids.  QP fields: segmenId"
   }
 
   measure: visitor_conversion_rate {
     type: number
-    sql: ${segment_converters} /  COUNT(DISTINCT ${TABLE}.context_id , 1000000) ;;
+    sql: SAFE_DIVIDE(${segment_converters},COUNT(DISTINCT ${TABLE}.context_id)) ;;
     value_format_name: percent_2
-    description: "Share of unique visitors on views that are labeled with any non-null transaction_id in all visitors. For counting, when figures are above 1.000.000, the result is approximated. Only for views labeled with any non-null segment_id. QP fields: transaction_id, context_id"
+    description: "Share of unique visitors on views that are labeled with any non-null transaction_id in all visitors. Only for views labeled with any non-null segment_id. QP fields: transaction_id, context_id"
   }
 
   measure: segment_views {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.view_id, 1000000);;
-    description: "Count of unique combinations of a visitor_id and a view_number. If above 1.000.000, the result is approximated. Only for views labeled with any non-null segment_id. QP fields: context_id, context_viewNumber"
+    sql: COUNT(DISTINCT ${TABLE}.view_id);;
+    description: "Count of unique combinations of a visitor_id and a view_number.  Only for views labeled with any non-null segment_id. QP fields: context_id, context_viewNumber"
   }
 
   measure: transaction_total {
@@ -71,22 +82,20 @@ view: qshopdemo_qp_bi_segment_base {
 
   measure: transactions {
     type: number
-    sql: EXACT_COUNT_DISTINCT(CASE WHEN ${TABLE}.segmentId IS NOT NULL THEN ${qshopdemo_qp_bi_transaction_v01.transaction_id} END) ;;
+    sql: COUNT(DISTINCT CASE WHEN ${TABLE}.segmentId IS NOT NULL THEN ${qshopdemo_qp_bi_transaction_v01.transaction_id} END) ;;
     description: "Count of unique transaction_ids (always exact count). Only for views labeled with any non-null segment_id. QP fields: transaction_id, segmentId"
   }
 
   measure: segment_converters {
     type: number
-    sql: COUNT(DISTINCT IF(${qshopdemo_qp_bi_transaction_v01.transaction_id} IS NOT NULL,${TABLE}.context_id,NULL), 1000000) ;;
-    description: "Count of unique visitor_ids on views labeled with any non-null segment_id. If above 1.000.000, the result is approximated. QP fields: context_id, transaction_id"
+    sql: COUNT(DISTINCT IF(${qshopdemo_qp_bi_transaction_v01.transaction_id} IS NOT NULL,${TABLE}.context_id,NULL)) ;;
+    description: "Count of unique visitor_ids on views labeled with any non-null segment_id.  QP fields: context_id, transaction_id"
   }
 
   measure: revenue_per_visitor {
     type: number
-    sql: ${qshopdemo_qp_bi_segment_v01.transaction_total} / ${qshopdemo_qp_bi_segment_v01.segment_visitors} ;;
+    sql: SAFE_DIVIDE(${qshopdemo_qp_bi_segment_v01.transaction_total},${qshopdemo_qp_bi_segment_v01.segment_visitors}) ;;
     value_format_name: decimal_2
-    description: "Sum of transaction_total divided by count of unique visitor_ids. If count of visitor_ids is above 1.000.000, the result is approximated. Only for views labeled with any non-null segment_id. QP fields: basket_total_baseValue, context_id"
+    description: "Sum of transaction_total divided by count of unique visitor_ids. Only for views labeled with any non-null segment_id. QP fields: basket_total_baseValue, context_id"
   }
-
 }
-

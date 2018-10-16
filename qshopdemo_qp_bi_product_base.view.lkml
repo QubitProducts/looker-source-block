@@ -1,18 +1,52 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_product_base {
 
- #version 1.1
- sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_product] ;;
+ # Qubit LookML | Retail | V2
+  derived_table: {
+    sql: SELECT
+          meta_recordDate,
+          ts,
+          property_event_ts,
+          view_id,
+          session_id,
+          entrance_id,
+          meta_serverTs,
+          meta_ts,
+          meta_trackingId,
+          context_id,
+          context_viewNumber,
+          context_sessionNumber,
+          context_conversionNumber,
+          transaction_id,
+          product_rows,
+          product.concat_product_id product_concat_product_id,
+          product.product_productId  product_productId,
+          product.product_sku  product_sku,
+          product.product_category product_category,
+          product.product_subcategory product_subcategory,
+          product.product_manufacturer product_manufacturer,
+          product.product_color  product_color,
+          product.product_size product_size,
+          product.product_stock  product_stock,
+          product.product_rating  product_rating,
+          product.product_price_baseValue  product_price_baseValue,
+          product.product_originalPrice_baseValue product_originalPrice_baseValue,
+          product.product_price_baseCurrency product_price_baseCurrency,
+          product.product_name product_name,
+          product.product_basket_action product_basket_action,
+          product.subtotal_baseValue subtotal_baseValue,
+          product.quantity quantity,
+          product.unique_row_id unique_row_id,
+          product.product_interaction_type product_interaction_type,
+          product.meta_type meta_type
+        FROM
+          `qubit-client-37403.qshopdemo__v2.livetap_product` v
+        LEFT JOIN
+          UNNEST (product) AS product ;;
+  }
 
   dimension: session_id {
     type: string
     sql: ${TABLE}.session_id ;;
-    hidden: yes
-  }
-
-  dimension: entrance_id {
-    type: string
-    sql: ${TABLE}.entrance_id ;;
     hidden: yes
   }
 
@@ -22,7 +56,11 @@ view: qshopdemo_qp_bi_product_base {
     hidden: yes
   }
 
-
+  dimension: entrance_id {
+    type: string
+    sql: ${TABLE}.entrance_id ;;
+    hidden: yes
+  }
 
   dimension: unique_row_id {
     type: string
@@ -71,7 +109,7 @@ view: qshopdemo_qp_bi_product_base {
     label: "Interaction Type"
     description: "One of six product interaction types for a certain view: Product Detail View, Product Listing View, Product View, Product Purchase, Basket Action, View with Product in Basket. QP fields: meta_type, eventType"
   }
-  
+
   dimension: product_interaction_type_ordered {
     type: string
     sql: CASE WHEN ${TABLE}.product_interaction_type = 'Product Listing View' THEN '1. Product Listing View'
@@ -94,12 +132,12 @@ view: qshopdemo_qp_bi_product_base {
   }
 
   dimension_group: time_data_points {
-    label: "Time Data Points"
+    label: ""
     type: time
     timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
     sql:  ${TABLE}.property_event_ts ;;
-    group_label: "Time Data Points"
-    description: "Timestamp of the product interaction event. QP fields:  meta_serverTs (with applied UTC offset, also accounting for daylight saving time)"
+    group_label: "⏰ Date & Time"
+    description: "Timestamp of the product interaction event. QP fields:  meta_serverTs (with applied UTC offset, for your timezone)"
   }
 
   dimension: meta_type {
@@ -124,7 +162,6 @@ view: qshopdemo_qp_bi_product_base {
     label: "Subcategory"
     description: "Subproduct category of a product that was displayed, interacted with, or purchased. QP fields: second element in the product_category breadcrumb"
   }
-
 
   dimension: product_color {
     type: string
@@ -198,15 +235,6 @@ view: qshopdemo_qp_bi_product_base {
     description: "Stock level of a product that was displayed or interacted with. QP fields: product_stock"
   }
 
-
-  dimension: product_in_stock {
-    type: yesno
-    sql: ${TABLE}.product_stock > 0;;
-    group_label: "Product"
-    label: "In Stock"
-    description: "True if product was in stock at the time of viewing"
-  }
-
   dimension: product_sku {
     type: string
     sql: ${TABLE}.product_sku ;;
@@ -233,34 +261,31 @@ view: qshopdemo_qp_bi_product_base {
 
   measure: product_visitors {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.context_id, 1000000) ;;
-    description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. Only for views flagged with 'Product Detail View' or 'Product Listing View' interaction type. QP fields: meta_type, context_id"
+    sql: COUNT(DISTINCT ${TABLE}.context_id) ;;
+    description: "Count of unique visitor_ids.  Only for views flagged with 'Product Detail View' or 'Product Listing View' interaction type. QP fields: meta_type, context_id"
   }
-
 
   measure: product_views {
     type: number
-    #LIKE accounts for namespaces - we have a lot of them and they look e.g. tracking_id_ecProduct
-    sql: COUNT(DISTINCT(IF(${TABLE}.meta_type LIKE '%ecProduct', ${TABLE}.view_id,NULL)), 1000000);;
-    description: "Count of unique combinations of a visitor_id and a view_number. If above 1.000.000, the result is approximated. Only for views flagged with 'Product Detail View' or 'Product Listing View' interaction type. QP fields: meta_type, context_id, context_viewNumber"
+    sql: COUNT(DISTINCT(IF(${TABLE}.meta_type LIKE '%ecProduct', ${TABLE}.view_id,NULL)));;
+    description: "Count of unique combinations of a visitor_id and a view_number.  Only for views flagged with 'Product Detail View' or 'Product Listing View' interaction type. QP fields: meta_type, context_id, context_viewNumber"
   }
 
   measure: basket_views {
     type: number
-    #LIKE accounts for namespaces - we have a lot of them and they look e.g. tracking_id_ecProduct
-    sql: COUNT(DISTINCT(IF(${TABLE}.meta_type LIKE '%ecBasketItem', ${TABLE}.view_id,NULL)), 1000000);;
-    description: "Count of unique combinations of a visitor_id and a view_number. If above 1.000.000, the result is approximated. Only for views flagged with 'View with Product in Basket' interaction type. QP fields: meta_type, context_id, context_viewNumber"
+    sql: COUNT(DISTINCT(IF(${TABLE}.meta_type LIKE '%ecBasketItem', ${TABLE}.view_id,NULL)));;
+    description: "Count of unique combinations of a visitor_id and a view_number.  Only for views flagged with 'View with Product in Basket' interaction type. QP fields: meta_type, context_id, context_viewNumber"
   }
 
   measure: converters {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.transaction_id IS NOT NULL, ${TABLE}.context_id, NULL), 1000000) ;;
-    description: "Count of unique visitor_ids on views that are labeled with 'Product Purchase' interaction type. If above 1.000.000, the result is approximated. QP fields: meta_type, context_id, transaction_id"
+    sql: COUNT(DISTINCT IF(${TABLE}.transaction_id IS NOT NULL, ${TABLE}.context_id, NULL)) ;;
+    description: "Count of unique visitor_ids on views that are labeled with 'Product Purchase' interaction type.  QP fields: meta_type, context_id, transaction_id"
   }
 
   measure: product_orders {
     type: number
-    sql: EXACT_COUNT_DISTINCT(${TABLE}.transaction_id) ;;
+    sql: COUNT(DISTINCT ${TABLE}.transaction_id) ;;
     description: "Count of unique transaction_ids (always exact count). QP fields: transaction_id"
   }
 
@@ -284,8 +309,8 @@ view: qshopdemo_qp_bi_product_base {
 
   measure: distinct_product_ids {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.product_productId, 1000000) ;;
-    description: "Count of unique product_ids that were displayed, interacted with, or purchased. If above 1.000.000, the result is approximated. QP fields: product_productId"
+    sql: COUNT(DISTINCT ${TABLE}.product_productId) ;;
+    description: "Count of unique product_ids that were displayed, interacted with, or purchased.  QP fields: product_productId"
   }
 
   measure: product_purchased_value {
@@ -304,13 +329,23 @@ view: qshopdemo_qp_bi_product_base {
 
   measure: product_quantity_average {
     type: number
-    sql: ${product_quantity_sum} / ${product_orders};;
-    ##sql: SUM(IF(${TABLE}.transaction_id IS NOT NULL, ${TABLE}.quantity, NULL)) /  EXACT_COUNT_DISTINCT(${TABLE}.transaction_id) ;;
-
+    sql: SAFE_DIVIDE(${product_quantity_sum},${product_orders});;
     label: "Product Purchased Item Average Quantity"
     description: "An average quantity of purchased items. QP fields: quantity"
     value_format_name: decimal_2
-
   }
 
+  measure: total_views_related_to_products {
+    type: number
+    label: "All Type Product Views"
+    sql: COUNT(DISTINCT(${TABLE}.view_id));;
+    description: "Total number of product-related views. QP fields: context_id, context_viewNumber"
+  }
+
+  measure: currency {
+    hidden: yes
+    type: string
+    sql: MAX(${TABLE}.product_price_baseCurrency) ;;
+    label: "Currency"
+  }
 }

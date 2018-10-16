@@ -1,8 +1,7 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_visitor_pulse_base {
 
- #version 1.1
- sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_visitor_pulse] ;;
+ # Qubit LookML | Retail | V2
+ sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_visitor_pulse` ;;
 
   dimension: answer {
     type: string
@@ -75,13 +74,11 @@ view: qshopdemo_qp_bi_visitor_pulse_base {
     hidden: yes
   }
 
-
   dimension: session_id {
     type: string
     sql: ${TABLE}.session_id ;;
     hidden: yes
   }
-
 
   dimension: page_subtype {
     type: string
@@ -99,14 +96,13 @@ view: qshopdemo_qp_bi_visitor_pulse_base {
     description: "Can be either home, category, product, checkout, transaction, help, contact or other. QP fields: type"
   }
 
-
   dimension_group: time_data_points {
-    label: "Time Data Points"
+    label: ""
     type: time
     timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
     sql:  ${TABLE}.property_event_ts ;;
-    group_label: "Time Data Points"
-    description: "Timestamp of the page view. QP fields:  meta_serverTs (with applied UTC offset, also accounting for daylight saving time)"
+    group_label: "⏰ Date & Time"
+    description: "Timestamp of the page view. QP fields:  meta_serverTs (with applied UTC offset, for your timezone)"
   }
 
   dimension: meta_url {
@@ -115,7 +111,6 @@ view: qshopdemo_qp_bi_visitor_pulse_base {
     label: "URL"
     description: "URL address on which a survey was submitted. QP fields: meta_url"
   }
-
 
   dimension: question_freetext {
     type: string
@@ -355,53 +350,49 @@ view: qshopdemo_qp_bi_visitor_pulse_base {
 
   measure: survey_visitors {
     type: count_distinct
-    approximate_threshold: 100000
     sql: ${TABLE}.context_id ;;
-    description: "Count of unique visitor_ids. If above 100.000, the result is approximated. Only for views on which a survey was submitted. QP fields: context_id"
+    description: "Count of unique visitor_ids. Only for views on which a survey was submitted. QP fields: context_id"
     }
 
   measure: surveys_count {
     type: number
-    sql: EXACT_COUNT_DISTINCT(survey_id) ;;
+    sql: COUNT(DISTINCT survey_id) ;;
     description: "Count of unique survey_ids (always exact count). QP fields: survey_id"
   }
 
   measure: total_answers {
     type: number
-    sql: EXACT_COUNT_DISTINCT(unique_row_id) ;;
+    sql: COUNT(DISTINCT unique_row_id) ;;
     description: "Count of unique answer IDs. If a survey contains 3 questions, the result for a single submission will be 3. If there are 3 submissions, 3 questions each, the result will be 9 etc.. QP fields: context_id, context_viewNumber, question_order, question_type, value_integer, value_text, question_type, value_boolean, choice_text"
   }
 
   measure: total_unanswered_questions {
     type: number
-    sql: EXACT_COUNT_DISTINCT(IF(answer IS NULL, unique_row_id,NULL)) ;;
+    sql: COUNT(DISTINCT IF(answer IS NULL, unique_row_id,NULL)) ;;
     description: "Count of unique answer IDs, only for unanswered questions. If a survey contains 3 questions, but one answer was left blank, the result for a single submission will be 1. QP fields: context_id, context_viewNumber, question_order, question_type, value_integer, value_text, question_type, value_boolean, choice_text"
   }
 
   measure: total_answered_questions {
     type: number
-    sql: EXACT_COUNT_DISTINCT(IF(answer IS NOT NULL, unique_row_id,NULL)) ;;
+    sql: COUNT(DISTINCT IF(answer IS NOT NULL, unique_row_id,NULL)) ;;
     description: "Count of unique answer IDs, only for answered questions. If a survey contains 3 questions, but one answer was left blank, the result for a single submission will be 2. QP fields: context_id, context_viewNumber, question_order, question_type, value_integer, value_text, question_type, value_boolean, choice_text"
   }
 
   measure: average_score {
     type: average_distinct
-    sql: CASE WHEN ${TABLE}.question_type = 'score' THEN INTEGER(${TABLE}.answer) ELSE NULL END ;;
+    sql: CASE WHEN ${TABLE}.question_type = 'score' THEN CAST(${TABLE}.answer AS INT64) ELSE NULL END ;;
     sql_distinct_key: ${TABLE}.view_id ;;
     value_format_name: "decimal_2"
     description: ""
   }
 
-
-
   measure: nps {
     type: number
-    sql: (EXACT_COUNT_DISTINCT(CASE WHEN question_type = 'score' AND INTEGER(answer) >= 9 THEN unique_row_id ELSE NULL END) /
-         EXACT_COUNT_DISTINCT(CASE WHEN  question_type = 'score' THEN unique_row_id ELSE NULL END)) -
-         EXACT_COUNT_DISTINCT(CASE WHEN  question_type = 'score' AND INTEGER(answer) <= 6 THEN unique_row_id ELSE NULL END) /
-         EXACT_COUNT_DISTINCT(CASE WHEN  question_type = 'score' THEN unique_row_id ELSE NULL END) ;;
+    sql: (COUNT(DISTINCT CASE WHEN question_type = 'score' AND INTEGER(answer) >= 9 THEN unique_row_id ELSE NULL END) /
+         COUT(DISTINCT CASE WHEN  question_type = 'score' THEN unique_row_id ELSE NULL END)) -
+         COUNT(DISTINCT CASE WHEN  question_type = 'score' AND INTEGER(answer) <= 6 THEN unique_row_id ELSE NULL END) /
+         COUNT(DISTINCT CASE WHEN  question_type = 'score' THEN unique_row_id ELSE NULL END) ;;
     value_format_name: "percent_2"
     label: "NPS"
   }
-
 }

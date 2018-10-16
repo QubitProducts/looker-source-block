@@ -1,8 +1,7 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_entrance_base {
 
-  #version 1.1
-  sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_entrance] ;;
+  # Qubit LookML | Retail | V2
+  sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_entrance` ;;
 
   dimension: view_id {
     type: string
@@ -22,7 +21,6 @@ view: qshopdemo_qp_bi_entrance_base {
     sql: ${TABLE}.context_entranceNumber ;;
     label: "Entrance Number"
     description: "Entrance number of the visitor, in a lifetime. QP fields: context_entranceNumber"
-
   }
 
   dimension: context_id {
@@ -47,12 +45,12 @@ view: qshopdemo_qp_bi_entrance_base {
   }
 
   dimension_group: time_data_points {
-    label: "Time Data Points"
+    label: ""
     type: time
     timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
     sql:  ${TABLE}.property_event_ts ;;
-    group_label: "Time Data Points"
-    description: "Timestamp of an entrance. QP field: meta_serverTs (with applied UTC offset, also accounting for daylight saving time)"
+    group_label: "⏰ Date & Time"
+    description: "Timestamp of an entrance. QP field: meta_serverTs (with applied UTC offset for your timezone)"
   }
 
   dimension: meta_url {
@@ -117,7 +115,7 @@ view: qshopdemo_qp_bi_entrance_base {
     label: "Medium"
     description: "Google's utm_medium parameter extracted out of the referrer URL. QP fields: referrer_url"
   }
-  
+
   dimension: content {
     type: string
     sql: ${TABLE}.utm_content ;;
@@ -125,7 +123,7 @@ view: qshopdemo_qp_bi_entrance_base {
     label: "Content"
     description: "Google's utm_content parameter extracted out of the referrer URL. QP fields: referrer_url"
   }
-  
+
   dimension: campaign {
     type: string
     sql: ${TABLE}.utm_campaign ;;
@@ -133,7 +131,7 @@ view: qshopdemo_qp_bi_entrance_base {
     label: "Campaign"
     description: "Google's utm_campaign parameter extracted out of the referrer URL. QP fields: referrer_url"
   }
-  
+
   dimension: term {
     type: string
     sql: ${TABLE}.utm_term ;;
@@ -144,13 +142,13 @@ view: qshopdemo_qp_bi_entrance_base {
 
   measure: entrance_visitors {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.context_id, 1000000) ;;
-    description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. QP fields: context_id"
+    sql: COUNT(DISTINCT ${TABLE}.context_id) ;;
+    description: "Count of unique visitor_ids.  QP fields: context_id"
   }
-  
+
   measure: entrances {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.entrance_id, 1000000) ;;
-    description: "Count of unique combinations of a visitor_id and an entrance_number. If above 1.000.000, the result is approximated. QP fields: context_id, context_entranceNumber"
+    sql: COUNT(DISTINCT ${TABLE}.entrance_id) ;;
+    description: "Count of unique combinations of a visitor_id and an entrance_number.  QP fields: context_id, context_entranceNumber"
   }
 }

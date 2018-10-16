@@ -1,9 +1,31 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_user_action_base {
 
- #version 1.1
- sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_user_action] ;;
- 
+ # Qubit LookML | Retail | V2
+ derived_table: {
+   sql: SELECT
+          qp_bi_view_name,
+          ts,
+          property_event_ts,
+          view_id,
+          meta_recordDate,
+          meta_trackingId,
+          context_id,
+          context_viewNumber,
+          context_sessionNumber,
+          meta_serverTs,
+          meta_ts,
+          user_action.meta_type AS meta_type,
+          user_action.type AS type,
+          user_action.name AS name,
+          user_action.user_interaction_type AS user_interaction_type,
+          user_action.voucher_id AS voucher_id,
+          user_action.voucher_label AS voucher_label,
+          user_action.voucher_entry AS voucher_entry,
+          user_action.voucher_entrySuccess AS voucher_entrySuccess
+        FROM `qubit-client-37403.qshopdemo__v2.livetap_user_action`
+        left join unnest (user_action) as user_action ;;
+ }
+
   dimension: view_id {
     type: string
     sql: ${TABLE}.view_id ;;
@@ -36,11 +58,11 @@ view: qshopdemo_qp_bi_user_action_base {
   }
 
   dimension_group: time_data_points {
-    label: "Time Data Points"
+    label: ""
     type: time
     timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
-    sql: ${TABLE}.property_event_ts ;;
-    group_label: "Time Data Points"
+    sql:  ${TABLE}.property_event_ts ;;
+    group_label: "⏰ Date & Time"
     description: "Timestamp of the user action. QP fields: property_event_ts"
   }
 
@@ -81,9 +103,8 @@ view: qshopdemo_qp_bi_user_action_base {
 
   measure: total_visitor_views {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.view_id, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.view_id) ;;
     group_label: "Visitor"
     description: "Number of unique views. QP fields: context_viewNumber, context_id"
   }
-
 }
