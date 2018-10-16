@@ -1,6 +1,13 @@
 # Welcome
 Qubit is the fastest and most scalable personalization platform available today. The highly granular low-latency behavioral data we collect is available for analysis and export using Qubit Live Tap.
 
+# Release notes
+
+*October 2018*
+- This block has been updated to work with Live Tap V2, which uses BigQuery StandardSQL & date partitioning for enhanced performance.
+- If you are looking for the previous block (which made use of LegacySQL), this is available on the branch _release-v1_.
+- Further updates and optimizations will be released soon.
+
 # Why does this block offer?
 For Qubit Live Tap customers, this block provides a template of an Explore for interacting directly with your data in Google BigQuery. 
 
@@ -24,13 +31,6 @@ Benefits of this block:
 - You are using the _retail ecommerce_ Live Tap data model
 
 Contact your Qubit customer success manager if you are unsure on the above, or if you are a travel or egaming customer.
-
-# Release notes
-
-*October 2018*
-- This block has been updated to work with Live Tap V2, which uses BigQuery StandardSQL & date partitioning for enhanced performance.
-- If you are looking for the previous block (which made use of LegacySQL), this is available on the branch _release-v1_.
-- Further updates and optimizations will be released soon.
 
 # Data Architecture
 
