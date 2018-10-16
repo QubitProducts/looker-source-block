@@ -143,12 +143,12 @@ view: qshopdemo_qp_bi_entrance_base {
   measure: entrance_visitors {
     type: number
     sql: COUNT(DISTINCT ${TABLE}.context_id) ;;
-    description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. QP fields: context_id"
+    description: "Count of unique visitor_ids.  QP fields: context_id"
   }
 
   measure: entrances {
     type: number
     sql: COUNT(DISTINCT ${TABLE}.entrance_id) ;;
-    description: "Count of unique combinations of a visitor_id and an entrance_number. If above 1.000.000, the result is approximated. QP fields: context_id, context_entranceNumber"
+    description: "Count of unique combinations of a visitor_id and an entrance_number.  QP fields: context_id, context_entranceNumber"
   }
 }

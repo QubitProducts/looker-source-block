@@ -351,7 +351,7 @@ view: qshopdemo_qp_bi_visitor_pulse_base {
   measure: survey_visitors {
     type: count_distinct
     sql: ${TABLE}.context_id ;;
-    description: "Count of unique visitor_ids. If above 100.000, the result is approximated. Only for views on which a survey was submitted. QP fields: context_id"
+    description: "Count of unique visitor_ids. Only for views on which a survey was submitted. QP fields: context_id"
     }
 
   measure: surveys_count {

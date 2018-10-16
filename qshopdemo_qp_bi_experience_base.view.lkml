@@ -210,32 +210,32 @@ dimension: iteration_published_at {
   measure: experience_visitors {
     type: number
     sql: COUNT(DISTINCT IF(${TABLE}.experienceId IS NOT NULL,${TABLE}.context_id,NULL))  ;;
-    description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, experienceId"
+    description: "Count of unique visitor_ids.  Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, experienceId"
   }
 
   measure: distinct_experiences {
     type: number
     sql: COUNT(DISTINCT ${TABLE}.experienceId) ;;
-    description: "Count of unique experience_ids. If above 1.000.000, the result is approximated. QP fields: experienceId"
+    description: "Count of unique experience_ids.  QP fields: experienceId"
   }
 
   measure: visitor_conversion_rate {
     type: number
     sql: SAFE_DIVIDE(${experience_converters},COUNT(DISTINCT ${TABLE}.context_id)) ;;
     value_format_name: percent_2
-    description: "Share of unique visitors on views that are labeled with any non-null transaction_id in all visitors. For counting, when figures are above 1.000.000, the result is approximated. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, transaction_id"
+    description: "Share of unique visitors on views that are labeled with any non-null transaction_id in all visitors. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, transaction_id"
   }
 
   measure: experience_views {
     type: number
     sql: COUNT(DISTINCT ${TABLE}.view_id) ;;
-    description: "Count of unique combinations of a visitor_id and a view_number. If above 1.000.000, the result is approximated. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, context_viewNumber"
+    description: "Count of unique combinations of a visitor_id and a view_number.  Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, context_viewNumber"
   }
 
   measure: experience_converters {
     type: number
     sql: COUNT(DISTINCT IF(${qshopdemo_qp_bi_transaction_v01.transaction_id} IS NOT NULL,${TABLE}.context_id,NULL)) ;;
-    description: "Count of unique visitor_ids on views that are labeled with any non-null transaction_id. If above 1.000.000, the result is approximated. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, transaction_id"
+    description: "Count of unique visitor_ids on views that are labeled with any non-null transaction_id.  Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, transaction_id"
   }
 
   measure: transaction_total {
@@ -256,7 +256,7 @@ dimension: iteration_published_at {
     type: number
     sql: ${qshopdemo_qp_bi_experience_v01.transaction_total} / ${qshopdemo_qp_bi_experience_v01.experience_visitors} ;;
     value_format_name: decimal_2
-    description: "Sum of transaction_total divided by count of unique visitor_ids. If count of visitor_ids is above 1.000.000, the result is approximated. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: basket_total_baseValue, context_id, experienceId"
+    description: "Sum of transaction_total divided by count of unique visitor_ids. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: basket_total_baseValue, context_id, experienceId"
   }
 
   measure: latest_traffic_allocation {

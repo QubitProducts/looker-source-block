@@ -146,12 +146,12 @@ view: qshopdemo_qp_bi_session_base {
   measure: session_visitors {
     type: number
     sql: COUNT(DISTINCT ${TABLE}.context_id) ;;
-    description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. QP fields: context_id"
+    description: "Count of unique visitor_ids.  QP fields: context_id"
   }
 
   measure: sessions {
     type: number
     sql: COUNT(DISTINCT ${TABLE}.session_id) ;;
-    description: "Count of unique combinations of a visitor_id and an session_number. If above 1.000.000, the result is approximated. QP fields: context_id, context_sessionNumber"
+    description: "Count of unique combinations of a visitor_id and an session_number.  QP fields: context_id, context_sessionNumber"
   }
 }

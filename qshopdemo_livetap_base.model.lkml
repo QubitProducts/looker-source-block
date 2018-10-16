@@ -277,12 +277,10 @@ explore: qshopdemo_qp_bi_experience_base {
   join:  qshopdemo_qp_bi_experience_z_meta_data_v01 {
     relationship: many_to_one
     sql_on: qshopdemo_qp_bi_experience_v01.experienceId = qshopdemo_qp_bi_experience_z_meta_data_v01.experienceId ;;
-
   }
 
   join:  qshopdemo_qp_bi_goal_achieved_z_meta_data_v01 {
     relationship: many_to_one
     sql_on: qshopdemo_qp_bi_goal_achieved_v01.experienceId = qshopdemo_qp_bi_goal_achieved_z_meta_data_v01.experienceId ;;
-
   }
 }

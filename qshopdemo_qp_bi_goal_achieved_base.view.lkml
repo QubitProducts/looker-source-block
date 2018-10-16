@@ -213,7 +213,7 @@ dimension: iteration_published_at {
   measure: goal_achieved_visitors {
     type: number
     sql: COUNT(DISTINCT IF(${TABLE}.goalId IS NOT NULL,${TABLE}.context_id,NULL))  ;;
-    description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. Only for views on which a goal was achieved or views that happened after a goal was achieved. QP fields: context_id, goalId"
+    description: "Count of unique visitor_ids.  Only for views on which a goal was achieved or views that happened after a goal was achieved. QP fields: context_id, goalId"
   }
 
   measure: distinct_goals {
@@ -225,7 +225,7 @@ dimension: iteration_published_at {
   measure: goal_achieved_views {
     type: number
     sql: COUNT(DISTINCT IF(${TABLE}.goalId IS NOT NULL,${TABLE}.view_id,NULL))  ;;
-    description: "Count of unique views. If above 1.000.000, the result is approximated. Only for views on which a goal was achieved or views that happened after a goal was achieved. QP fields: context_id, context_viewNumber, goalId"
+    description: "Count of unique views.  Only for views on which a goal was achieved or views that happened after a goal was achieved. QP fields: context_id, context_viewNumber, goalId"
 
   }
 
