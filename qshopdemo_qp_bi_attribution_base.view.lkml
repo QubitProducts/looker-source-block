@@ -1,8 +1,7 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_attribution_base {
 
   #version 1.1
-  sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_attribution] ;;
+  sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_attribution` ;;
 
   dimension: context_entrance_number {
     type: number
@@ -322,7 +321,7 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
 
   measure: entry_count {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.entry_id, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.entry_id) ;;
     label: "Attribution Entry Count"
     description: "Number of unique entries. QP fields: dervied"
 
@@ -330,7 +329,7 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
 
   measure: attribution_order_count {
     type: number
-    sql: COUNT(DISTINCT  ${TABLE}.order_ids_in_purchase_cycle, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.order_ids_in_purchase_cycle) ;;
     label: "Attribution Order Count"
     description: "Number of attribution orders. NB. an order in attribution is a set of transactions processed in the same session . QP fields: derived"
 
@@ -338,7 +337,7 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
 
   measure: distinct_referrer_types {
     type: number
-    sql: COUNT(DISTINCT  ${TABLE}.true_referrer_type, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.true_referrer_type) ;;
     label: "Distinct Referrer Types"
     description: "Number of distinct referrers. QP fields: referrer_type"
 
