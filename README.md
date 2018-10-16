@@ -102,10 +102,10 @@ Now at the terminal run the following commands to replace all occurrences of our
 
 ```bash
 # replace qshopdemo placeholder with our actual TRACKING_ID in all files
-find . -type f -print0 | xargs -0 perl -pi -e ‘s/qshopdemo/TRACKING_ID/g’
+find . -type f -print0 | xargs -0 perl -pi -e 's/qshopdemo/TRACKING_ID/g'
 
 # replace project ID placeholder with our actual PROJECT_ID in all files
-find . -type f -print0 | xargs -0 perl -pi -e ‘s/37403/PROJECT_ID/g’
+find . -type f -print0 | xargs -0 perl -pi -e 's/37403/PROJECT_ID/g'
 
 # relabel our LookML filenames to our actual tracking ID
 for f in *.l*; do mv $f ${f/qshopdemo/TRACKING_ID}; done
@@ -114,8 +114,8 @@ for f in *.l*; do mv $f ${f/qshopdemo/TRACKING_ID}; done
 for example, for the tracking ID “shipping_global” and project ID "12345" you would run the commands:
 
 ```bash
-find . -type f -print0 | xargs -0 perl -pi -e ‘s/qshopdemo/shipping_global/g’
-find . -type f -print0 | xargs -0 perl -pi -e ‘s/37403/12345/g’
+find . -type f -print0 | xargs -0 perl -pi -e 's/qshopdemo/shipping_global/g'
+find . -type f -print0 | xargs -0 perl -pi -e 's/37403/12345/g'
 for f in *.l*; do mv $f ${f/qshopdemo/shipping_global}; done
 ```
 
