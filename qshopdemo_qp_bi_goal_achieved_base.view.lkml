@@ -1,8 +1,49 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_goal_achieved_base {
 
  #version 1.1
- sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_goal_achieved] ;;
+ derived_table: {
+   sql: SELECT
+qp_bi_view_name,
+ts,
+property_event_ts,
+view_id,
+meta_recordDate,
+meta_trackingId,
+context_id,
+context_viewNumber,
+context_sessionNumber,
+context_conversionNumber,
+meta_ts,
+meta_serverTs,
+property_event_ts_str,
+experience_goal_achieved.goalId AS goalId,
+experience_goal_achieved.goalType AS goalType,
+experience_goal_achieved.goalValue AS goalValue,
+experience_goal_achieved.goalKey AS goalKey,
+experience_goal_achieved.experienceId AS experienceId,
+experience_goal_achieved.experienceName AS experienceName,
+experience_goal_achieved.variationMasterId AS variationMasterId,
+experience_goal_achieved.variationName AS variationName,
+experience_goal_achieved.iterationName AS iterationName,
+experience_goal_achieved.iterationId AS iterationId,
+experience_goal_achieved.isControl AS isControl,
+experience_goal_achieved.first_view_meta_ts AS first_view_meta_ts,
+experience_goal_achieved.first_view_meta_recordDate AS first_view_meta_recordDate,
+experience_goal_achieved.first_view_in_iteration AS first_view_in_iteration,
+experience_goal_achieved.last_view_in_iteration AS last_view_in_iteration,
+experience_goal_achieved.is_post_goal_achieved_view AS is_post_goal_achieved_view,
+experience_goal_achieved.experience_status AS experience_status,
+experience_goal_achieved.days_experience_live AS days_experience_live,
+experience_goal_achieved.experience_first_published_at AS experience_first_published_at,
+experience_goal_achieved.iteration_published_at AS iteration_published_at,
+experience_goal_achieved.iteration_paused_at AS iteration_paused_at,
+experience_goal_achieved.experience_paused_on_view AS experience_paused_on_view,
+experience_goal_achieved.experience_last_paused_at AS experience_last_paused_at,
+experience_goal_achieved.experience_paused_within_15_days AS experience_paused_within_15_days
+ FROM
+ `qubit-client-37403.qshopdemo__v2.livetap_goal_achieved`
+LEFT JOIN UNNEST (experience_goal_achieved) as experience_goal_achieved ;;
+ }
 
   dimension: view_id {
     type: string
@@ -35,7 +76,7 @@ view: qshopdemo_qp_bi_goal_achieved_base {
 
   dimension: experience_id {
     type: string
-    sql: STRING(${TABLE}.experienceId) ;;
+    sql: CAST(${TABLE}.experienceId AS STRING) ;;
     group_label: "Experience"
     description: "ID unique to the experience which the goal refers to. QP fields: experienceId"
 
@@ -50,7 +91,7 @@ view: qshopdemo_qp_bi_goal_achieved_base {
 
   dimension: goal_id {
     type: string
-    sql: STRING(${TABLE}.goalId);;
+    sql: CAST(${TABLE}.goalId AS STRING);;
     group_label: "Goal Achieved"
     description: "ID unique to the goal. QP fields: goalId"
   }
@@ -61,7 +102,7 @@ view: qshopdemo_qp_bi_goal_achieved_base {
     group_label: "Goal Achieved"
     description: "Goal name. QP fields: goalValue"
   }
-  
+
   dimension: goal_type {
     type: string
     sql: ${TABLE}.goalType ;;
@@ -79,7 +120,7 @@ view: qshopdemo_qp_bi_goal_achieved_base {
 
   dimension: iteration_id {
     type: string
-    sql: STRING(${TABLE}.iterationId) ;;
+    sql: CAST(${TABLE}.iterationId AS STRING) ;;
     group_label: "Experience"
     description: "The unique ID of the experience variation shown. QP fields: iterationId"
   }
@@ -103,7 +144,7 @@ view: qshopdemo_qp_bi_goal_achieved_base {
 
   dimension: variation_master_id {
     type: string
-    sql: STRING( ${TABLE}.variationMasterId) ;;
+    sql: CAST( ${TABLE}.variationMasterId AS STRING) ;;
     group_label: "Experience"
     description: "Master variation ID of an experiment. The ID is assigned when a variation is launched and it is preserved throughout the experiment. QP fields: variationMasterId"
   }
@@ -171,31 +212,31 @@ dimension: iteration_published_at {
 
   measure: goal_achieved_visitors {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.goalId IS NOT NULL,${TABLE}.context_id,NULL), 1000000)  ;;
+    sql: COUNT(DISTINCT IF(${TABLE}.goalId IS NOT NULL,${TABLE}.context_id,NULL))  ;;
     description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. Only for views on which a goal was achieved or views that happened after a goal was achieved. QP fields: context_id, goalId"
   }
 
   measure: distinct_goals {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.goalId, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.goalId) ;;
     description: "Count of unique goal_ids. Only for views on which a goal was achieved or views that happened after a goal was achieved. QP fields: goalId"
   }
 
   measure: goal_achieved_views {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.goalId IS NOT NULL,${TABLE}.view_id,NULL), 1000000)  ;;
+    sql: COUNT(DISTINCT IF(${TABLE}.goalId IS NOT NULL,${TABLE}.view_id,NULL))  ;;
     description: "Count of unique views. If above 1.000.000, the result is approximated. Only for views on which a goal was achieved or views that happened after a goal was achieved. QP fields: context_id, context_viewNumber, goalId"
 
   }
- 
+
   measure: primary_goal_converters {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.goalType = 'primaryConversion', ${TABLE}.context_id,NULL), 1000000)  ;;
+    sql: COUNT(DISTINCT IF(${TABLE}.goalType = 'primaryConversion', ${TABLE}.context_id,NULL))  ;;
   }
 
   measure: custom_goal_converters {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.goalType = 'other', ${TABLE}.context_id,NULL), 1000000)  ;;
+    sql: COUNT(DISTINCT IF(${TABLE}.goalType = 'other', ${TABLE}.context_id,NULL))  ;;
   }
 
 #  measure: latest_traffic_allocation {
