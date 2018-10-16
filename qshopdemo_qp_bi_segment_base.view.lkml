@@ -3,8 +3,8 @@ view: qshopdemo_qp_bi_segment_base {
  #version 2
  derived_table: {
    sql: select meta_recordDate, qp_bi_view_name, ts, property_event_ts, view_id, meta_ts, meta_serverTs, meta_trackingId, context_id, context_viewNumber, context_sessionNumber, context_conversionNumber, segment_rows, segment.segmentId as segmentId, segment.segmentName as segmentName
-from  `qubit-client-37403.qshopdemo__v2.livetap_segment`
-left join unnest(segment) as segment ;;
+        from  `qubit-client-37403.qshopdemo__v2.livetap_segment`
+        left join unnest(segment) as segment ;;
  }
 
   dimension: segment_id {

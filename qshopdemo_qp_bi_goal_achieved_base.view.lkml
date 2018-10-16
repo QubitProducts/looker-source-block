@@ -3,46 +3,46 @@ view: qshopdemo_qp_bi_goal_achieved_base {
  #version 2
  derived_table: {
    sql: SELECT
-qp_bi_view_name,
-ts,
-property_event_ts,
-view_id,
-meta_recordDate,
-meta_trackingId,
-context_id,
-context_viewNumber,
-context_sessionNumber,
-context_conversionNumber,
-meta_ts,
-meta_serverTs,
-property_event_ts_str,
-experience_goal_achieved.goalId AS goalId,
-experience_goal_achieved.goalType AS goalType,
-experience_goal_achieved.goalValue AS goalValue,
-experience_goal_achieved.goalKey AS goalKey,
-experience_goal_achieved.experienceId AS experienceId,
-experience_goal_achieved.experienceName AS experienceName,
-experience_goal_achieved.variationMasterId AS variationMasterId,
-experience_goal_achieved.variationName AS variationName,
-experience_goal_achieved.iterationName AS iterationName,
-experience_goal_achieved.iterationId AS iterationId,
-experience_goal_achieved.isControl AS isControl,
-experience_goal_achieved.first_view_meta_ts AS first_view_meta_ts,
-experience_goal_achieved.first_view_meta_recordDate AS first_view_meta_recordDate,
-experience_goal_achieved.first_view_in_iteration AS first_view_in_iteration,
-experience_goal_achieved.last_view_in_iteration AS last_view_in_iteration,
-experience_goal_achieved.is_post_goal_achieved_view AS is_post_goal_achieved_view,
-experience_goal_achieved.experience_status AS experience_status,
-experience_goal_achieved.days_experience_live AS days_experience_live,
-experience_goal_achieved.experience_first_published_at AS experience_first_published_at,
-experience_goal_achieved.iteration_published_at AS iteration_published_at,
-experience_goal_achieved.iteration_paused_at AS iteration_paused_at,
-experience_goal_achieved.experience_paused_on_view AS experience_paused_on_view,
-experience_goal_achieved.experience_last_paused_at AS experience_last_paused_at,
-experience_goal_achieved.experience_paused_within_15_days AS experience_paused_within_15_days
- FROM
- `qubit-client-37403.qshopdemo__v2.livetap_goal_achieved`
-LEFT JOIN UNNEST (experience_goal_achieved) as experience_goal_achieved ;;
+        qp_bi_view_name,
+        ts,
+        property_event_ts,
+        view_id,
+        meta_recordDate,
+        meta_trackingId,
+        context_id,
+        context_viewNumber,
+        context_sessionNumber,
+        context_conversionNumber,
+        meta_ts,
+        meta_serverTs,
+        property_event_ts_str,
+        experience_goal_achieved.goalId AS goalId,
+        experience_goal_achieved.goalType AS goalType,
+        experience_goal_achieved.goalValue AS goalValue,
+        experience_goal_achieved.goalKey AS goalKey,
+        experience_goal_achieved.experienceId AS experienceId,
+        experience_goal_achieved.experienceName AS experienceName,
+        experience_goal_achieved.variationMasterId AS variationMasterId,
+        experience_goal_achieved.variationName AS variationName,
+        experience_goal_achieved.iterationName AS iterationName,
+        experience_goal_achieved.iterationId AS iterationId,
+        experience_goal_achieved.isControl AS isControl,
+        experience_goal_achieved.first_view_meta_ts AS first_view_meta_ts,
+        experience_goal_achieved.first_view_meta_recordDate AS first_view_meta_recordDate,
+        experience_goal_achieved.first_view_in_iteration AS first_view_in_iteration,
+        experience_goal_achieved.last_view_in_iteration AS last_view_in_iteration,
+        experience_goal_achieved.is_post_goal_achieved_view AS is_post_goal_achieved_view,
+        experience_goal_achieved.experience_status AS experience_status,
+        experience_goal_achieved.days_experience_live AS days_experience_live,
+        experience_goal_achieved.experience_first_published_at AS experience_first_published_at,
+        experience_goal_achieved.iteration_published_at AS iteration_published_at,
+        experience_goal_achieved.iteration_paused_at AS iteration_paused_at,
+        experience_goal_achieved.experience_paused_on_view AS experience_paused_on_view,
+        experience_goal_achieved.experience_last_paused_at AS experience_last_paused_at,
+        experience_goal_achieved.experience_paused_within_15_days AS experience_paused_within_15_days
+      FROM
+        `qubit-client-37403.qshopdemo__v2.livetap_goal_achieved`
+      LEFT JOIN UNNEST (experience_goal_achieved) as experience_goal_achieved ;;
  }
 
   dimension: view_id {
@@ -58,7 +58,6 @@ LEFT JOIN UNNEST (experience_goal_achieved) as experience_goal_achieved ;;
     label: "Visitor ID"
     description: "ID unique to the visitor. QP fields: context_id"
   }
-
 
   dimension: context_view_number {
     type: number
@@ -79,7 +78,6 @@ LEFT JOIN UNNEST (experience_goal_achieved) as experience_goal_achieved ;;
     sql: CAST(${TABLE}.experienceId AS STRING) ;;
     group_label: "Experience"
     description: "ID unique to the experience which the goal refers to. QP fields: experienceId"
-
   }
 
   dimension: experience_name {
@@ -110,7 +108,6 @@ LEFT JOIN UNNEST (experience_goal_achieved) as experience_goal_achieved ;;
     description: "Goal type as specified for a given experience. QP fields: goalType"
   }
 
-
   dimension: is_control {
     type: yesno
     sql: ${TABLE}.isControl = 1;;
@@ -124,7 +121,6 @@ LEFT JOIN UNNEST (experience_goal_achieved) as experience_goal_achieved ;;
     group_label: "Experience"
     description: "The unique ID of the experience variation shown. QP fields: iterationId"
   }
-
 
   dimension: meta_record_date {
     type: string
@@ -148,7 +144,6 @@ LEFT JOIN UNNEST (experience_goal_achieved) as experience_goal_achieved ;;
     group_label: "Experience"
     description: "Master variation ID of an experiment. The ID is assigned when a variation is launched and it is preserved throughout the experiment. QP fields: variationMasterId"
   }
-
   dimension: variation_name {
     type: string
     sql: ${TABLE}.variationName ;;
@@ -156,9 +151,7 @@ LEFT JOIN UNNEST (experience_goal_achieved) as experience_goal_achieved ;;
     description: "The name assigned to variation master ID. QP fields: variationName"
   }
 
-
-
-dimension: experience_status_as_of_date {
+  dimension: experience_status_as_of_date {
     type: string
     sql: CASE
      WHEN ${TABLE}.experience_paused_within_15_days = 1  THEN 'Paused for 15 days or less'
@@ -181,15 +174,15 @@ dimension: experience_paused_15_days_window {
     hidden: yes
 }
 
-  dimension: days_experience_live_on_visitors_view {
-    type: number
-    sql: ${TABLE}.days_experience_live ;;
-    group_label: "Experience"
-    description: "The number of days the experience had been live at the time of user's pageview"
-  }
+dimension: days_experience_live_on_visitors_view {
+  type: number
+  sql: ${TABLE}.days_experience_live ;;
+  group_label: "Experience"
+  description: "The number of days the experience had been live at the time of user's pageview"
+}
 
 
-dimension: iteration_published_at {
+  dimension: iteration_published_at {
     type: date
     sql: TIMESTAMP(${TABLE}.iteration_published_at) ;;
     group_label: "Experience"
@@ -203,7 +196,7 @@ dimension: iteration_published_at {
     description: "Date the iteration was paused"
   }
 
- dimension: experience_paused_on_view {
+  dimension: experience_paused_on_view {
     type: yesno
     sql: ${TABLE}.experience_paused_on_view = 1;;
     group_label: "Experience"
@@ -239,23 +232,11 @@ dimension: iteration_published_at {
     sql: COUNT(DISTINCT IF(${TABLE}.goalType = 'other', ${TABLE}.context_id,NULL))  ;;
   }
 
-#  measure: latest_traffic_allocation {
-#    type: number
-#    sql: MAX(${TABLE}.trafficAllocation) ;;
-#  }
-
- #  measure: days_experience_live {
- #    type: number
- #    sql:   MAX(IF(${TABLE}.experience_last_paused_at = '2030-01-01', DATEDIFF(CURRENT_DATE(), ${TABLE}.experience_first_published_at), DATEDIFF(${TABLE}.experience_last_paused_at, ${TABLE}.experience_first_published_at)));;
- #    group_label: "Experience"
- #    description: "The number of days the experience has been live as of today"
- #  }
-
- measure: days_experience_live {
-   type: number
-   sql:   COUNT(DISTINCT IF(${TABLE}.experience_status  = 'Live' AND ${TABLE}.meta_recordDate >= ${TABLE}.experience_first_published_at, ${TABLE}.meta_recordDate, NULL) ) ;;
-   group_label: "Experience"
-   description: "The number of days the experience has been live as of today"
- }
+  measure: days_experience_live {
+    type: number
+    sql:   COUNT(DISTINCT IF(${TABLE}.experience_status  = 'Live' AND ${TABLE}.meta_recordDate >= ${TABLE}.experience_first_published_at, ${TABLE}.meta_recordDate, NULL) ) ;;
+    group_label: "Experience"
+    description: "The number of days the experience has been live as of today"
+  }
 
 }

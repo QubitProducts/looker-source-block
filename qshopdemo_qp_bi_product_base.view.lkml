@@ -3,45 +3,45 @@ view: qshopdemo_qp_bi_product_base {
  #version 2
   derived_table: {
     sql: SELECT
-  meta_recordDate,
-  ts,
-  property_event_ts,
-  view_id,
-  session_id,
-  entrance_id,
-  meta_serverTs,
-  meta_ts,
-  meta_trackingId,
-  context_id,
-  context_viewNumber,
-  context_sessionNumber,
-  context_conversionNumber,
-  transaction_id,
-  product_rows,
-  product.concat_product_id product_concat_product_id,
-  product.product_productId  product_productId,
-  product.product_sku  product_sku,
-  product.product_category product_category,
-  product.product_subcategory product_subcategory,
-  product.product_manufacturer product_manufacturer,
-  product.product_color  product_color,
-  product.product_size product_size,
-  product.product_stock  product_stock,
-  product.product_rating  product_rating,
-  product.product_price_baseValue  product_price_baseValue,
-  product.product_originalPrice_baseValue product_originalPrice_baseValue,
-  product.product_price_baseCurrency product_price_baseCurrency,
-  product.product_name product_name,
-  product.product_basket_action product_basket_action,
-  product.subtotal_baseValue subtotal_baseValue,
-  product.quantity quantity,
-  product.unique_row_id unique_row_id,
-  product.product_interaction_type product_interaction_type,
-  product.meta_type meta_type
-FROM
-  `qubit-client-37403.qshopdemo__v2.livetap_product` v
-LEFT JOIN
-  UNNEST (product) AS product ;;
+          meta_recordDate,
+          ts,
+          property_event_ts,
+          view_id,
+          session_id,
+          entrance_id,
+          meta_serverTs,
+          meta_ts,
+          meta_trackingId,
+          context_id,
+          context_viewNumber,
+          context_sessionNumber,
+          context_conversionNumber,
+          transaction_id,
+          product_rows,
+          product.concat_product_id product_concat_product_id,
+          product.product_productId  product_productId,
+          product.product_sku  product_sku,
+          product.product_category product_category,
+          product.product_subcategory product_subcategory,
+          product.product_manufacturer product_manufacturer,
+          product.product_color  product_color,
+          product.product_size product_size,
+          product.product_stock  product_stock,
+          product.product_rating  product_rating,
+          product.product_price_baseValue  product_price_baseValue,
+          product.product_originalPrice_baseValue product_originalPrice_baseValue,
+          product.product_price_baseCurrency product_price_baseCurrency,
+          product.product_name product_name,
+          product.product_basket_action product_basket_action,
+          product.subtotal_baseValue subtotal_baseValue,
+          product.quantity quantity,
+          product.unique_row_id unique_row_id,
+          product.product_interaction_type product_interaction_type,
+          product.meta_type meta_type
+        FROM
+          `qubit-client-37403.qshopdemo__v2.livetap_product` v
+        LEFT JOIN
+          UNNEST (product) AS product ;;
   }
 
   dimension: session_id {
@@ -162,7 +162,6 @@ LEFT JOIN
     label: "Subcategory"
     description: "Subproduct category of a product that was displayed, interacted with, or purchased. QP fields: second element in the product_category breadcrumb"
   }
-
 
   dimension: product_color {
     type: string
@@ -333,18 +332,14 @@ LEFT JOIN
   measure: product_quantity_average {
     type: number
     sql: SAFE_DIVIDE(${product_quantity_sum},${product_orders});;
-    ##sql: SUM(IF(${TABLE}.transaction_id IS NOT NULL, ${TABLE}.quantity, NULL)) /  COUNT(DISTINCT ${TABLE}.transaction_id) ;;
-
     label: "Product Purchased Item Average Quantity"
     description: "An average quantity of purchased items. QP fields: quantity"
     value_format_name: decimal_2
-
   }
 
   measure: total_views_related_to_products {
     type: number
     label: "All Type Product Views"
-    #LIKE accounts for namespaces - we have a lot of them and they look e.g. tracking_id_ecProduct
     sql: COUNT(DISTINCT(${TABLE}.view_id));;
     description: "Total number of product-related views. QP fields: context_id, context_viewNumber"
   }
