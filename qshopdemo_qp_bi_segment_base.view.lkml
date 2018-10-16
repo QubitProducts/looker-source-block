@@ -1,7 +1,6 @@
-#File uploaded: Tue Jan 30 23:40:53 GMT 2018
 view: qshopdemo_qp_bi_segment_base {
 
- #version 1.1
+ #version 2
  derived_table: {
    sql: select meta_recordDate, qp_bi_view_name, ts, property_event_ts, view_id, meta_ts, meta_serverTs, meta_trackingId, context_id, context_viewNumber, context_sessionNumber, context_conversionNumber, segment_rows, segment.segmentId as segmentId, segment.segmentName as segmentName
 from  `qubit-client-37403.qshopdemo__v2.livetap_segment`
@@ -19,7 +18,6 @@ left join unnest(segment) as segment ;;
     sql: ${TABLE}.segmentName ;;
     description: "The name of segment. QP fields: segmentName"
   }
-
 
   dimension: visitor_id {
     type: string
@@ -91,5 +89,4 @@ left join unnest(segment) as segment ;;
     value_format_name: decimal_2
     description: "Sum of transaction_total divided by count of unique visitor_ids. If count of visitor_ids is above 1.000.000, the result is approximated. Only for views labeled with any non-null segment_id. QP fields: basket_total_baseValue, context_id"
   }
-
 }

@@ -1,5 +1,5 @@
 view: qshopdemo_qp_bi_transaction_base {
-  #version 1.1
+  #version 2
   sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_transaction` ;;
 
   dimension: basket_tax_base_value {
@@ -78,11 +78,11 @@ view: qshopdemo_qp_bi_transaction_base {
     hidden: yes
   }
 
-    dimension: transaction_total {
-      type: string
-      sql: ${TABLE}.transaction_total ;;
-      hidden: yes
-    }
+  dimension: transaction_total {
+    type: string
+    sql: ${TABLE}.transaction_total ;;
+    hidden: yes
+  }
 
   dimension: weeks_since_first_entry {
     type: number

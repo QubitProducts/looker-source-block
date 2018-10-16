@@ -1,30 +1,29 @@
-#File uploaded: Tue Jan 30 23:40:53 GMT 2018
 view: qshopdemo_qp_bi_user_action_base {
 
- #version 1.1
+ #version 2
  derived_table: {
    sql: SELECT
-qp_bi_view_name,
-ts,
-property_event_ts,
-view_id,
-meta_recordDate,
-meta_trackingId,
-context_id,
-context_viewNumber,
-context_sessionNumber,
-meta_serverTs,
-meta_ts,
-user_action.meta_type AS meta_type,
-user_action.type AS type,
-user_action.name AS name,
-user_action.user_interaction_type AS user_interaction_type,
-user_action.voucher_id AS voucher_id,
-user_action.voucher_label AS voucher_label,
-user_action.voucher_entry AS voucher_entry,
-user_action.voucher_entrySuccess AS voucher_entrySuccess
- FROM `qubit-client-37403.qshopdemo__v2.livetap_user_action`
-left join unnest (user_action) as user_action ;;
+          qp_bi_view_name,
+          ts,
+          property_event_ts,
+          view_id,
+          meta_recordDate,
+          meta_trackingId,
+          context_id,
+          context_viewNumber,
+          context_sessionNumber,
+          meta_serverTs,
+          meta_ts,
+          user_action.meta_type AS meta_type,
+          user_action.type AS type,
+          user_action.name AS name,
+          user_action.user_interaction_type AS user_interaction_type,
+          user_action.voucher_id AS voucher_id,
+          user_action.voucher_label AS voucher_label,
+          user_action.voucher_entry AS voucher_entry,
+          user_action.voucher_entrySuccess AS voucher_entrySuccess
+        FROM `qubit-client-37403.qshopdemo__v2.livetap_user_action`
+        left join unnest (user_action) as user_action ;;
  }
 
   dimension: view_id {
@@ -108,5 +107,4 @@ left join unnest (user_action) as user_action ;;
     group_label: "Visitor"
     description: "Number of unique views. QP fields: context_viewNumber, context_id"
   }
-
 }

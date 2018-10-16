@@ -1,6 +1,6 @@
 view: qshopdemo_qp_bi_goal_achieved_base {
 
- #version 1.1
+ #version 2
  derived_table: {
    sql: SELECT
 qp_bi_view_name,

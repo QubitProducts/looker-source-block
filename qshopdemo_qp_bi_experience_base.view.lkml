@@ -1,45 +1,46 @@
 view: qshopdemo_qp_bi_experience_base {
 
- #version 1.1
+ #version 2
  derived_table: {
    sql: SELECT
-qp_bi_view_name,
-ts,
-property_event_ts,
-view_id,
-meta_recordDate,
-meta_trackingId,
-context_id,
-context_viewNumber,
-context_sessionNumber,
-context_conversionNumber,
-meta_ts,
-meta_serverTs,
-experience.experienceId AS experienceId,
-experience.experienceName AS experienceName,
-experience.variationMasterId AS variationMasterId,
-experience.variationName AS variationName,
-experience.iterationName AS iterationName,
-experience.iterationId AS iterationId,
-experience.isControl AS isControl,
-experience.first_view_meta_ts AS first_view_meta_ts,
-experience.first_view_meta_recordDate AS first_view_meta_recordDate,
-experience.first_view_in_iteration AS first_view_in_iteration,
-experience.last_view_in_iteration AS last_view_in_iteration,
-experience.is_post_experience_view AS is_post_experience_view,
-experience.trafficAllocation AS trafficAllocation,
-experience.experience_status AS experience_status,
-experience.days_experience_live AS days_experience_live,
-experience.experience_first_published_at AS experience_first_published_at,
-experience.iteration_published_at AS iteration_published_at,
-experience.iteration_paused_at AS iteration_paused_at,
-experience.experience_last_paused_at AS experience_last_paused_at,
-experience.experience_paused_on_view AS experience_paused_on_view,
-experience.experience_paused_within_15_days AS experience_paused_within_15_days
+    qp_bi_view_name,
+    ts,
+    property_event_ts,
+    view_id,
+    meta_recordDate,
+    meta_trackingId,
+    context_id,
+    context_viewNumber,
+    context_sessionNumber,
+    context_conversionNumber,
+    meta_ts,
+    meta_serverTs,
+    experience.experienceId AS experienceId,
+    experience.experienceName AS experienceName,
+    experience.variationMasterId AS variationMasterId,
+    experience.variationName AS variationName,
+    experience.iterationName AS iterationName,
+    experience.iterationId AS iterationId,
+    experience.isControl AS isControl,
+    experience.first_view_meta_ts AS first_view_meta_ts,
+    experience.first_view_meta_recordDate AS first_view_meta_recordDate,
+    experience.first_view_in_iteration AS first_view_in_iteration,
+    experience.last_view_in_iteration AS last_view_in_iteration,
+    experience.is_post_experience_view AS is_post_experience_view,
+    experience.trafficAllocation AS trafficAllocation,
+    experience.experience_status AS experience_status,
+    experience.days_experience_live AS days_experience_live,
+    experience.experience_first_published_at AS experience_first_published_at,
+    experience.iteration_published_at AS iteration_published_at,
+    experience.iteration_paused_at AS iteration_paused_at,
+    experience.experience_last_paused_at AS experience_last_paused_at,
+    experience.experience_paused_on_view AS experience_paused_on_view,
+    experience.experience_paused_within_15_days AS experience_paused_within_15_days
  FROM
- `qubit-client-37403.qshopdemo__v2.livetap_experience`
-LEFT JOIN UNNEST (experience) as experience ;;
+  `qubit-client-37403.qshopdemo__v2.livetap_experience`
+  LEFT JOIN UNNEST (experience) as experience ;;
  }
+
 #Time, visitor and meta info
   dimension: view_id {
     type: string
@@ -59,7 +60,6 @@ LEFT JOIN UNNEST (experience) as experience ;;
     sql: ${TABLE}.entrance_id ;;
     hidden:  yes
   }
-
 
   dimension: context_id {
     type: string
@@ -163,7 +163,6 @@ LEFT JOIN UNNEST (experience) as experience ;;
     description: "The number of days the experience had been live at the time of user's pageview"
   }
 
-
 dimension: experience_status_as_of_date {
     type: string
     sql: CASE
@@ -175,7 +174,6 @@ dimension: experience_status_as_of_date {
     label: "Experience Status As Of Date "
     group_label: "Experience"
     description: "Status of the experience at the time of pageview"
-
 }
 
 dimension: experience_paused_15_days_window {
@@ -186,7 +184,6 @@ dimension: experience_paused_15_days_window {
     description: "True if view happened within 15 days of the date experience being paused "
     hidden: yes
 }
-
 
 dimension: iteration_published_at {
     type: date
@@ -263,23 +260,14 @@ dimension: iteration_published_at {
     description: "Sum of transaction_total divided by count of unique visitor_ids. If count of visitor_ids is above 1.000.000, the result is approximated. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: basket_total_baseValue, context_id, experienceId"
   }
 
-
   measure: latest_traffic_allocation {
     type: number
     sql: CAST(COALESCE(SUBSTR(MAX(CONCAT(IF(${TABLE}.trafficAllocation = 0, NULL, CAST(${TABLE}.meta_recordDate AS STRING)), CAST(CAST(IF(${TABLE}.trafficAllocation = 0, NULL,${TABLE}.trafficAllocation) AS FLOAT64) AS STRING))),11),'0.00') AS FLOAT64);;
   }
 
-# measure: days_experience_live_on_view {
-#   type: number
-#   sql:   MAX(IF(${TABLE}.experience_last_paused_at = '2030-01-01', DATEDIFF(CURRENT_DATE(), ${TABLE}.experience_first_published_at), DATEDIFF(${TABLE}.experience_last_paused_at, ${TABLE}.experience_first_published_at)));;
-#   group_label: "Experience"
-#   description: "The number of days the experience has been live as of today"
-# }
-
-
- measure: days_experience_live {
-   type: number
-   sql:   COUNT(DISTINCT IF(${TABLE}.experience_status  = 'Live' AND cast(${TABLE}.meta_recordDate as string) >= ${TABLE}.experience_first_published_at, ${TABLE}.meta_recordDate, NULL) ) ;;
-   description: "The number of days the experience has been live as of today"
- }
+  measure: days_experience_live {
+    type: number
+    sql:   COUNT(DISTINCT IF(${TABLE}.experience_status  = 'Live' AND cast(${TABLE}.meta_recordDate as string) >= ${TABLE}.experience_first_published_at, ${TABLE}.meta_recordDate, NULL) ) ;;
+    description: "The number of days the experience has been live as of today"
+  }
 }

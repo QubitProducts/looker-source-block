@@ -1,6 +1,6 @@
 view: qshopdemo_qp_bi_attribution_base {
 
-  #version 1.1
+  #version 2
   sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_attribution` ;;
 
   dimension: context_entrance_number {
@@ -8,7 +8,6 @@ view: qshopdemo_qp_bi_attribution_base {
     sql: ${TABLE}.context_entranceNumber ;;
     label: "Entrance Number"
     description: "Entrance number of the visitor, in a lifetime. QP fields: context_entranceNumber"
-
   }
 
   dimension: context_id {
@@ -18,12 +17,11 @@ view: qshopdemo_qp_bi_attribution_base {
     description: "Visitor ID. QP fields: derived"
   }
 
-
   dimension: context_session_number {
     type: number
     sql: ${TABLE}.context_sessionNumber ;;
     label: "Session Number"
-description: "User session number. QP fields: context_sessionNumber"
+    description: "User session number. QP fields: context_sessionNumber"
   }
 
   dimension: context_conversion_number {
@@ -31,17 +29,16 @@ description: "User session number. QP fields: context_sessionNumber"
     sql: ${TABLE}.context_conversionNumber ;;
     label: "Conversion Number"
     hidden: yes
-
   }
-
 
   dimension: entry_id {
     type: string
     sql: ${TABLE}.entry_id ;;
     label: "Attribution Entry ID"
     description: "Unique entry ID. An entry is a unique pair of entrance and session numbers. QP fields: context_id, context_entranceNumber, context_sessionNumber, context_conversionNumber"
-      primary_key: yes}
-
+    primary_key: yes
+  }
+  
   dimension_group: entry_timestamp {
     type: time
     timeframes: [
@@ -57,7 +54,6 @@ description: "User session number. QP fields: context_sessionNumber"
     label: "Entry Time - "
     description: "Timestamp of an entry. QP field: meta_serverTs"
   }
-
 
   dimension: meta_record_date {
     type: string
@@ -121,14 +117,13 @@ description: "User session number. QP fields: context_sessionNumber"
     type: number
     sql: ${TABLE}.ranked_entry_number ;;
     label: "Entry Number"
-description: "Sequential entry number, starts with 1. Ordered by timestamp of entry in ascending order. QP fields: derived"
+    description: "Sequential entry number, starts with 1. Ordered by timestamp of entry in ascending order. QP fields: derived"
   }
 
   dimension: ranked_entry_number_reverse {
     type: number
     sql: ${TABLE}.ranked_entry_number_reverse ;;
     hidden: yes
-
   }
 
   dimension: ranked_purchase_number_int {
@@ -136,9 +131,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: ${TABLE}.ranked_purchase_number_int ;;
     label: "Purchase Cycle"
     description: "Represents the number of orders the user has had. QP fields: context_conversionNumber"
-
-
-
   }
 
   dimension: referrer_ad_group {
@@ -161,7 +153,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: ${TABLE}.referrer_content ;;
     group_label: "Entry Referrer"
     description: "Referrer Content - as emitted. QP fields: referrer_content"
-
   }
 
   dimension: referrer_domain {
@@ -169,8 +160,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: ${TABLE}.referrer_domain ;;
     group_label: "Entry Referrer"
     description: "Referrer Domain - as emitted. QP fields: referrer_domain"
-
-
   }
 
   dimension: referrer_keywords {
@@ -178,7 +167,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: ${TABLE}.referrer_keywords ;;
     group_label: "Entry Referrer"
     description: "Referrer Keywords - as emitted. QP fields: referrer_keywords"
-
   }
 
   dimension: referrer_label {
@@ -193,7 +181,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: ${TABLE}.referrer_matchType ;;
     group_label: "Entry Referrer"
     description: "Referrer Match Type - as emitted. QP fields: referrer_matchType"
-
   }
 
   dimension: referrer_media_type {
@@ -201,7 +188,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: ${TABLE}.referrer_mediaType ;;
     group_label: "Entry Referrer"
     description: "Referrer Media Type - as emitted. QP fields: referrer_mediaType"
-
   }
 
   dimension: referrer_network {
@@ -209,7 +195,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: ${TABLE}.referrer_network ;;
     group_label: "Entry Referrer"
     description: "Referrer Network - as emitted. QP fields: referrer_network"
-
   }
 
   dimension: referrer_search_query {
@@ -241,9 +226,7 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     group_label: "Entry Referrer"
     label: "Categorised Referrer"
     description: "Mapped referrer based on the emitted referrer_type. QP fields: referrer_type"
-
   }
-
 
   measure: behavioural_value_livetap {
     type: number
@@ -283,7 +266,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: SUM(${TABLE}.behavioural_value) ;;
     value_format_name: decimal_2
     description: "Monetary value attributed to an entry based on the proportion of pageviews in current entry compared to the number of pageviews in all entries in a purchase cycle. The more pageviews an entry had, the higher the behavioural value. . QP fields: derived - basket_total_baseValue"
-
   }
 
   measure: even_click_value {
@@ -292,7 +274,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: SUM(${TABLE}.even_click_value);;
     value_format_name: decimal_2
     description: "Monetary value attributed to an entry - the value of an entry based ratio of this entry to the total number of entries. QP fields: derived - basket_total_baseValue"
-
   }
 
   measure: first_click_value {
@@ -316,7 +297,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: ${TABLE}.conversion_value_in_purchase_cycle  ;;
     value_format_name: decimal_2
     description: "Summed transactional value for an 'attribution' order. NB. an order in attribution is a set of transactions processed in the same session . QP fields: derived - basket_total_baseValue"
-
   }
 
   measure: entry_count {
@@ -324,7 +304,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: COUNT(DISTINCT ${TABLE}.entry_id) ;;
     label: "Attribution Entry Count"
     description: "Number of unique entries. QP fields: dervied"
-
   }
 
   measure: attribution_order_count {
@@ -332,7 +311,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: COUNT(DISTINCT ${TABLE}.order_ids_in_purchase_cycle) ;;
     label: "Attribution Order Count"
     description: "Number of attribution orders. NB. an order in attribution is a set of transactions processed in the same session . QP fields: derived"
-
   }
 
   measure: distinct_referrer_types {
@@ -340,7 +318,6 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     sql: COUNT(DISTINCT ${TABLE}.true_referrer_type) ;;
     label: "Distinct Referrer Types"
     description: "Number of distinct referrers. QP fields: referrer_type"
-
   }
 
   dimension: view_count {
@@ -349,7 +326,4 @@ description: "Sequential entry number, starts with 1. Ordered by timestamp of en
     label: "Views In Attribution Entry"
     description: "Number of views user had in entry. QP fields: context_id "
   }
-
-
-
 }

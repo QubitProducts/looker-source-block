@@ -1,7 +1,6 @@
-#File uploaded: Tue Jan 30 23:40:53 GMT 2018
 view: qshopdemo_qp_bi_visitor_pulse_base {
 
- #version 1.1
+ #version 2
  sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_visitor_pulse` ;;
 
   dimension: answer {
@@ -82,7 +81,6 @@ view: qshopdemo_qp_bi_visitor_pulse_base {
     hidden: yes
   }
 
-
   dimension: page_subtype {
     type: string
     sql: ${TABLE}.page_subtype ;;
@@ -99,7 +97,6 @@ view: qshopdemo_qp_bi_visitor_pulse_base {
     description: "Can be either home, category, product, checkout, transaction, help, contact or other. QP fields: type"
   }
 
-
   dimension_group: time_data_points {
     label: "Time Data Points"
     type: time
@@ -115,7 +112,6 @@ view: qshopdemo_qp_bi_visitor_pulse_base {
     label: "URL"
     description: "URL address on which a survey was submitted. QP fields: meta_url"
   }
-
 
   dimension: question_freetext {
     type: string
@@ -391,8 +387,6 @@ view: qshopdemo_qp_bi_visitor_pulse_base {
     description: ""
   }
 
-
-
   measure: nps {
     type: number
     sql: (COUNT(DISTINCT CASE WHEN question_type = 'score' AND INTEGER(answer) >= 9 THEN unique_row_id ELSE NULL END) /
@@ -402,5 +396,4 @@ view: qshopdemo_qp_bi_visitor_pulse_base {
     value_format_name: "percent_2"
     label: "NPS"
   }
-
 }

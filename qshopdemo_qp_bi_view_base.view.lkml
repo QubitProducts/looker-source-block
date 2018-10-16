@@ -1,6 +1,6 @@
 view: qshopdemo_qp_bi_view_base {
 
- #version 1.1
+ #version 2
  sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_view` ;;
   dimension: view_id {
     type: string

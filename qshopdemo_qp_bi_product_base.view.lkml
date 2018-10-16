@@ -1,7 +1,6 @@
-#File uploaded: Tue Jan 30 23:40:53 GMT 2018
 view: qshopdemo_qp_bi_product_base {
 
- #version 1.1
+ #version 2
   derived_table: {
     sql: SELECT
   meta_recordDate,
@@ -57,13 +56,11 @@ LEFT JOIN
     hidden: yes
   }
 
-
   dimension: entrance_id {
     type: string
     sql: ${TABLE}.entrance_id ;;
     hidden: yes
   }
-
 
   dimension: unique_row_id {
     type: string
@@ -345,29 +342,13 @@ LEFT JOIN
 
   }
 
-
-
-
-
   measure: total_views_related_to_products {
     type: number
     label: "All Type Product Views"
     #LIKE accounts for namespaces - we have a lot of them and they look e.g. tracking_id_ecProduct
     sql: COUNT(DISTINCT(${TABLE}.view_id));;
-    description: "Total number of product-related views. If above 1.000.000, the result is approximated.
-    QP fields: context_id, context_viewNumber"
+    description: "Total number of product-related views. QP fields: context_id, context_viewNumber"
   }
-
-  #measure: percentage_views {
-  #  type: percent_of_total
-  #  #LIKE accounts for namespaces - we have a lot of them and they look e.g. tracking_id_ecProduct
-  #  sql: COUNT(DISTINCT(${TABLE}.view_id, 1000000) / ${total_views_related_to_products} ;;
-  #  description: "Total number of product-related views. If above 1.000.000, the result is approximated.
-  #  QP fields: context_id, context_viewNumber"
-  #}
-
-
-
 
   measure: currency {
     hidden: yes
@@ -375,7 +356,4 @@ LEFT JOIN
     sql: MAX(${TABLE}.product_price_baseCurrency) ;;
     label: "Currency"
   }
-
-
-
 }

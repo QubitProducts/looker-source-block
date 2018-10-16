@@ -1,6 +1,6 @@
 view: qshopdemo_qp_bi_entrance_base {
 
-  #version 1.1
+  #version 2
   sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_entrance` ;;
 
   dimension: view_id {
@@ -51,7 +51,7 @@ view: qshopdemo_qp_bi_entrance_base {
     timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
     sql:  ${TABLE}.property_event_ts ;;
     group_label: "Time Data Points"
-    description: "Timestamp of an entrance. QP field: meta_serverTs (with applied UTC offset, also accounting for daylight saving time)"
+    description: "Timestamp of an entrance. QP field: meta_serverTs (with applied UTC offset for your timezone)"
   }
 
   dimension: meta_url {

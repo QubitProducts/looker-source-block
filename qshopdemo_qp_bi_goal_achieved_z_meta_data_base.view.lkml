@@ -53,47 +53,42 @@ view: qshopdemo_qp_bi_goal_achieved_z_meta_data_base {
       1
     ;;}
 
+  dimension: experience_id {
+    type: string
+    sql: STRING(${TABLE}.experienceId) ;;
+    hidden: yes
+  }
 
-      dimension: experience_id {
-        type: string
-        sql: STRING(${TABLE}.experienceId) ;;
-        hidden: yes
-      }
+  dimension: experience_name {
+    type: string
+    sql: ${TABLE}.experienceName ;;
+    hidden: yes
+  }
 
+  dimension: g_current_experience_status {
+    view_label: "Goal Achieved"
+    type: string
+    sql: IF(${TABLE}.experience_last_paused_at <= CURRENT_DATE() , "Paused" , "Active") ;;
+    label: "Current Experience Status "
+    description: "Status of the experience as of today"
+    group_label: "Experience"
+  }
 
-      dimension: experience_name {
-        type: string
-        sql: ${TABLE}.experienceName ;;
-        hidden: yes
-      }
+  dimension: g_experience_first_published_at {
+    view_label: "Goal Achieved"
+    type: date
+    sql: TIMESTAMP(${TABLE}.experience_first_published_at) ;;
+    group_label: "Experience"
+    description: "Date the first iteration of experience was published"
+    label: "Experience First Published At"
+  }
 
-
-    dimension: g_current_experience_status {
-      view_label: "Goal Achieved"
-      type: string
-      sql: IF(${TABLE}.experience_last_paused_at <= CURRENT_DATE() , "Paused" , "Active") ;;
-      label: "Current Experience Status "
-      description: "Status of the experience as of today"
-      group_label: "Experience"
-
+  dimension: g_experience_last_paused_at {
+    view_label: "Goal Achieved"
+    type: date
+    sql: TIMESTAMP(${TABLE}.experience_last_paused_at) ;;
+    group_label: "Experience"
+    description: "Most recent date experience was paused"
+    label: "Experience Last Paused At"
     }
-    dimension: g_experience_first_published_at {
-        view_label: "Goal Achieved"
-        type: date
-        sql: TIMESTAMP(${TABLE}.experience_first_published_at) ;;
-        group_label: "Experience"
-        description: "Date the first iteration of experience was published"
-        label: "Experience First Published At"
-
-      }
-
-    dimension: g_experience_last_paused_at {
-       view_label: "Goal Achieved"
-       type: date
-       sql: TIMESTAMP(${TABLE}.experience_last_paused_at) ;;
-       group_label: "Experience"
-       description: "Most recent date experience was paused"
-       label: "Experience Last Paused At"
-     }
-
-    }
+}

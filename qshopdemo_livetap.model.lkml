@@ -11,7 +11,6 @@ explore: qshopdemo_qp_bi_attribution_base {
   from: qshopdemo_qp_bi_attribution_v01
   hidden: yes
   persist_for: "24 hours"
-
 }
 
 explore: qshopdemo_qp_bi_view_base {
@@ -66,7 +65,6 @@ explore: qshopdemo_qp_bi_view_base {
     sql_on: qshopdemo_qp_bi_experience_v01.experienceId = qshopdemo_qp_bi_experience_z_meta_data_v01.experienceId ;;
   }
 
-
   join: qshopdemo_qp_bi_goal_achieved_v01 {
     view_label: "Goal Achieved"
     foreign_key:qshopdemo_qp_bi_view_v01.view_id
@@ -78,7 +76,6 @@ explore: qshopdemo_qp_bi_view_base {
     sql_on: qshopdemo_qp_bi_goal_achieved_v01.experienceId = qshopdemo_qp_bi_goal_achieved_z_meta_data_v01.experienceId ;;
 
   }
-
 
   join: qshopdemo_qp_bi_attribution_v01 {
     view_label: "Attribution"
@@ -101,8 +98,6 @@ explore: qshopdemo_qp_bi_view_base {
     foreign_key: qshopdemo_qp_bi_view_v01.view_id
     relationship: one_to_many
   }
-
-
 }
 
 
@@ -114,7 +109,6 @@ explore: qshopdemo_qp_bi_visitor_pulse_base {
   persist_for: "24 hours"
   hidden: yes
   view_name: qshopdemo_qp_bi_visitor_pulse_v01
-
 
   join:  qshopdemo_qp_bi_session_v01 {
     view_label: "Sessions"
@@ -129,6 +123,7 @@ explore: qshopdemo_qp_bi_visitor_pulse_base {
     sql_on: ${qshopdemo_qp_bi_view_v01.view_id} = ${qshopdemo_qp_bi_visitor_pulse_v01.view_id} ;;
 
   }
+
   join:  qshopdemo_qp_bi_entrance_v01 {
     view_label: "Entrances"
     relationship: many_to_one
@@ -140,7 +135,6 @@ explore: qshopdemo_qp_bi_visitor_pulse_base {
     foreign_key:qshopdemo_qp_bi_visitor_pulse_v01.view_id
     relationship:  one_to_one
   }
-
 
   join: qshopdemo_qp_bi_segment_v01 {
     view_label: "Segment Membership"
@@ -159,7 +153,6 @@ explore: qshopdemo_qp_bi_visitor_pulse_base {
     foreign_key:qshopdemo_qp_bi_visitor_pulse_v01.view_id
     relationship: one_to_many
   }
-
 
   join: qshopdemo_qp_bi_user_action_v01 {
     view_label: "User Action"
@@ -177,7 +170,6 @@ explore: qshopdemo_qp_bi_product_base {
   hidden: yes
   view_name: qshopdemo_qp_bi_product_v01
 
-
   join:  qshopdemo_qp_bi_session_v01 {
     view_label: "Sessions"
     relationship: many_to_one
@@ -191,6 +183,7 @@ explore: qshopdemo_qp_bi_product_base {
     sql_on: ${qshopdemo_qp_bi_view_v01.view_id} = ${qshopdemo_qp_bi_product_v01.view_id} ;;
 
   }
+
   join:  qshopdemo_qp_bi_entrance_v01 {
     view_label: "Entrances"
     relationship: many_to_one
@@ -202,7 +195,6 @@ explore: qshopdemo_qp_bi_product_base {
     foreign_key:qshopdemo_qp_bi_product_v01.view_id
     relationship:  one_to_one
   }
-
 
   join: qshopdemo_qp_bi_segment_v01 {
     view_label: "Segment Membership"
@@ -222,14 +214,12 @@ explore: qshopdemo_qp_bi_product_base {
     relationship: one_to_many
   }
 
-
   join: qshopdemo_qp_bi_user_action_v01 {
     view_label: "User Action"
     relationship: many_to_one
     sql_on: (qshopdemo_qp_bi_product_v01.view_id = qshopdemo_qp_bi_user_action_v01.view_id) ;;
   }
 }
-
 
 explore: qshopdemo_qp_bi_experience_base {
   extension: required
@@ -254,6 +244,7 @@ explore: qshopdemo_qp_bi_experience_base {
     sql_on: ${qshopdemo_qp_bi_view_v01.view_id} = ${qshopdemo_qp_bi_experience_v01.view_id} ;;
 
   }
+
   join:  qshopdemo_qp_bi_entrance_v01 {
     view_label: "Entrances"
     relationship: many_to_one
@@ -266,20 +257,17 @@ explore: qshopdemo_qp_bi_experience_base {
     relationship:  one_to_one
   }
 
-
   join: qshopdemo_qp_bi_segment_v01 {
     view_label: "Segment Membership"
     foreign_key:qshopdemo_qp_bi_experience_v01.view_id
     relationship: one_to_many
   }
 
-
   join: qshopdemo_qp_bi_goal_achieved_v01 {
     view_label: "Goal Achieved"
     foreign_key:qshopdemo_qp_bi_experience_v01.view_id
     relationship: one_to_many
   }
-
 
   join: qshopdemo_qp_bi_user_action_v01 {
     view_label: "User Action"

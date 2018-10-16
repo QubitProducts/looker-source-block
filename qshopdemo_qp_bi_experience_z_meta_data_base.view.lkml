@@ -1,7 +1,5 @@
 view: qshopdemo_qp_bi_experience_z_meta_data_base {
- #the reason we have a `z` in name is because
   derived_table: {
-
     sql:
     SELECT
       CAST(experienceId AS STRING) experienceId,
@@ -54,13 +52,11 @@ view: qshopdemo_qp_bi_experience_z_meta_data_base {
       1
     ;;}
 
-
       dimension: experience_id {
         type: string
         sql: CAST(${TABLE}.experienceId AS STRING) ;;
         hidden: yes
       }
-
 
       dimension: experience_name {
         type: string
@@ -77,20 +73,20 @@ view: qshopdemo_qp_bi_experience_z_meta_data_base {
         group_label: "Experience"
 
       }
+
       dimension: experience_first_published_at {
-          view_label: "Experiences"
-          type: date
-          sql: TIMESTAMP(${TABLE}.experience_first_published_at) ;;
-          group_label: "Experience"
-          description: "Date the first iteration of experience was published"
-        }
+        view_label: "Experiences"
+        type: date
+        sql: TIMESTAMP(${TABLE}.experience_first_published_at) ;;
+        group_label: "Experience"
+        description: "Date the first iteration of experience was published"
+      }
 
      dimension: experience_last_paused_at {
-         view_label: "Experiences"
-         type: date
-         sql: TIMESTAMP(${TABLE}.experience_last_paused_at) ;;
-         group_label: "Experience"
-         description: "Most recent date experience was paused"
-       }
-
+        view_label: "Experiences"
+        type: date
+        sql: TIMESTAMP(${TABLE}.experience_last_paused_at) ;;
+        group_label: "Experience"
+        description: "Most recent date experience was paused"
+      }
     }
