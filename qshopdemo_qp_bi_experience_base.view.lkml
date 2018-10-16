@@ -1,9 +1,45 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_experience_base {
 
  #version 1.1
- sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_experience] ;;
-
+ derived_table: {
+   sql: SELECT
+qp_bi_view_name,
+ts,
+property_event_ts,
+view_id,
+meta_recordDate,
+meta_trackingId,
+context_id,
+context_viewNumber,
+context_sessionNumber,
+context_conversionNumber,
+meta_ts,
+meta_serverTs,
+experience.experienceId AS experienceId,
+experience.experienceName AS experienceName,
+experience.variationMasterId AS variationMasterId,
+experience.variationName AS variationName,
+experience.iterationName AS iterationName,
+experience.iterationId AS iterationId,
+experience.isControl AS isControl,
+experience.first_view_meta_ts AS first_view_meta_ts,
+experience.first_view_meta_recordDate AS first_view_meta_recordDate,
+experience.first_view_in_iteration AS first_view_in_iteration,
+experience.last_view_in_iteration AS last_view_in_iteration,
+experience.is_post_experience_view AS is_post_experience_view,
+experience.trafficAllocation AS trafficAllocation,
+experience.experience_status AS experience_status,
+experience.days_experience_live AS days_experience_live,
+experience.experience_first_published_at AS experience_first_published_at,
+experience.iteration_published_at AS iteration_published_at,
+experience.iteration_paused_at AS iteration_paused_at,
+experience.experience_last_paused_at AS experience_last_paused_at,
+experience.experience_paused_on_view AS experience_paused_on_view,
+experience.experience_paused_within_15_days AS experience_paused_within_15_days
+ FROM
+ `qubit-client-37403.qshopdemo__v2.livetap_experience`
+LEFT JOIN UNNEST (experience) as experience ;;
+ }
 #Time, visitor and meta info
   dimension: view_id {
     type: string
@@ -70,7 +106,7 @@ view: qshopdemo_qp_bi_experience_base {
 #Experience related dimensions
   dimension: experience_id {
     type: string
-    sql: STRING(${TABLE}.experienceId) ;;
+    sql: CAST(${TABLE}.experienceId AS STRING) ;;
     group_label: "Experience"
     description: "ID unique to the experience. QP fields: experienceId"
   }
@@ -85,14 +121,14 @@ view: qshopdemo_qp_bi_experience_base {
 
   dimension: iteration_id {
     type: string
-    sql: STRING(${TABLE}.iterationId) ;;
+    sql: CAST(${TABLE}.iterationId AS STRING) ;;
     group_label: "Experience"
     description: "The unique ID of iteration. Updates when modification is made to a master variation. QP fields: iterationId"
   }
 
   dimension: variation_master_id {
     type: string
-    sql: STRING(${TABLE}.variationMasterId) ;;
+    sql: CAST(${TABLE}.variationMasterId AS STRING) ;;
     group_label: "Experience"
     description: "Master variation ID of an experiment. The ID is assigned when a variation is launched and it is preserved throughout the experiment. QP fields: variationMasterId"
   }
@@ -177,32 +213,32 @@ dimension: iteration_published_at {
 
   measure: experience_visitors {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.experienceId IS NOT NULL,${TABLE}.context_id,NULL), 1000000)  ;;
+    sql: COUNT(DISTINCT IF(${TABLE}.experienceId IS NOT NULL,${TABLE}.context_id,NULL))  ;;
     description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, experienceId"
   }
 
   measure: distinct_experiences {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.experienceId, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.experienceId) ;;
     description: "Count of unique experience_ids. If above 1.000.000, the result is approximated. QP fields: experienceId"
   }
 
   measure: visitor_conversion_rate {
     type: number
-    sql: ${experience_converters} /  COUNT(DISTINCT ${TABLE}.context_id, 1000000) ;;
+    sql: SAFE_DIVIDE(${experience_converters},COUNT(DISTINCT ${TABLE}.context_id)) ;;
     value_format_name: percent_2
     description: "Share of unique visitors on views that are labeled with any non-null transaction_id in all visitors. For counting, when figures are above 1.000.000, the result is approximated. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, transaction_id"
   }
 
   measure: experience_views {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.view_id, 1000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.view_id) ;;
     description: "Count of unique combinations of a visitor_id and a view_number. If above 1.000.000, the result is approximated. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, context_viewNumber"
   }
 
   measure: experience_converters {
     type: number
-    sql: COUNT(DISTINCT IF(${qshopdemo_qp_bi_transaction_v01.transaction_id} IS NOT NULL,${TABLE}.context_id,NULL), 1000000) ;;
+    sql: COUNT(DISTINCT IF(${qshopdemo_qp_bi_transaction_v01.transaction_id} IS NOT NULL,${TABLE}.context_id,NULL)) ;;
     description: "Count of unique visitor_ids on views that are labeled with any non-null transaction_id. If above 1.000.000, the result is approximated. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, transaction_id"
   }
 
@@ -216,7 +252,7 @@ dimension: iteration_published_at {
 
   measure: transactions {
     type: number
-    sql: EXACT_COUNT_DISTINCT(CASE WHEN ${TABLE}.experienceId IS NOT NULL THEN ${qshopdemo_qp_bi_transaction_v01.transaction_id} END) ;;
+    sql: COUNT(DISTINCT CASE WHEN ${TABLE}.experienceId IS NOT NULL THEN ${qshopdemo_qp_bi_transaction_v01.transaction_id} END) ;;
   description: "Count of unique transaction_ids (always exact count). Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: transaction_id, experienceId"
   }
 
@@ -230,7 +266,7 @@ dimension: iteration_published_at {
 
   measure: latest_traffic_allocation {
     type: number
-    sql: FLOAT(COALESCE(SUBSTR(MAX(CONCAT(IF(${TABLE}.trafficAllocation = 0, NULL, ${TABLE}.meta_recordDate), STRING(FLOAT(IF(${TABLE}.trafficAllocation = 0, NULL,${TABLE}.trafficAllocation))))),11),'0.00'));;
+    sql: CAST(COALESCE(SUBSTR(MAX(CONCAT(IF(${TABLE}.trafficAllocation = 0, NULL, CAST(${TABLE}.meta_recordDate AS STRING)), CAST(CAST(IF(${TABLE}.trafficAllocation = 0, NULL,${TABLE}.trafficAllocation) AS FLOAT64) AS STRING))),11),'0.00') AS FLOAT64);;
   }
 
 # measure: days_experience_live_on_view {
@@ -243,7 +279,7 @@ dimension: iteration_published_at {
 
  measure: days_experience_live {
    type: number
-   sql:   COUNT(DISTINCT IF(${TABLE}.experience_status  = 'Live' AND ${TABLE}.meta_recordDate >= ${TABLE}.experience_first_published_at, ${TABLE}.meta_recordDate, NULL) ) ;;
+   sql:   COUNT(DISTINCT IF(${TABLE}.experience_status  = 'Live' AND cast(${TABLE}.meta_recordDate as string) >= ${TABLE}.experience_first_published_at, ${TABLE}.meta_recordDate, NULL) ) ;;
    description: "The number of days the experience has been live as of today"
  }
 }
