@@ -1,8 +1,7 @@
-#File uploaded: Mon Apr 09 14:05:48 GMT 2018
 view: qshopdemo_qp_bi_entrance_base {
 
   #version 1.1
-  sql_table_name:  [qubit-client-37403:qshopdemo.qp_bi_entrance] ;;
+  sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_entrance` ;;
 
   dimension: view_id {
     type: string
@@ -117,7 +116,7 @@ view: qshopdemo_qp_bi_entrance_base {
     label: "Medium"
     description: "Google's utm_medium parameter extracted out of the referrer URL. QP fields: referrer_url"
   }
-  
+
   dimension: content {
     type: string
     sql: ${TABLE}.utm_content ;;
@@ -125,7 +124,7 @@ view: qshopdemo_qp_bi_entrance_base {
     label: "Content"
     description: "Google's utm_content parameter extracted out of the referrer URL. QP fields: referrer_url"
   }
-  
+
   dimension: campaign {
     type: string
     sql: ${TABLE}.utm_campaign ;;
@@ -133,7 +132,7 @@ view: qshopdemo_qp_bi_entrance_base {
     label: "Campaign"
     description: "Google's utm_campaign parameter extracted out of the referrer URL. QP fields: referrer_url"
   }
-  
+
   dimension: term {
     type: string
     sql: ${TABLE}.utm_term ;;
@@ -144,13 +143,13 @@ view: qshopdemo_qp_bi_entrance_base {
 
   measure: entrance_visitors {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.context_id, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.context_id) ;;
     description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. QP fields: context_id"
   }
-  
+
   measure: entrances {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.entrance_id, 1000000) ;;
+    sql: COUNT(DISTINCT ${TABLE}.entrance_id) ;;
     description: "Count of unique combinations of a visitor_id and an entrance_number. If above 1.000.000, the result is approximated. QP fields: context_id, context_entranceNumber"
   }
 }
