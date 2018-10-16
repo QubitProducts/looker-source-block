@@ -25,6 +25,13 @@ Benefits of this block:
 
 Contact your Qubit customer success manager if you are unsure on the above, or if you are a travel or egaming customer.
 
+# Release notes
+
+*October 2018*
+- This block has been updated to work with Live Tap V2, which uses BigQuery StandardSQL & date partitioning for enhanced performance.
+- If you are looking for the previous block (which made use of LegacySQL), this is available on the branch _release-v1_.
+- Further updates and optimizations will be released soon.
+
 # Data Architecture
 
 This model covers the common set of metrics & subject areas used in the Qubit platform. 
@@ -141,5 +148,5 @@ For more information on extending this block, see the [Live Tap documentation](h
 Qubit may upgrade the contents of this block and extend it with new fields and views. In order to make incorporating these updates into your Looker instance easy, ensure any customizations are saved in the files ending with v01 (not the 'base'), or in a new file. If you make changes to _base_ files and then merge in updates into your model your changes will be lost.
 
 
-## Help & feedback
+# Help & feedback
 Blocks were designed for continuous improvement through the help of the entire Looker community, and we’d love your input. To log an error or recommendation, simply create an github issue. Please be as detailed as possible in your explanation, and we’ll address it as quick as we can.
