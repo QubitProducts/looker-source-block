@@ -1,7 +1,7 @@
-include: "qshopdemo_qp_bi_visitor_pulse_base.view.lkml"
+include: "qshopdemo_visitor_pulse.view.lkml"
 
-view: qshopdemo_qp_bi_visitor_pulse_v01 {
-  extends: [qshopdemo_qp_bi_visitor_pulse_base]
+view: qshopdemo_visitor_pulse_v01 {
+  extends: [qshopdemo_visitor_pulse]
   
   # add lookml view customizations here
   

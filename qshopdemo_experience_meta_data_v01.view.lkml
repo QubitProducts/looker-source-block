@@ -1,7 +1,7 @@
-include: "qshopdemo_qp_bi_experience_z_meta_data_base.view.lkml"
+include: "qshopdemo_experience_meta_data.view.lkml"
 
-view: qshopdemo_qp_bi_experience_z_meta_data_v01 {
-  extends: [qshopdemo_qp_bi_experience_z_meta_data_base]
+view: qshopdemo_experience_meta_data_v01 {
+  extends: [qshopdemo_experience_meta_data]
 
   # add lookml view customizations here
 

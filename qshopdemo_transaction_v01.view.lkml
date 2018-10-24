@@ -1,7 +1,7 @@
-include: "qshopdemo_qp_bi_transaction_base.view.lkml"
+include: "qshopdemo_transaction.view.lkml"
 
-view: qshopdemo_qp_bi_transaction_v01 {
-  extends: [qshopdemo_qp_bi_transaction_base]
+view: qshopdemo_transaction_v01 {
+  extends: [qshopdemo_transaction]
   
   # add lookml view customizations here
   

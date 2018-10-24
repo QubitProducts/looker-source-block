@@ -1,4 +1,4 @@
-view: qshopdemo_qp_bi_goal_achieved_base {
+view: qshopdemo_goal_achieved {
 
  # Qubit LookML | Retail | V2
  derived_table: {

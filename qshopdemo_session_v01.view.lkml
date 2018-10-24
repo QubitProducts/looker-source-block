@@ -1,7 +1,7 @@
-include: "qshopdemo_qp_bi_session_base.view.lkml"
+include: "qshopdemo_session.view.lkml"
 
-view: qshopdemo_qp_bi_session_v01 {
-  extends: [qshopdemo_qp_bi_session_base]
+view: qshopdemo_session_v01 {
+  extends: [qshopdemo_session]
   
   # add lookml view customizations here
   

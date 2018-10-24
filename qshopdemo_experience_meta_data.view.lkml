@@ -1,4 +1,4 @@
-view: qshopdemo_qp_bi_experience_z_meta_data_base {
+view: qshopdemo_experience_meta_data {
   derived_table: {
     sql:
     SELECT
