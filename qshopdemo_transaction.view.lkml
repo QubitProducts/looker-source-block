@@ -1,4 +1,4 @@
-view: qshopdemo_qp_bi_transaction_base {
+view: qshopdemo_transaction {
   # Qubit LookML | Retail | V2
   sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_transaction` ;;
 
@@ -86,7 +86,7 @@ view: qshopdemo_qp_bi_transaction_base {
 
   dimension: weeks_since_first_entry {
     type: number
-    sql: DATE_DIFF(CAST(${TABLE}.property_event_ts AS DATE), CAST(TIMESTAMP(${qshopdemo_qp_bi_view_v01.visitor_first_entry_date}) AS DATE),WEEK);;
+    sql: DATE_DIFF(CAST(${TABLE}.property_event_ts AS DATE), CAST(TIMESTAMP(${qshopdemo_view_v01.visitor_first_entry_date}) AS DATE),WEEK);;
     label: "Weeks Since First Entry"
     group_label: "Time Since First Entry"
     value_format_name: decimal_0
@@ -95,7 +95,7 @@ view: qshopdemo_qp_bi_transaction_base {
 
   dimension: days_since_first_entry {
     type: number
-    sql: DATE_DIFF(CAST(${TABLE}.property_event_ts AS DATE), CAST(TIMESTAMP(${qshopdemo_qp_bi_view_v01.visitor_first_entry_date}) AS DATE),DAY) ;;
+    sql: DATE_DIFF(CAST(${TABLE}.property_event_ts AS DATE), CAST(TIMESTAMP(${qshopdemo_view_v01.visitor_first_entry_date}) AS DATE),DAY) ;;
     label: "Days Since First Entry"
     group_label: "Time Since First Entry"
     value_format_name: decimal_0
@@ -160,14 +160,14 @@ view: qshopdemo_qp_bi_transaction_base {
 
   measure: session_conversion_rate {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.session_id) /  COUNT(DISTINCT ${qshopdemo_qp_bi_view_v01.session_id}) ;;
+    sql: COUNT(DISTINCT ${TABLE}.session_id) /  COUNT(DISTINCT ${qshopdemo_view_v01.session_id}) ;;
     value_format_name: percent_2
     description: "Share of unique sessions containing views that are labeled with any non-null transaction_id in all sessions. QP fields: context_sessionNumber, context_id"
   }
 
   measure: visitor_conversion_rate {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.context_id) /  COUNT(DISTINCT ${qshopdemo_qp_bi_view_v01.context_id}) ;;
+    sql: COUNT(DISTINCT ${TABLE}.context_id) /  COUNT(DISTINCT ${qshopdemo_view_v01.context_id}) ;;
     value_format_name: percent_2
     description: "Share of unique visitors on views that are labeled with any non-null transaction_id in all visitors. QP fields: context_id"
   }
@@ -202,7 +202,7 @@ view: qshopdemo_qp_bi_transaction_base {
 
   measure: revenue_per_visitor {
     type: number
-    sql: ${qshopdemo_qp_bi_transaction_v01.sum_of_transaction_total} / ${qshopdemo_qp_bi_view_v01.view_visitors} ;;
+    sql: ${qshopdemo_transaction_v01.sum_of_transaction_total} / ${qshopdemo_view_v01.view_visitors} ;;
     value_format_name: decimal_2
     description: "Sum of transaction_total divided by count of unique visitor_ids. QP fields: basket_total_baseValue, context_id"
   }

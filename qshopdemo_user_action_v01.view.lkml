@@ -1,7 +1,7 @@
-include: "qshopdemo_qp_bi_user_action_base.view.lkml"
+include: "qshopdemo_user_action.view.lkml"
 
-view: qshopdemo_qp_bi_user_action_v01 {
-  extends: [qshopdemo_qp_bi_user_action_base]
+view: qshopdemo_user_action_v01 {
+  extends: [qshopdemo_user_action]
   
   # add lookml view customizations here
   

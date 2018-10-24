@@ -1,7 +1,7 @@
-include: "qshopdemo_qp_bi_entrance_base.view.lkml"
+include: "qshopdemo_entrance.view.lkml"
 
-view: qshopdemo_qp_bi_entrance_v01 {
-  extends: [qshopdemo_qp_bi_entrance_base]
+view: qshopdemo_entrance_v01 {
+  extends: [qshopdemo_entrance]
   
   # add lookml view customizations here
   

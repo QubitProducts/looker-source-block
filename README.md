@@ -57,7 +57,7 @@ If a data point is not available in this model, you can always query the underly
 
 To connect your Looker instance to your Qubit Live Tap dataset you’ll need admin rights on your Looker instance, and you will need the following information that can be provided by your Qubit account manager:
 
-* **Looker Connection Name**: e.g. client-connection-100000
+* **Looker Connection Name**: e.g. qubit-livetap
 * **Qubit Project Name**: e.g. qubit-client-10000
 * **Qubit Tracking ID**: e.g. the name of the BigQuery dataset you wish to analyze in Looker
 * **Service Account Name**: e.g. email address for a service account. This will start with qubit-client-bi@qubit-client
@@ -102,10 +102,10 @@ Now at the terminal run the following commands to replace all occurrences of our
 
 ```bash
 # replace qshopdemo placeholder with our actual TRACKING_ID in all files
-find . -type f -print0 | xargs -0 perl -pi -e ‘s/qshopdemo/TRACKING_ID/g’
+find . -type f -print0 | xargs -0 perl -pi -e 's/qshopdemo/TRACKING_ID/g'
 
 # replace project ID placeholder with our actual PROJECT_ID in all files
-find . -type f -print0 | xargs -0 perl -pi -e ‘s/37403/PROJECT_ID/g’
+find . -type f -print0 | xargs -0 perl -pi -e 's/37403/PROJECT_ID/g'
 
 # relabel our LookML filenames to our actual tracking ID
 for f in *.l*; do mv $f ${f/qshopdemo/TRACKING_ID}; done
@@ -114,8 +114,8 @@ for f in *.l*; do mv $f ${f/qshopdemo/TRACKING_ID}; done
 for example, for the tracking ID “shipping_global” and project ID "12345" you would run the commands:
 
 ```bash
-find . -type f -print0 | xargs -0 perl -pi -e ‘s/qshopdemo/shipping_global/g’
-find . -type f -print0 | xargs -0 perl -pi -e ‘s/37403/12345/g’
+find . -type f -print0 | xargs -0 perl -pi -e 's/qshopdemo/shipping_global/g'
+find . -type f -print0 | xargs -0 perl -pi -e 's/37403/12345/g'
 for f in *.l*; do mv $f ${f/qshopdemo/shipping_global}; done
 ```
 
@@ -156,7 +156,7 @@ For more information on extending this block, see the [Live Tap documentation](h
 
 
 ## Be ready for future updates to this block
-Qubit may upgrade the contents of this block and extend it with new fields and views. In order to make incorporating these updates into your Looker instance easy, ensure any customizations are saved in the files ending with v01 (not the 'base'), or in a new file. If you make changes to _base_ files and then merge in updates into your model your changes will be lost.
+Qubit may upgrade the contents of this block and extend it with new fields and views. In order to make incorporating these updates into your Looker instance easy, ensure any customizations are saved in the files ending with v01 (not the 'base'), or in a new file. If you make changes to the base files and then merge in updates into your model your changes will be lost.
 
 
 # Help & feedback

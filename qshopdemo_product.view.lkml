@@ -1,4 +1,4 @@
-view: qshopdemo_qp_bi_product_base {
+view: qshopdemo_product {
 
  # Qubit LookML | Retail | V2
   derived_table: {
@@ -304,6 +304,7 @@ view: qshopdemo_qp_bi_product_base {
   measure: product_average_price {
     type: average
     sql: ${TABLE}.product_price_baseValue ;;
+    value_format_name: decimal_2
     description: "Average value of final price of all products that were displayed, interacted with, or purchased. QP fields: product_price_baseValue"
   }
 
@@ -315,7 +316,7 @@ view: qshopdemo_qp_bi_product_base {
 
   measure: product_purchased_value {
     type: sum
-    sql: IF(${TABLE}.transaction_id IS NOT NULL, ${TABLE}.subtotal_baseValue ,0) ;;
+    sql: IF(${TABLE}.transaction_id IS NOT NULL, ${TABLE}.product_price_baseValue ,0) ;;
     value_format_name: decimal_2
     description: "Sum of final product values on views that are labeled with 'Product Purchase' interaction type. QP fields: transaction_id, product_price_baseValue"
   }
