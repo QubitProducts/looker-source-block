@@ -1,4 +1,4 @@
-view: qshopdemo_qp_bi_segment_base {
+view: qshopdemo_segment {
 
  # Qubit LookML | Retail | V2
  derived_table: {
@@ -74,27 +74,27 @@ view: qshopdemo_qp_bi_segment_base {
 
   measure: transaction_total {
     type: sum_distinct
-    sql_distinct_key: ${qshopdemo_qp_bi_transaction_v01.transaction_id} ;;
-    sql: CASE WHEN ${TABLE}.segmentId IS NOT NULL THEN ${qshopdemo_qp_bi_transaction_v01.transaction_total} END ;;
+    sql_distinct_key: ${qshopdemo_transaction_v01.transaction_id} ;;
+    sql: CASE WHEN ${TABLE}.segmentId IS NOT NULL THEN ${qshopdemo_transaction_v01.transaction_total} END ;;
     value_format_name: decimal_0
     description: "Sum of transaction_total. Only for views labeled with any non-null segment_id. QP fields: basket_total_baseValue, segmentId"
   }
 
   measure: transactions {
     type: number
-    sql: COUNT(DISTINCT CASE WHEN ${TABLE}.segmentId IS NOT NULL THEN ${qshopdemo_qp_bi_transaction_v01.transaction_id} END) ;;
+    sql: COUNT(DISTINCT CASE WHEN ${TABLE}.segmentId IS NOT NULL THEN ${qshopdemo_transaction_v01.transaction_id} END) ;;
     description: "Count of unique transaction_ids (always exact count). Only for views labeled with any non-null segment_id. QP fields: transaction_id, segmentId"
   }
 
   measure: segment_converters {
     type: number
-    sql: COUNT(DISTINCT IF(${qshopdemo_qp_bi_transaction_v01.transaction_id} IS NOT NULL,${TABLE}.context_id,NULL)) ;;
+    sql: COUNT(DISTINCT IF(${qshopdemo_transaction_v01.transaction_id} IS NOT NULL,${TABLE}.context_id,NULL)) ;;
     description: "Count of unique visitor_ids on views labeled with any non-null segment_id.  QP fields: context_id, transaction_id"
   }
 
   measure: revenue_per_visitor {
     type: number
-    sql: SAFE_DIVIDE(${qshopdemo_qp_bi_segment_v01.transaction_total},${qshopdemo_qp_bi_segment_v01.segment_visitors}) ;;
+    sql: SAFE_DIVIDE(${qshopdemo_segment_v01.transaction_total},${qshopdemo_segment_v01.segment_visitors}) ;;
     value_format_name: decimal_2
     description: "Sum of transaction_total divided by count of unique visitor_ids. Only for views labeled with any non-null segment_id. QP fields: basket_total_baseValue, context_id"
   }

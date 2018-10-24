@@ -1,4 +1,4 @@
-view: qshopdemo_qp_bi_goal_achieved_z_meta_data_base {
+view: qshopdemo_goal_achieved_meta_data {
   derived_table: {
 
     sql:

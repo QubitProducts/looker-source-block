@@ -1,4 +1,4 @@
-view: qshopdemo_qp_bi_user_action_base {
+view: qshopdemo_user_action {
 
  # Qubit LookML | Retail | V2
  derived_table: {

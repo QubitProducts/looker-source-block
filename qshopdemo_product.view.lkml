@@ -1,4 +1,4 @@
-view: qshopdemo_qp_bi_product_base {
+view: qshopdemo_product {
 
  # Qubit LookML | Retail | V2
   derived_table: {

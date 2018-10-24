@@ -1,4 +1,4 @@
-view: qshopdemo_qp_bi_entrance_base {
+view: qshopdemo_entrance {
 
   # Qubit LookML | Retail | V2
   sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_entrance` ;;
