@@ -41,8 +41,11 @@ view: qshopdemo_goal_achieved {
         experience_goal_achieved.experience_last_paused_at AS experience_last_paused_at,
         experience_goal_achieved.experience_paused_within_15_days AS experience_paused_within_15_days
       FROM
-        `qubit-client-37403.qshopdemo__v2.livetap_goal_achieved`
-      LEFT JOIN UNNEST (experience_goal_achieved) as experience_goal_achieved ;;
+        `qubit-client-37403.{{qshopdemo_analytics.site._parameter_value}}__v2.livetap_goal_achieved`
+      WHERE
+        {% condition qshopdemo_analytics.time_data_points_date  %} property_event_ts {% endcondition %}
+      LEFT JOIN 
+        UNNEST (experience_goal_achieved) as experience_goal_achieved ;;
  }
 
   dimension: view_id {
@@ -136,6 +139,7 @@ view: qshopdemo_goal_achieved {
     sql:  ${TABLE}.property_event_ts ;;
     group_label: "⏰ Date & Time"
     description: "Timestamp of achieving the goal by the visitor. QP fields:  meta_serverTs (with applied UTC offset, for your timezone)"
+    hidden: yes
   }
 
   dimension: variation_master_id {

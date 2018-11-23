@@ -36,12 +36,15 @@ view: qshopdemo_experience {
     experience.experience_last_paused_at AS experience_last_paused_at,
     experience.experience_paused_on_view AS experience_paused_on_view,
     experience.experience_paused_within_15_days AS experience_paused_within_15_days
- FROM
-  `qubit-client-37403.qshopdemo__v2.livetap_experience`
-  LEFT JOIN UNNEST (experience) as experience ;;
+  FROM
+    `qubit-client-37403.{{qshopdemo_analytics.site._parameter_value}}__v2.livetap_experience`
+  WHERE 
+    {% condition qshopdemo_analytics.time_data_points_date  %} property_event_ts {% endcondition %}
+  LEFT JOIN 
+    UNNEST (experience) as experience ;;
  }
 
-#Time, visitor and meta info
+  #Time, visitor and meta info
   dimension: view_id {
     type: string
     sql: ${TABLE}.view_id ;;
@@ -101,6 +104,7 @@ view: qshopdemo_experience {
     sql:  ${TABLE}.property_event_ts ;;
     group_label: "⏰ Date & Time"
     description: "Timestamp of all views that happened on or after seeing an experience. QP field: meta_serverTs (with applied UTC offset for your timezone)"
+    hidden: yes
   }
 
 #Experience related dimensions

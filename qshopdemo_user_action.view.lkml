@@ -1,8 +1,8 @@
 view: qshopdemo_user_action {
 
- # Qubit LookML | Retail | V2
- derived_table: {
-   sql: SELECT
+  # Qubit LookML | Retail | V2
+  derived_table: {
+    sql: SELECT
           qp_bi_view_name,
           ts,
           property_event_ts,
@@ -22,9 +22,13 @@ view: qshopdemo_user_action {
           user_action.voucher_label AS voucher_label,
           user_action.voucher_entry AS voucher_entry,
           user_action.voucher_entrySuccess AS voucher_entrySuccess
-        FROM `qubit-client-37403.qshopdemo__v2.livetap_user_action`
-        left join unnest (user_action) as user_action ;;
- }
+        FROM 
+          `qubit-client-37403.{{qshopdemo_analytics.site._parameter_value}}__v2.livetap_user_action`
+        WHERE
+          {% condition qshopdemo_analytics.time_data_points_date  %} property_event_ts {% endcondition %}
+        LEFT JOIN
+          unnest (user_action) as user_action ;;
+  }
 
   dimension: view_id {
     type: string
@@ -64,6 +68,7 @@ view: qshopdemo_user_action {
     sql:  ${TABLE}.property_event_ts ;;
     group_label: "⏰ Date & Time"
     description: "Timestamp of the user action. QP fields: property_event_ts"
+    hidden: yes
   }
 
   dimension: type {

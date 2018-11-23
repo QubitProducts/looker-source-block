@@ -2,10 +2,26 @@ view: qshopdemo_segment {
 
  # Qubit LookML | Retail | V2
  derived_table: {
-   sql: select meta_recordDate, qp_bi_view_name, ts, property_event_ts, view_id, meta_ts, meta_serverTs, meta_trackingId, context_id, context_viewNumber, context_sessionNumber, context_conversionNumber, segment_rows, segment.segmentId as segmentId, segment.segmentName as segmentName
-        from  `qubit-client-37403.qshopdemo__v2.livetap_segment`
-        left join unnest(segment) as segment ;;
- }
+   sql: select meta_recordDate, 
+                qp_bi_view_name, ts, 
+                property_event_ts, 
+                view_id, meta_ts, 
+                meta_serverTs, 
+                meta_trackingId, 
+                context_id, 
+                context_viewNumber, 
+                context_sessionNumber, 
+                context_conversionNumber, 
+                segment_rows, 
+                segment.segmentId as segmentId, 
+                segment.segmentName as segmentName
+        from  
+          `qubit-client-37403.{{qshopdemo_analytics.site._parameter_value}}__v2.livetap_segment`
+        where
+          {% condition qshopdemo_analytics.time_data_points_date  %} property_event_ts {% endcondition %}
+        left join 
+          unnest(segment) as segment ;;
+  }
 
   dimension: segment_id {
     type: string
@@ -45,6 +61,7 @@ view: qshopdemo_segment {
     sql:  ${TABLE}.property_event_ts ;;
     group_label: "⏰ Date & Time"
     description: "Timestamp that a visitor was active & a member of a particular segment. QP fields: meta_serverTs (adjusted to timezone)"
+    hidden: yes
   }
 
   measure: segment_visitors {

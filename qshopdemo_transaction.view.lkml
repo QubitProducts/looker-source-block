@@ -1,6 +1,15 @@
 view: qshopdemo_transaction {
   # Qubit LookML | Retail | V2
-  sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_transaction` ;;
+  derived_table: {
+    sql:
+      SELECT
+        *
+      FROM
+        `qubit-client-37403.{{realtime.site._parameter_value}}__v2.livetap_transaction`
+      WHERE
+        {% condition qshopdemo_analytics.time_data_points_date  %} property_event_ts {% endcondition %}
+      ;;
+  }
 
   dimension: basket_tax_base_value {
     label: "Transaction Tax"
@@ -109,6 +118,7 @@ view: qshopdemo_transaction {
     sql:  ${TABLE}.property_event_ts ;;
     group_label: "⏰ Date & Time"
     description: "Timestamp of the transaction. QP fields:  meta_serverTs (with applied UTC offset, for your timezone)"
+    hidden: yes
   }
 
   dimension_group: time_data_points_previous_transaction {
