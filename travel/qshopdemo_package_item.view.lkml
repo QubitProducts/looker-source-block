@@ -12,21 +12,14 @@ view: qshopdemo_package_item {
       ;;
   }
 
-  dimension: weeks_since_first_entry {
-    type: number
-    sql: ROUND(DATEDIFF(MSEC_TO_TIMESTAMP(${TABLE}.meta_ts), TIMESTAMP((DATE(${{TRACKING_ID}_qp_bi_view_v01.visitor_first_entry_date} )))) / 7, 0) ;;
-    label: "Weeks Since First Entry"
-    value_format_name: decimal_0
-    description: "Number of weeks between the first view of a visitor and the current view. QP fields: meta_ts, meta_recordDate"
-  }
-
   dimension_group: time_data_points {
-    label: "Time Data Points"
+    label: ""
     type: time
     timeframes:  [time, hour_of_day, date, day_of_week, week, week_of_year, month, month_name, quarter_of_year, year]
-    sql: MSEC_TO_TIMESTAMP(${TABLE}.meta_ts) ;;
-    group_label: "Time Data Points"
-    description: "Timestamp of package item interaction event. QP fields: meta_ts"
+    sql:  ${TABLE}.property_event_ts ;;
+    group_label: "⏰ Date & Time"
+    description: "Timestamp of the transaction. QP fields:  meta_serverTs (with applied UTC offset, for your timezone)"
+    hidden: yes
   }
 
   dimension: context_conversion_number {
@@ -603,32 +596,32 @@ view: qshopdemo_package_item {
 
   measure: visitors {
     type: number
-    sql: COUNT(DISTINCT ${TABLE}.context_id, 1000000) ;;
-    description: "Count of unique visitor_ids. If above 1.000.000, the result is approximated. QP fields: context_id"
+    sql: COUNT(DISTINCT ${TABLE}.context_id) ;;
+    description: "Count of unique visitor_ids. QP fields: context_id"
   }
 
   measure: package_views {
     type: number
-    sql: SUM(IF(${TABLE}.meta_type = 'trPackageItem',1,0));;
-    description: "Count of unique combinations of a visitor_id and a view_number. If above 1.000.000, the result is approximated. Only for views flagged with 'Package View' interaction type. QP fields: meta_type"
+    sql: SUM(IF(${TABLE}.meta_type = 'trPackageItem', 1, 0));;
+    description: "Count of unique combinations of a visitor_id and a view_number. Only for views flagged with 'Package View' interaction type. QP fields: meta_type"
   }
 
   measure: checkout_views {
     type: number
-    sql: SUM(IF(${TABLE}.meta_type = 'trPackageItemCheckout',1,0));;
-    description: "Count of unique combinations of a visitor_id and a view_number. If above 1.000.000, the result is approximated. Only for views flagged with 'Package Checkout' interaction type. QP fields: meta_type"
+    sql: SUM(IF(${TABLE}.meta_type = 'trPackageItemCheckout', 1, 0));;
+    description: "Count of unique combinations of a visitor_id and a view_number. Only for views flagged with 'Package Checkout' interaction type. QP fields: meta_type"
   }
 
   measure: converters {
     type: number
-    sql: COUNT(DISTINCT IF(${TABLE}.transaction_id IS NOT NULL, ${TABLE}.context_id, NULL), 1000000) ;;
-    description: "Count of unique visitor_ids on page views that are labeled with 'Package Purchase' interaction type. If above 1.000.000, the result is approximated. QP fields: transaction_id, context_id"
+    sql: COUNT(DISTINCT IF(${TABLE}.transaction_id IS NOT NULL, ${TABLE}.context_id, NULL)) ;;
+    description: "Count of unique visitor_ids on page views that are labeled with 'Package Purchase' interaction type. QP fields: transaction_id, context_id"
   }
 
   measure: orders {
     type: number
-    sql: EXACT_COUNT_DISTINCT(${TABLE}.transaction_id) ;;
-    description: "Count of unique transaction_ids (always exact count). QP fields: transaction_id"
+    sql: COUNT_DISTINCT(${TABLE}.transaction_id) ;;
+    description: "Count of unique transaction_ids. QP fields: transaction_id"
   }
 
   measure: package_item_min_price {
@@ -651,13 +644,13 @@ view: qshopdemo_package_item {
 
   measure: distinct_package_item_ids {
     type: number
-    sql: COUNT(DISTINCT ${package_item_id}, 1000000) ;;
-    description: "Count of unique package item ids that were displayed, interacted with, or purchased. If above 1.000.000, the result is approximated. QP fields: package_item_id"
+    sql: COUNT(DISTINCT ${package_item_id}) ;;
+    description: "Count of unique package item ids that were displayed, interacted with, or purchased. QP fields: package_item_id"
   }
 
   measure: package_item_purchased_value {
     type: number
-    sql: SUM(IF(${TABLE}.transaction_id IS NOT NULL, ${package_subtotal_base_value} ,0));;
+    sql: SUM(IF(${TABLE}.transaction_id IS NOT NULL, ${package_subtotal_base_value}, 0));;
     description: "Final price of all packages that were purchased. QP fields: transaction_id, package_item_price_base_value"
   }
 }

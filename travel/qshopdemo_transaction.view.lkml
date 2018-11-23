@@ -323,14 +323,14 @@ view: qshopdemo_transaction {
     type: number
     sql: COUNT(DISTINCT ${TABLE}.session_id) /  COUNT(DISTINCT ${qshopdemo_view_v01.session_id}) ;;
     value_format_name: percent_2
-    description: "Share of unique sessions containing page views that are labeled with any non-null transaction_id in all sessions. For counting, when figures are above 1.000.000, the result is approximated. QP fields: context_id, context_sessionNumber"
+    description: "Share of unique sessions containing page views that are labeled with any non-null transaction_id in all sessions.  QP fields: context_id, context_sessionNumber"
   }
 
   measure: visitor_conversion_rate {
     type: number
     sql: COUNT(DISTINCT ${TABLE}.context_id) /  COUNT(DISTINCT ${qshopdemo_view_v01.context_id}) ;;
     value_format_name: percent_2
-    description: "Share of unique visitors on page views that are labeled with any non-null transaction_id in all visitors. For counting, when figures are above 1.000.000, the result is approximated. QP fields: context_id"
+    description: "Share of unique visitors on page views that are labeled with any non-null transaction_id in all visitors. QP fields: context_id"
   }
 
   measure: sum_of_transaction_total {
@@ -358,7 +358,7 @@ view: qshopdemo_transaction {
     type: number
     sql: ${qshopdemo_transaction_v01.sum_of_transaction_total} / ${qshopdemo_view_v01.view_visitors} ;;
     value_format_name: decimal_2
-    description: "Sum of transaction_total divided by count of unique visitor_ids. If count of visitor_ids is above 1.000.000, the result is approximated. QP fields: transaction_total, context_id"
+    description: "Sum of transaction_total divided by count of unique visitor_ids. QP fields: transaction_total, context_id"
   }
 
   measure: hours_since_previous_purchase {
