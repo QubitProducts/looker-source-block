@@ -1,7 +1,7 @@
 view: qshopdemo_attribution {
 
   # Qubit LookML | Retail | V2
-  sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_attribution` ;;
+  sql_table_name: `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_attribution` ;;
 
   dimension: context_entrance_number {
     type: number

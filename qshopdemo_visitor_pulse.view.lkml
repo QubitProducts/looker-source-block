@@ -1,7 +1,16 @@
 view: qshopdemo_visitor_pulse {
 
  # Qubit LookML | Retail | V2
- sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_visitor_pulse` ;;
+  derived_table: {
+    sql:
+      SELECT
+        *
+      FROM
+        `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_visitor_pulse`
+      WHERE
+        {% condition qshopdemo_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
+      ;;
+  }
 
   dimension: answer {
     type: string
@@ -103,6 +112,7 @@ view: qshopdemo_visitor_pulse {
     sql:  ${TABLE}.property_event_ts ;;
     group_label: "⏰ Date & Time"
     description: "Timestamp of the page view. QP fields:  meta_serverTs (with applied UTC offset, for your timezone)"
+    hidden: yes
   }
 
   dimension: meta_url {

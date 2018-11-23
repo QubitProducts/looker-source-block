@@ -3,6 +3,11 @@ Qubit is the fastest and most scalable personalization platform available today.
 
 # Release notes
 
+**December 2018 - Release v2.3**
+- Add site filter: enabling easy switching between separate projects
+- You a can now use a single date filter to easily filter all views in the Explore
+- Includes latest fixes.
+
 **October 2018 - Release v2.0**
 - This block has been updated to work with Live Tap V2, which uses BigQuery StandardSQL & date partitioning for enhanced performance.
 - If you are looking for the previous block (which made use of LegacySQL), this is available on the git branch _v1-legacy_. This update introduces breaking changes from V1.0. 

@@ -1,7 +1,16 @@
 view: qshopdemo_view {
 
- # Qubit LookML | Retail | V2
- sql_table_name:  `qubit-client-37403.qshopdemo__v2.livetap_view` ;;
+  # Qubit LookML | Retail | V2
+  sql_table_name:  `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_view` ;;
+
+  parameter: site {
+    type: unquoted
+    allowed_value: {
+      label: ".com"
+      value: "qshopdemo"
+    }
+  }
+
   dimension: view_id {
     type: string
     sql: ${TABLE}.view_id ;;

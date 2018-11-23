@@ -39,7 +39,9 @@ view: qshopdemo_product {
           product.product_interaction_type product_interaction_type,
           product.meta_type meta_type
         FROM
-          `qubit-client-37403.qshopdemo__v2.livetap_product` v
+          `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_product` v
+        WHERE
+          {% condition qshopdemo_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
         LEFT JOIN
           UNNEST (product) AS product ;;
   }
@@ -138,6 +140,7 @@ view: qshopdemo_product {
     sql:  ${TABLE}.property_event_ts ;;
     group_label: "⏰ Date & Time"
     description: "Timestamp of the product interaction event. QP fields:  meta_serverTs (with applied UTC offset, for your timezone)"
+    hidden: yes
   }
 
   dimension: meta_type {
