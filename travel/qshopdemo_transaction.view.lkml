@@ -307,7 +307,7 @@ view: qshopdemo_transaction {
 
   measure: average_order_value {
     type: number
-    sql:  SUM(${TABLE}.package_total_baseValue) / COUNT_DISTINCT(${transaction_id}) ;;
+    sql:  SUM(${TABLE}.package_total_baseValue) / COUNT(DISTINCT ${transaction_id}) ;;
     value_format_name: decimal_2
     description: "Average of transaction value of all transactions. QP fields: package_total_baseValue"
   }

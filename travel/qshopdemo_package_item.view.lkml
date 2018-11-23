@@ -620,7 +620,7 @@ view: qshopdemo_package_item {
 
   measure: orders {
     type: number
-    sql: COUNT_DISTINCT(${TABLE}.transaction_id) ;;
+    sql: COUNT(DISTINCT ${TABLE}.transaction_id ) ;;
     description: "Count of unique transaction_ids. QP fields: transaction_id"
   }
 
