@@ -39,9 +39,9 @@ view: qshopdemo_product {
           product.product_interaction_type product_interaction_type,
           product.meta_type meta_type
         FROM
-          `qubit-client-37403.{{qshopdemo_analytics.site._parameter_value}}__v2.livetap_product` v
+          `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_product` v
         WHERE
-          {% condition qshopdemo_analytics.time_data_points_date  %} property_event_ts {% endcondition %}
+          {% condition qshopdemo_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
         LEFT JOIN
           UNNEST (product) AS product ;;
   }

@@ -6,9 +6,9 @@ view: qshopdemo_package_item {
       SELECT
         *
       FROM
-        `qubit-client-37403.{{realtime.site._parameter_value}}__v2.livetap_package_item`
+        `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_package_item`
       WHERE
-        {% condition qshopdemo_analytics.time_data_points_date  %} property_event_ts {% endcondition %}
+        {% condition qshopdemo_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
       ;;
   }
 
