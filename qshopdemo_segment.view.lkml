@@ -16,9 +16,9 @@ view: qshopdemo_segment {
                 segment.segmentId as segmentId, 
                 segment.segmentName as segmentName
         from  
-          `qubit-client-37403.{{qshopdemo_analytics.site._parameter_value}}__v2.livetap_segment`
+          `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_segment`
         where
-          {% condition qshopdemo_analytics.time_data_points_date  %} property_event_ts {% endcondition %}
+          {% condition qshopdemo_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
         left join 
           unnest(segment) as segment ;;
   }
