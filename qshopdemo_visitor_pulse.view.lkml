@@ -6,7 +6,7 @@ view: qshopdemo_visitor_pulse {
       SELECT
         *
       FROM
-        `qubit-client-37403.{{realtime.site._parameter_value}}__v2.livetap_visitor_pulse`
+        `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_visitor_pulse`
       WHERE
         {% condition qshopdemo_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
       ;;
