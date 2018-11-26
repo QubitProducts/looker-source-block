@@ -38,10 +38,11 @@ view: qshopdemo_experience {
     experience.experience_paused_within_15_days AS experience_paused_within_15_days
   FROM
     `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_experience`
+  LEFT JOIN 
+    UNNEST (experience) as experience
   WHERE 
     {% condition qshopdemo_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
-  LEFT JOIN 
-    UNNEST (experience) as experience ;;
+  ;;
  }
 
   #Time, visitor and meta info
@@ -258,7 +259,7 @@ dimension: iteration_published_at {
 
   measure: revenue_per_visitor {
     type: number
-    sql: ${qshopdemo_experience_v01.transaction_total} / ${qshopdemo_experience_v01.experience_visitors} ;;
+    sql: SAFE_DIVIDE(${qshopdemo_experience_v01.transaction_total}, ${qshopdemo_experience_v01.experience_visitors}) ;;
     value_format_name: decimal_2
     description: "Sum of transaction_total divided by count of unique visitor_ids. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: basket_total_baseValue, context_id, experienceId"
   }

@@ -156,14 +156,14 @@ view: qshopdemo_transaction {
 
   measure: average_order_value {
     type: number
-    sql:  SUM(${TABLE}.basket_total_baseValue) / COUNT(DISTINCT ${transaction_id}) ;;
+    sql:  SAFE_DIVIDE(SUM(${TABLE}.basket_total_baseValue), COUNT(DISTINCT ${transaction_id})) ;;
     value_format_name: decimal_2
     description: "Average of transaction value of all transactions. QP fields: basket_total_baseValue"
   }
 
   measure: revenue_per_converter {
     type: number
-    sql:  SUM(${TABLE}.basket_total_baseValue) / COUNT(DISTINCT ${TABLE}.context_id) ;;
+    sql:  SAFE_DIVIDE(SUM(${TABLE}.basket_total_baseValue), COUNT(DISTINCT ${TABLE}.context_id)) ;;
     value_format_name: decimal_2
     description: "Sum of transaction_total divided by count of unique visitor_ids. Only for views that are labeled with any non-null transaction_id. QP fields: basket_total_baseValue, context_id"
   }
