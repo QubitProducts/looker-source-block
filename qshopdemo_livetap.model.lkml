@@ -6,7 +6,7 @@ case_sensitive:  no
 explore: qshopdemo_view {
   group_label: "Qubit"
   extension: required
-  fields: [ALL_FIELDS*, -qshopdemo_attribution_v01.first_click_value, -qshopdemo_attribution_v01.last_click_value, -qshopdemo_attribution_v01.even_click_value, -qshopdemo_attribution_v01.behavioural_value]
+  fields: [ALL_FIELDS*]
   view_name: qshopdemo_view_v01
   from: qshopdemo_view_v01
   label: "Analytics: qshopdemo"
