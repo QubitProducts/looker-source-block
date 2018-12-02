@@ -1,4 +1,4 @@
-view: qshopdemo_transaction {
+view: q_transaction {
 
   # Qubit LookML | Travel | V2
   derived_table: {
@@ -6,9 +6,9 @@ view: qshopdemo_transaction {
       SELECT
         *
       FROM
-        `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_transaction`
+        `{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_transaction`
       WHERE
-        {% condition qshopdemo_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
+        {% condition q_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
       ;;
   }
 
@@ -307,14 +307,14 @@ view: qshopdemo_transaction {
 
   measure: average_order_value {
     type: number
-    sql:  SUM(${TABLE}.package_total_baseValue) / COUNT(DISTINCT ${transaction_id}) ;;
+    sql:  SAFE_DIVIDE(SUM(${TABLE}.package_total_baseValue), COUNT(DISTINCT ${transaction_id})) ;;
     value_format_name: decimal_2
     description: "Average of transaction value of all transactions. QP fields: package_total_baseValue"
   }
 
   measure: revenue_per_converter {
     type: number
-    sql:  SUM(${TABLE}.transaction_total) / COUNT(DISTINCT ${TABLE}.context_id) ;;
+    sql:  SAFE_DIVIDE(SUM(${TABLE}.transaction_total), COUNT(DISTINCT ${TABLE}.context_id)) ;;
     value_format_name: decimal_2
     description: "Number of weeks between the current transaction and previous transaction by the same visitor. QP fields: transaction_total, context_id"
   }
