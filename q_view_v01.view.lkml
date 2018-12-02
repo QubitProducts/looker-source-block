@@ -7,7 +7,7 @@ view: q_view_v01 {
     type: unquoted
     allowed_value: {
       label: ".com"
-      value: "qshopdemo"
+      value: "store_us"
     }
   }
 
