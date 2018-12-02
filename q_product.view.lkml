@@ -1,4 +1,4 @@
-view: qshopdemo_product {
+view: q_product {
 
  # Qubit LookML | Retail | V2
   derived_table: {
@@ -39,9 +39,9 @@ view: qshopdemo_product {
           product.product_interaction_type product_interaction_type,
           product.meta_type meta_type
         FROM
-          `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_product` v
+          `{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_product` v
         WHERE
-          {% condition qshopdemo_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
+          {% condition q_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
         LEFT JOIN
           UNNEST (product) AS product ;;
   }
