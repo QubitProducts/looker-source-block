@@ -42,10 +42,11 @@ view: q_goal_achieved {
         experience_goal_achieved.experience_paused_within_15_days AS experience_paused_within_15_days
       FROM
         `{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_goal_achieved`
+      LEFT JOIN 
+        UNNEST (experience_goal_achieved) as experience_goal_achieved 
       WHERE
         {% condition q_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
-      LEFT JOIN 
-        UNNEST (experience_goal_achieved) as experience_goal_achieved ;;
+      ;;
  }
 
   dimension: view_id {

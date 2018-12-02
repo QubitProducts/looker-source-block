@@ -40,10 +40,11 @@ view: q_product {
           product.meta_type meta_type
         FROM
           `{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_product` v
+        LEFT JOIN
+          UNNEST (product) AS product 
         WHERE
           {% condition q_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
-        LEFT JOIN
-          UNNEST (product) AS product ;;
+        ;;
   }
 
   dimension: session_id {
