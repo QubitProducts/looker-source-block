@@ -1,15 +1,7 @@
-view: qshopdemo_view {
+view: q_view {
 
   # Qubit LookML | Retail | V2
-  sql_table_name:  `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_view` ;;
-
-  parameter: site {
-    type: unquoted
-    allowed_value: {
-      label: ".com"
-      value: "qshopdemo"
-    }
-  }
+  sql_table_name:  `{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_view` ;;
 
   dimension: view_id {
     type: string
@@ -296,7 +288,7 @@ view: qshopdemo_view {
 
   dimension: weeks_since_first_entry {
     type: number
-    sql: DATE_DIFF(CAST(${TABLE}.meta_serverTs AS DATE), CAST(TIMESTAMP(${qshopdemo_view_v01.visitor_first_entry_date}) AS DATE),WEEK) ;;
+    sql: DATE_DIFF(CAST(${TABLE}.meta_serverTs AS DATE), CAST(TIMESTAMP(${q_view_v01.visitor_first_entry_date}) AS DATE),WEEK) ;;
     group_label: "View Meta Data"
     value_format_name: decimal_0
     description: "Number of weeks between the first view of a visitor and the current view. QP fields: meta_ts, meta_recordDate, context_id"

@@ -1,7 +1,7 @@
-view: qshopdemo_attribution {
+view: q_attribution {
 
   # Qubit LookML | Retail | V2
-  sql_table_name: `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_attribution` ;;
+  sql_table_name: `{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_attribution` ;;
 
   dimension: context_entrance_number {
     type: number
@@ -258,38 +258,6 @@ view: qshopdemo_attribution {
     value_format_name: decimal_2
     description: "Monetary value attributed to an entry - set to full conversion value if the entry was last. QP fields: derived - basket_total_baseValue"
     label: "Last Click Value"
-  }
-
-  measure: behavioural_value {
-    # only for attribution standalone model use
-    type: number
-    sql: SUM(${TABLE}.behavioural_value) ;;
-    value_format_name: decimal_2
-    description: "Monetary value attributed to an entry based on the proportion of pageviews in current entry compared to the number of pageviews in all entries in a purchase cycle. The more pageviews an entry had, the higher the behavioural value. . QP fields: derived - basket_total_baseValue"
-  }
-
-  measure: even_click_value {
-    # only for attribution standalone model use
-    type: number
-    sql: SUM(${TABLE}.even_click_value);;
-    value_format_name: decimal_2
-    description: "Monetary value attributed to an entry - the value of an entry based ratio of this entry to the total number of entries. QP fields: derived - basket_total_baseValue"
-  }
-
-  measure: first_click_value {
-    # only for attribution standalone model use
-    type: number
-    sql: SUM(${TABLE}.first_click_value);;
-    value_format_name: decimal_2
-    description: "Monetary value attributed to an entry - set to full conversion value if the entry was first. QP fields: derived - basket_total_baseValue"
-  }
-
-  measure: last_click_value {
-    # only for attribution standalone model use
-    type: number
-    sql: SUM(${TABLE}.last_click_value);;
-    value_format_name: decimal_2
-    description: "Monetary value attributed to an entry - set to full conversion value if the entry was last. QP fields: derived - basket_total_baseValue"
   }
 
   measure: conversion_value_in_purchase_cycle {

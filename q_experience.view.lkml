@@ -1,48 +1,49 @@
-view: qshopdemo_experience {
+view: q_experience {
 
- # Qubit LookML | Retail | V2
- derived_table: {
-   sql: SELECT
-    qp_bi_view_name,
-    ts,
-    property_event_ts,
-    view_id,
-    meta_recordDate,
-    meta_trackingId,
-    context_id,
-    context_viewNumber,
-    context_sessionNumber,
-    context_conversionNumber,
-    meta_ts,
-    meta_serverTs,
-    experience.experienceId AS experienceId,
-    experience.experienceName AS experienceName,
-    experience.variationMasterId AS variationMasterId,
-    experience.variationName AS variationName,
-    experience.iterationName AS iterationName,
-    experience.iterationId AS iterationId,
-    experience.isControl AS isControl,
-    experience.first_view_meta_ts AS first_view_meta_ts,
-    experience.first_view_meta_recordDate AS first_view_meta_recordDate,
-    experience.first_view_in_iteration AS first_view_in_iteration,
-    experience.last_view_in_iteration AS last_view_in_iteration,
-    experience.is_post_experience_view AS is_post_experience_view,
-    experience.trafficAllocation AS trafficAllocation,
-    experience.experience_status AS experience_status,
-    experience.days_experience_live AS days_experience_live,
-    experience.experience_first_published_at AS experience_first_published_at,
-    experience.iteration_published_at AS iteration_published_at,
-    experience.iteration_paused_at AS iteration_paused_at,
-    experience.experience_last_paused_at AS experience_last_paused_at,
-    experience.experience_paused_on_view AS experience_paused_on_view,
-    experience.experience_paused_within_15_days AS experience_paused_within_15_days
-  FROM
-    `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_experience`
-  WHERE 
-    {% condition qshopdemo_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
-  LEFT JOIN 
-    UNNEST (experience) as experience ;;
- }
+  # Qubit LookML | Retail | V2
+  derived_table: {
+    sql: SELECT
+      qp_bi_view_name,
+      ts,
+      property_event_ts,
+      view_id,
+      meta_recordDate,
+      meta_trackingId,
+      context_id,
+      context_viewNumber,
+      context_sessionNumber,
+      context_conversionNumber,
+      meta_ts,
+      meta_serverTs,
+      experience.experienceId AS experienceId,
+      experience.experienceName AS experienceName,
+      experience.variationMasterId AS variationMasterId,
+      experience.variationName AS variationName,
+      experience.iterationName AS iterationName,
+      experience.iterationId AS iterationId,
+      experience.isControl AS isControl,
+      experience.first_view_meta_ts AS first_view_meta_ts,
+      experience.first_view_meta_recordDate AS first_view_meta_recordDate,
+      experience.first_view_in_iteration AS first_view_in_iteration,
+      experience.last_view_in_iteration AS last_view_in_iteration,
+      experience.is_post_experience_view AS is_post_experience_view,
+      experience.trafficAllocation AS trafficAllocation,
+      experience.experience_status AS experience_status,
+      experience.days_experience_live AS days_experience_live,
+      experience.experience_first_published_at AS experience_first_published_at,
+      experience.iteration_published_at AS iteration_published_at,
+      experience.iteration_paused_at AS iteration_paused_at,
+      experience.experience_last_paused_at AS experience_last_paused_at,
+      experience.experience_paused_on_view AS experience_paused_on_view,
+      experience.experience_paused_within_15_days AS experience_paused_within_15_days
+    FROM
+      `{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_experience`
+    LEFT JOIN 
+      UNNEST (experience) as experience
+    WHERE 
+      {% condition q_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
+    ;;
+  }
 
   #Time, visitor and meta info
   dimension: view_id {
@@ -107,7 +108,8 @@ view: qshopdemo_experience {
     hidden: yes
   }
 
-#Experience related dimensions
+  #Experience related dimensions
+  
   dimension: experience_id {
     type: string
     sql: CAST(${TABLE}.experienceId AS STRING) ;;
@@ -151,13 +153,11 @@ view: qshopdemo_experience {
     description: "Returns Yes if the visitor is in contol group of experiment (on a page view), otherwise returns No. QP fields: isControl"
   }
 
-
   dimension: traffic_allocation {
     type: number
-    sql: ${TABLE}.trafficAllocation ;;
+    sql: if (${TABLE}.trafficAllocation is not null, CAST(${TABLE}.trafficAllocation as NUMERIC), 1) ;;
     group_label: "Experience"
   }
-
 
   dimension: days_experience_live_on_visitors_view {
     type: number
@@ -166,7 +166,7 @@ view: qshopdemo_experience {
     description: "The number of days the experience had been live at the time of user's pageview"
   }
 
-dimension: experience_status_as_of_date {
+  dimension: experience_status_as_of_date {
     type: string
     sql: CASE
      WHEN ${TABLE}.experience_paused_within_15_days = 1  THEN 'Paused for 15 days or less'
@@ -177,18 +177,18 @@ dimension: experience_status_as_of_date {
     label: "Experience Status As Of Date "
     group_label: "Experience"
     description: "Status of the experience at the time of pageview"
-}
+  }
 
-dimension: experience_paused_15_days_window {
-    type: yesno
-    sql: ${TABLE}.experience_paused_within_15_days = 1 ;;
-    label: "Experience Paused - 15-day window"
-    group_label: "Experience"
-    description: "True if view happened within 15 days of the date experience being paused "
-    hidden: yes
-}
+  dimension: experience_paused_15_days_window {
+      type: yesno
+      sql: ${TABLE}.experience_paused_within_15_days = 1 ;;
+      label: "Experience Paused - 15-day window"
+      group_label: "Experience"
+      description: "True if view happened within 15 days of the date experience being paused "
+      hidden: yes
+  }
 
-dimension: iteration_published_at {
+  dimension: iteration_published_at {
     type: date
     sql: TIMESTAMP(${TABLE}.iteration_published_at) ;;
     group_label: "Experience"
@@ -202,14 +202,14 @@ dimension: iteration_published_at {
     description: "Date the iteration was paused"
   }
 
- dimension: experience_paused_on_view {
+  dimension: experience_paused_on_view {
     type: yesno
     sql: ${TABLE}.experience_paused_on_view = 1 ;;
     group_label: "Experience"
     description: "True if experience was paused at the time of the view. NB. An experience will be visible in user's activity for up to 15 days from the time it was paused. After the cut-off period, the paused experience will no longer be included in visitor's activity"
   }
 
-#Measures
+  #Measures
 
   measure: experience_visitors {
     type: number
@@ -238,27 +238,27 @@ dimension: iteration_published_at {
 
   measure: experience_converters {
     type: number
-    sql: COUNT(DISTINCT IF(${qshopdemo_transaction_v01.transaction_id} IS NOT NULL,${TABLE}.context_id,NULL)) ;;
+    sql: COUNT(DISTINCT IF(${q_transaction_v01.transaction_id} IS NOT NULL,${TABLE}.context_id,NULL)) ;;
     description: "Count of unique visitor_ids on views that are labeled with any non-null transaction_id.  Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: context_id, transaction_id"
   }
 
   measure: transaction_total {
     type: sum_distinct
-    sql_distinct_key: ${qshopdemo_transaction_v01.transaction_id} ;;
-    sql: CASE WHEN ${TABLE}.experienceId IS NOT NULL THEN ${qshopdemo_transaction_v01.transaction_total} END ;;
+    sql_distinct_key: ${q_transaction_v01.transaction_id} ;;
+    sql: CASE WHEN ${TABLE}.experienceId IS NOT NULL THEN ${q_transaction_v01.transaction_total} END ;;
     value_format_name: decimal_2
     description: "Sum of transaction_total. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: experienceId, basket_total_baseValue"
   }
 
   measure: transactions {
     type: number
-    sql: COUNT(DISTINCT CASE WHEN ${TABLE}.experienceId IS NOT NULL THEN ${qshopdemo_transaction_v01.transaction_id} END) ;;
+    sql: COUNT(DISTINCT CASE WHEN ${TABLE}.experienceId IS NOT NULL THEN ${q_transaction_v01.transaction_id} END) ;;
   description: "Count of unique transaction_ids (always exact count). Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: transaction_id, experienceId"
   }
 
   measure: revenue_per_visitor {
     type: number
-    sql: ${qshopdemo_experience_v01.transaction_total} / ${qshopdemo_experience_v01.experience_visitors} ;;
+    sql: SAFE_DIVIDE(${q_experience_v01.transaction_total}, ${q_experience_v01.experience_visitors}) ;;
     value_format_name: decimal_2
     description: "Sum of transaction_total divided by count of unique visitor_ids. Only for views on which an experience was seen or views that happened after an experience was seen. QP fields: basket_total_baseValue, context_id, experienceId"
   }
