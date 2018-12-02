@@ -39,7 +39,7 @@ view: q_product {
           product.product_interaction_type product_interaction_type,
           product.meta_type meta_type
         FROM
-          `{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_product` v
+          `qubit-client-{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_product` v
         LEFT JOIN
           UNNEST (product) AS product 
         WHERE

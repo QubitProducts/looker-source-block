@@ -16,7 +16,7 @@ view: q_segment {
                 segment.segmentId as segmentId, 
                 segment.segmentName as segmentName
         from  
-          `{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_segment`
+          `qubit-client-{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_segment`
         left join 
           unnest(segment) as segment 
         where

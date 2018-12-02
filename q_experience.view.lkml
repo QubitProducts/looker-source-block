@@ -37,7 +37,7 @@ view: q_experience {
       experience.experience_paused_on_view AS experience_paused_on_view,
       experience.experience_paused_within_15_days AS experience_paused_within_15_days
     FROM
-      `{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_experience`
+      `qubit-client-{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_experience`
     LEFT JOIN 
       UNNEST (experience) as experience
     WHERE 

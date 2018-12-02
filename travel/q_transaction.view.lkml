@@ -6,7 +6,7 @@ view: q_transaction {
       SELECT
         *
       FROM
-        `{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_transaction`
+        `qubit-client-{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_transaction`
       WHERE
         {% condition q_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
       ;;
