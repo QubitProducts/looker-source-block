@@ -23,7 +23,7 @@ view: q_user_action {
           user_action.voucher_entry AS voucher_entry,
           user_action.voucher_entrySuccess AS voucher_entrySuccess
         FROM 
-          `{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_user_action`
+          `qubit-client-{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_user_action`
         LEFT JOIN
           unnest (user_action) as user_action
         WHERE
