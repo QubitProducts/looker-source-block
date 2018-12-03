@@ -130,7 +130,7 @@ parameter: site {
     ...
 }
 ```
-The default choice for `site` is defined in `q_model_v01.model.lkml`.
+The default choice for `site` is defined in `model_v01.model.lkml`.
 If you wish to use multiple entirely separate models in the same git repository, 
 you should find & replace the `q_` placeholder across this block with a unique identifier for each model.
 
