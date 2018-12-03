@@ -1,4 +1,4 @@
-view: qshopdemo_goal_achieved_meta_data {
+view: q_goal_achieved_meta_data {
   derived_table: {
 
     sql:
@@ -37,7 +37,7 @@ view: qshopdemo_goal_achieved_meta_data {
             MIN(iterationCreatedAt) AS iteration_created_at,
             MIN(iterationUpdatedAt) AS iteration_upadted_at
           FROM
-            `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.aux_experience_iteration_variation_v01`
+            `qubit-client-{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.aux_experience_iteration_variation_v01`
           GROUP BY
             1,
             2,

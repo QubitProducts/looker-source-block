@@ -63,7 +63,7 @@ If a data point is not available in this model, you can always query the underly
 To connect your Looker instance to your Qubit Live Tap dataset you’ll need admin rights on your Looker instance, and you will need the following information that can be provided by your Qubit account manager:
 
 * **Looker Connection Name**: e.g. qubit-livetap
-* **Qubit Project Name**: e.g. qubit-client-10000
+* **Qubit Project Name**: e.g. qubit-client-12345
 * **Qubit Tracking ID**: e.g. the name of the BigQuery dataset you wish to analyze in Looker
 * **Service Account Name**: e.g. email address for a service account. This will start with qubit-client-bi@qubit-client
 * **JSON key file**: JSON file containing authentication details.
@@ -101,31 +101,40 @@ Now you can fork the Qubit demo Looker repo so you have a copy in your own priva
 git clone https://github.com/YOUR-USERNAME/QubitProducts/looker-source-block
 ```
 
-## 3. Customizing the Qubit Source Block with Client-Specific Live Tap datasets
+## 3. Customizing the Qubit Source Block for your Qubit dataset
 
-Now at the terminal run the following commands to replace all occurrences of our demo ID (_qshopdemo_) and project ID in the repo LookML files with your own values:
+This block uses parameters to inject your Qubit project ID and tracking IDs into the SQL, enabling you to switch between websites
+using a simple filter. These are found in `q_view_v01.view.lkml`.
 
-```bash
-# replace qshopdemo placeholder with our actual TRACKING_ID in all files
-find . -type f -print0 | xargs -0 perl -pi -e 's/qshopdemo/TRACKING_ID/g'
-
-# replace project ID placeholder with our actual PROJECT_ID in all files
-find . -type f -print0 | xargs -0 perl -pi -e 's/37403/PROJECT_ID/g'
-
-# relabel our LookML filenames to our actual tracking ID
-for f in *.l*; do mv $f ${f/qshopdemo/TRACKING_ID}; done
+Firstly, update `project` with your BigQuery project ID:
+```js
+parameter: project {
+    type: unquoted
+    default_value: "12345"
+    hidden: yes
+}
 ```
 
-for example, for the tracking ID “shipping_global” and project ID "12345" you would run the commands:
-
-```bash
-find . -type f -print0 | xargs -0 perl -pi -e 's/qshopdemo/shipping_global/g'
-find . -type f -print0 | xargs -0 perl -pi -e 's/37403/12345/g'
-for f in *.l*; do mv $f ${f/qshopdemo/shipping_global}; done
+Next, complete the `site` parameter with each tracking ID you wish to use:
+```js
+parameter: site {
+    type: unquoted
+    allowed_value: {
+        label: ".com"
+        value: "store_us"
+    }
+    allowed_value: {
+        label: ".co.uk"
+        value: "store_uk"
+    }
+    ...
+}
 ```
+The default choice for `site` is defined in `q_model_v01.model.lkml`.
+If you wish to use multiple entirely separate models in the same git repository, 
+you should find & replace the `q_` placeholder across this block with a unique identifier for each model.
 
-Next, commit your changes back to the git repo.
-
+Finally, commit your changes back to the git repo.
 ```bash
 git add .
 git commit -m "added our tracking ID and project ID"

@@ -1,4 +1,4 @@
-view: qshopdemo_segment {
+view: q_segment {
 
  # Qubit LookML | Retail | V2
  derived_table: {
@@ -16,11 +16,11 @@ view: qshopdemo_segment {
                 segment.segmentId as segmentId, 
                 segment.segmentName as segmentName
         from  
-          `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_segment`
+          `qubit-client-{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_segment`
         left join 
           unnest(segment) as segment 
         where
-          {% condition qshopdemo_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
+          {% condition q_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
         ;;
   }
 
@@ -92,27 +92,27 @@ view: qshopdemo_segment {
 
   measure: transaction_total {
     type: sum_distinct
-    sql_distinct_key: ${qshopdemo_transaction_v01.transaction_id} ;;
-    sql: CASE WHEN ${TABLE}.segmentId IS NOT NULL THEN ${qshopdemo_transaction_v01.transaction_total} END ;;
+    sql_distinct_key: ${q_transaction_v01.transaction_id} ;;
+    sql: CASE WHEN ${TABLE}.segmentId IS NOT NULL THEN ${q_transaction_v01.transaction_total} END ;;
     value_format_name: decimal_0
     description: "Sum of transaction_total. Only for views labeled with any non-null segment_id. QP fields: basket_total_baseValue, segmentId"
   }
 
   measure: transactions {
     type: number
-    sql: COUNT(DISTINCT CASE WHEN ${TABLE}.segmentId IS NOT NULL THEN ${qshopdemo_transaction_v01.transaction_id} END) ;;
+    sql: COUNT(DISTINCT CASE WHEN ${TABLE}.segmentId IS NOT NULL THEN ${q_transaction_v01.transaction_id} END) ;;
     description: "Count of unique transaction_ids (always exact count). Only for views labeled with any non-null segment_id. QP fields: transaction_id, segmentId"
   }
 
   measure: segment_converters {
     type: number
-    sql: COUNT(DISTINCT IF(${qshopdemo_transaction_v01.transaction_id} IS NOT NULL,${TABLE}.context_id,NULL)) ;;
+    sql: COUNT(DISTINCT IF(${q_transaction_v01.transaction_id} IS NOT NULL,${TABLE}.context_id,NULL)) ;;
     description: "Count of unique visitor_ids on views labeled with any non-null segment_id.  QP fields: context_id, transaction_id"
   }
 
   measure: revenue_per_visitor {
     type: number
-    sql: SAFE_DIVIDE(${qshopdemo_segment_v01.transaction_total},${qshopdemo_segment_v01.segment_visitors}) ;;
+    sql: SAFE_DIVIDE(${q_segment_v01.transaction_total},${q_segment_v01.segment_visitors}) ;;
     value_format_name: decimal_2
     description: "Sum of transaction_total divided by count of unique visitor_ids. Only for views labeled with any non-null segment_id. QP fields: basket_total_baseValue, context_id"
   }

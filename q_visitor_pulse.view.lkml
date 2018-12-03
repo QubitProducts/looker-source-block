@@ -1,4 +1,4 @@
-view: qshopdemo_visitor_pulse {
+view: q_visitor_pulse {
 
  # Qubit LookML | Retail | V2
   derived_table: {
@@ -6,9 +6,9 @@ view: qshopdemo_visitor_pulse {
       SELECT
         *
       FROM
-        `qubit-client-37403.{{qshopdemo_view_v01.site._parameter_value}}__v2.livetap_visitor_pulse`
+        `qubit-client-{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_visitor_pulse`
       WHERE
-        {% condition qshopdemo_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
+        {% condition q_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
       ;;
   }
 
@@ -148,11 +148,6 @@ view: qshopdemo_visitor_pulse {
     sql: ${TABLE}.question_text ;;
     group_label: "Question"
     description: "The actual question text that appeared within survey. QP fields: question_text"
-    link: {
-      label: "{{ value }} - question deep dive"
-      url: "/dashboards/qshopdemo_livetap::qshopdemo_visitor_pulse_{{ qshopdemo_visitor_pulse_v01.question_type._value }}_question?question_text=\"{{ value }}\"&survey={{ qshopdemo_visitor_pulse_v01.survey_id._value }}"
-      icon_url: "http://looker.com/favicon.ico"
-    }
   }
 
   dimension: question_text_score {
@@ -355,7 +350,7 @@ view: qshopdemo_visitor_pulse {
 
   measure: last_answer_date {
     type: date
-    sql: MAX(${qshopdemo_visitor_pulse_v01.time_data_points_date}) ;;
+    sql: MAX(${q_visitor_pulse_v01.time_data_points_date}) ;;
   }
 
   measure: survey_visitors {
