@@ -110,7 +110,7 @@ Firstly, update `project` with your BigQuery project ID:
 ```js
 parameter: project {
     type: unquoted
-    default_value: "qubit-client-12345"
+    default_value: "12345"
     hidden: yes
 }
 ```
