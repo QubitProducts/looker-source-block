@@ -1,6 +1,6 @@
 include:    "q_*.view"
 
-include: "q_model.model.lkml"
+include: "model.model.lkml"
 persist_for: "24 hours"
 case_sensitive: no
 
