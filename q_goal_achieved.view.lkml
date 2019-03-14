@@ -42,8 +42,8 @@ view: q_goal_achieved {
         experience_goal_achieved.experience_paused_within_15_days AS experience_paused_within_15_days
       FROM
         `qubit-client-{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.livetap_goal_achieved`
-      LEFT JOIN 
-        UNNEST (experience_goal_achieved) as experience_goal_achieved 
+      LEFT JOIN
+        UNNEST (experience_goal_achieved) as experience_goal_achieved
       WHERE
         {% condition q_view_v01.time_data_points_date  %} property_event_ts {% endcondition %}
       ;;
@@ -89,6 +89,7 @@ view: q_goal_achieved {
     sql: ${TABLE}.experienceName ;;
     group_label: "Experience"
     description: "The name of experience which the goal refers to. QP fields: experienceName"
+    hidden:  yes
   }
 
   dimension: goal_id {
@@ -149,6 +150,7 @@ view: q_goal_achieved {
     group_label: "Experience"
     description: "Master variation ID of an experiment. The ID is assigned when a variation is launched and it is preserved throughout the experiment. QP fields: variationMasterId"
   }
+
   dimension: variation_name {
     type: string
     sql: ${TABLE}.variationName ;;
@@ -168,23 +170,23 @@ view: q_goal_achieved {
     group_label: "Experience"
     description: "Status of the experience at the time of pageview"
 
-}
+  }
 
-dimension: experience_paused_15_days_window {
-    type: yesno
-    sql: ${TABLE}.experience_paused_within_15_days = 1 ;;
-    label: "Experience Paused - 15-day window"
+  dimension: experience_paused_15_days_window {
+      type: yesno
+      sql: ${TABLE}.experience_paused_within_15_days = 1 ;;
+      label: "Experience Paused - 15-day window"
+      group_label: "Experience"
+      description: "True if view happened within 15 days of the date experience being paused "
+      hidden: yes
+  }
+
+  dimension: days_experience_live_on_visitors_view {
+    type: number
+    sql: ${TABLE}.days_experience_live ;;
     group_label: "Experience"
-    description: "True if view happened within 15 days of the date experience being paused "
-    hidden: yes
-}
-
-dimension: days_experience_live_on_visitors_view {
-  type: number
-  sql: ${TABLE}.days_experience_live ;;
-  group_label: "Experience"
-  description: "The number of days the experience had been live at the time of user's pageview"
-}
+    description: "The number of days the experience had been live at the time of user's pageview"
+  }
 
 
   dimension: iteration_published_at {
@@ -239,7 +241,7 @@ dimension: days_experience_live_on_visitors_view {
 
   measure: days_experience_live {
     type: number
-    sql:   COUNT(DISTINCT IF(${TABLE}.experience_status  = 'Live' AND ${TABLE}.meta_recordDate >= ${TABLE}.experience_first_published_at, ${TABLE}.meta_recordDate, NULL) ) ;;
+    sql:   COUNT(DISTINCT IF(${TABLE}.experience_status  = 'Live' AND ${TABLE}.meta_recordDate >= CAST(${TABLE}.experience_first_published_at as DATE), ${TABLE}.meta_recordDate, NULL) ) ;;
     group_label: "Experience"
     description: "The number of days the experience has been live as of today"
   }
