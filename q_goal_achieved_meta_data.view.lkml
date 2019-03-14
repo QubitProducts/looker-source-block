@@ -2,56 +2,99 @@ view: q_goal_achieved_meta_data {
   derived_table: {
 
     sql:
-    SELECT
-      CAST(experienceId AS STRING) experienceId,
-      DATE(MAX(experience_last_paused_at)) experience_last_paused_at,
-      DATE(MIN(experience_first_published_at)) experience_first_published_at
-    FROM (
-      SELECT
-        *,
-        MIN(iteration_published_at) OVER (PARTITION BY experienceId) AS experience_first_published_at,
-        CAST(DATE(iteration_paused_at) AS STRING) iteration_paused_at_date,
-        CAST(DATE(iteration_published_at) AS STRING) iteration_published_at_date,
-        UNIX_MILLIS(iteration_paused_at) AS iteration_paused_at_unix_ts,
-        MAX(iteration_paused_at) OVER (PARTITION BY experienceId) AS experience_last_paused_at
-      FROM (
+      WITH
+      iterations AS
+      (
         SELECT
-          COALESCE(iteration_published_at_first,iteration_started_at,iteration_created_at,iteration_upadted_at) AS iteration_published_at,
-          *
+          experienceId AS experienceId,
+          variationMasterId AS variationMasterId,
+          iterationId AS iterationId,
+          MAX(iterationName) AS iterationName,
+          MIN(iterationStartedAt) AS iterationStartedAt,
+          MIN(iterationPublishedAt) AS iterationPublishedAt,
+          MIN(iterationPausedAt) AS iterationPausedAt
+        FROM
+          `qubit-client-{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.aux_experience_iteration_variation_v01`
+        WHERE
+          experienceId IS NOT NULL
+          AND iterationId IS NOT NULL
+          AND variationMasterId IS NOT NULL
+        GROUP BY
+          1,
+          2,
+          3 ),
+
+        iteration_metadata AS
+        (
+        SELECT
+          experienceId,
+          variationMasterId,
+          iterationId,
+          iterationName,
+          iterationStartedAt,
+          iterationPausedAt,
+          IF (iterationPublishedAt IS NULL,
+            TRUE,
+            FALSE) AS inDraft,
+          IF (iterationId = FIRST_VALUE(iterationId) OVER (PARTITION BY experienceId, variationMasterId ORDER BY iterationStartedAt DESC),
+            TRUE,
+            FALSE) AS isLatestIteration
+        FROM
+          iterations
+      ),
+
+      status AS
+      (
+        SELECT
+          *,
+          IF (isLatestIteration = TRUE
+            AND iterationPausedAt IS NULL
+            AND iterationStartedAt IS NOT NULL,
+            TRUE,
+            FALSE) AS isActive
+        FROM
+          iteration_metadata
+      ),
+
+      latestName AS (
+        SELECT
+          ROW.experienceId,
+          ROW.experienceName
         FROM (
           SELECT
-            experienceId AS experienceId,
-            variationMasterId AS variationMasterId,
-            iterationId AS iterationId,
-            MAX(experienceName) AS experienceName,
-            MAX(variationName) AS variationName,
-            MAX(iterationName) AS iterationName,
-            MIN(CASE
-                  WHEN iterationUpdatedAt > COALESCE(iterationStartedAt, TIMESTAMP_MILLIS(0)) AND iterationPausedAt IS NULL THEN iterationUpdatedAt
-                  WHEN iterationPausedAt > COALESCE(iterationStartedAt, TIMESTAMP_MILLIS(0))
-                AND iterationPausedAt > COALESCE(iterationPublishedAt, TIMESTAMP_MILLIS(0))
-                AND iterationPausedAt > COALESCE(iterationResumedAt, TIMESTAMP_MILLIS(0)) THEN iterationPausedAt
-                  ELSE TIMESTAMP('2030-01-01 00:00:00 UTC') END) AS iteration_paused_at,
-            MIN(iterationPublishedAt) AS iteration_published_at_first,
-            MIN(iterationStartedAt) AS iteration_started_at,
-            MIN(iterationCreatedAt) AS iteration_created_at,
-            MIN(iterationUpdatedAt) AS iteration_upadted_at
+            ARRAY_AGG(t
+            ORDER BY
+              meta_recordDate DESC
+            LIMIT
+              1)[
+          OFFSET
+            (0)] AS ROW
           FROM
-            `qubit-client-{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.aux_experience_iteration_variation_v01`
+            `qubit-client-{{q_view_v01.project._parameter_value}}.{{q_view_v01.site._parameter_value}}__v2.aux_experience_iteration_variation_v01` AS t
           GROUP BY
-            1,
-            2,
-            3) AS experience_metadata ) AS experience_metadata_1
-      WHERE
-        (experienceId IS NOT NULL
-          AND CAST(experienceId AS STRING) != 'undefined'
-          AND variationMasterId IS NOT NULL
-          AND CAST(variationMasterId AS STRING) != 'undefined'
-          AND iterationId IS NOT NULL
-          AND CAST(iterationId AS STRING) != 'undefined' ))
+            experienceId,
+            experienceName
+        )
+    )
+
+    SELECT
+      CAST(status.experienceId AS STRING) experienceId,
+      CAST(experienceName as STRING) experienceName,
+      DATE(MIN(iterationStartedAt)) experience_first_published_at,
+      DATE(MAX(iterationPausedAt)) experience_last_paused_at,
+      MAX(isActive) AS is_active
+
+    FROM
+      status
+
+    LEFT JOIN
+      latestName on (status.experienceId = latestName.experienceId)
+
+
     GROUP BY
-      1
-    ;;}
+      1, 2
+    ;;
+  }
 
   dimension: experience_id {
     type: string
@@ -62,15 +105,18 @@ view: q_goal_achieved_meta_data {
   dimension: experience_name {
     type: string
     sql: ${TABLE}.experienceName ;;
-    hidden: yes
+    view_label: "Goal Achieved"
+    group_label: "Experience"
+    label: "Experience Name"
+    description: "The name of experience in app.qubit.com."
   }
 
   dimension: g_current_experience_status {
     view_label: "Goal Achieved"
     type: string
-    sql: IF(${TABLE}.experience_last_paused_at <= CURRENT_DATE() , "Paused" , "Active") ;;
+    sql: IF(${TABLE}.is_active = true , "Active" , "Paused") ;;
     label: "Current Experience Status "
-    description: "Status of the experience as of today"
+    description: "Status of the experience as of today."
     group_label: "Experience"
   }
 
@@ -79,7 +125,7 @@ view: q_goal_achieved_meta_data {
     type: date
     sql: TIMESTAMP(${TABLE}.experience_first_published_at) ;;
     group_label: "Experience"
-    description: "Date the first iteration of experience was published"
+    description: "Date the first iteration of experience was published."
     label: "Experience First Published At"
   }
 
@@ -88,7 +134,7 @@ view: q_goal_achieved_meta_data {
     type: date
     sql: TIMESTAMP(${TABLE}.experience_last_paused_at) ;;
     group_label: "Experience"
-    description: "Most recent date experience was paused"
+    description: "Most recent date experience was paused."
     label: "Experience Last Paused At"
-    }
+  }
 }

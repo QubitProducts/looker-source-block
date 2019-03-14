@@ -109,7 +109,7 @@ view: q_experience {
   }
 
   #Experience related dimensions
-  
+
   dimension: experience_id {
     type: string
     sql: CAST(${TABLE}.experienceId AS STRING) ;;
@@ -121,7 +121,8 @@ view: q_experience {
     type: string
     sql: ${TABLE}.experienceName ;;
     group_label: "Experience"
-    description: "The assigned name of experience. QP fields: experienceName"
+    description: "The assigned name of experience."
+    hidden: yes
   }
 
   dimension: iteration_id {

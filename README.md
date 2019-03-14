@@ -3,6 +3,11 @@ Qubit is the fastest and most scalable personalization platform available today.
 
 # Release notes
 
+**March 2019 - Release v2.5**
+- Updated `q_experience`* and `q_goal_achieved`* views to provide latest _Experience Name_.
+- Updated `q_experience`* and `q_goal_achieved`* views to fix a rare issue where _Experience Status_ was calculated incorrectly.
+- Fixed column type bug that was preventing `q_goal_achieved.days_experience_live` from calculating.
+
 **December 2018 - Release v2.3**
 - Add site filter: enabling easy switching between separate projects
 - You a can now use a single date filter to easily filter all views in the Explore
