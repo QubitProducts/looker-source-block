@@ -58,32 +58,34 @@ If a data point is not available in this model, you can always query the underly
 
 ## Summary
 
-1. Set up the connection to Google BigQuery in Looker for your hosted Live Tap dataset
+1. Set up a connection in Looker to Google BigQuery StandardSQL for your Qubit datasets
 2. Fork this GitHub repo
-3. Clone the forked repo to your desktop and replace the demo project details with your organization’s, then commit changes
-4. Set up and configure your Looker project to use this forked, customized Looker repo
+3. Clone the forked repo to your desktop and replace the demo project details with your organization’s
+4. Set up and configure a new Looker project to use this new customized Looker repo
+5. Grant access to your Looker users
 
 ## 1. Creating a Looker Connection to Your Qubit Live Tap Dataset
 
 To connect your Looker instance to your Qubit Live Tap dataset you’ll need admin rights on your Looker instance, and you will need the following information that can be provided by your Qubit account manager:
 
-* **Looker Connection Name**: e.g. qubit-livetap
-* **Qubit Project Name**: e.g. qubit-client-12345
-* **Qubit Tracking ID**: e.g. the name of the BigQuery dataset you wish to analyze in Looker
+* **Looker Connection Name**: e.g. `qubit-livetap`
+* **Qubit Project Name**: e.g. `qubit-client-12345`
+* **Qubit Tracking ID**:
 * **Service Account Name**: e.g. email address for a service account. This will start with qubit-client-bi@qubit-client
 * **JSON key file**: JSON file containing authentication details.
 
-Your JSON key file can also be downloaded from the Qubit app from the Settings>Auth Keys menu.
+(Your JSON key file can be downloaded from the Qubit app from the Settings>Auth Keys menu if not already provided)
 
 To configure the connection from your Looker instance to Qubit Live Tap on Google BigQuery go to the Admin panel in Looker, then select **Connections** and then **New Connection**, then enter the following details:
 
-* **Name** - Looker Connection Name 
-* **Dialect** - Google BigQuery (Standard SQL)
-* **Project Name** - Qubit Project Name
-* **Dataset** - Qubit Dataset  (the connection will work for all datasets in the project, not just the one specified) 
-* **OAuth Credentials Email** - Service Account Name
-* **OAuth Credentials JSON/P12 File** - upload JSON key file
-* **Max Billing Tier** - 1 
+* **Name** - Create a Looker connection name: this name must match the `connection` defined on line 1 of `model.model.lkml`
+* **Dialect** - `Google BigQuery (Standard SQL)`
+* **Project Name** - Qubit Project Name (e.g. `qubit-client-12345`)
+* **Dataset** - Qubit Dataset  (e.g. `mysite__v2` the connection will work for all datasets in the project, not just the one specified) 
+* **OAuth Credentials Email** - Email address for your service account
+* **OAuth Credentials JSON/P12 File** - Upload the JSON key file for access
+* **Persistent Derived Tables (PDTs)** - ✔
+* **Temp Dataset** - Scratch dataset for Looker to create PDTs in - default is `qubit_bi_cs_cache`
 
 
 Select **Test These Settings** to ensure the setup works, then press **Save**.
@@ -125,11 +127,11 @@ Next, complete the `site` parameter with each tracking ID you wish to use:
 parameter: site {
     type: unquoted
     allowed_value: {
-        label: ".com"
+        label: "USA"
         value: "store_us"
     }
     allowed_value: {
-        label: ".co.uk"
+        label: "UK"
         value: "store_uk"
     }
     ...
@@ -154,17 +156,19 @@ Before completing this final step, ensure that you have forked the GitHub repo a
 3. Scroll to the bottom of the page and select **New LookML Project**
 4. Type in a name for your project. We recommend using the same project same name as the GitHub repo holding your files
 5. Select **Generate Model & Views and Save**. You’ll then be taken to the project page
-6. Select **Configure Git**. Type-in the URL of your Github repo, then select **Continue**
-7. Looker will now issue a deploy key.  Select the full content content of the key and copy it to your clipboard
+6. Select **Configure Git**. Paste in the SSH URL of your Github repo (e.g. `git@github.com:organisation/repo.git`), then select **Continue**
+7. Looker will create a deploy key.  Copy this.
 8. Navigate to your repo in GitHub and select **Settings**
 9. In the page that’s then displayed, select **Deploy Keys** and **Add Deploy Key**
-10. Enter a title for the deploy key and paste the deploy key given by Looker
+10. Enter a title for the deploy key and paste the deploy key
 11. When prompted, Select **Allow write access** and **Add key**
 12. Return to  Looker and on the page showing the deploy key, select **Continue Setup**
 13. Looker will now attempt to sync with GitHub repo
-14. Select **Sync Development Mode**
 
-If successful, the response will be **Up to date with Production**.  This means that  all permissioned users should be able to see the Live Tap model on your Looker instance.
+If successful, you should be able to **Pull** the LookML into your development branch and see the LookML from this block. You can then:
+
+- Deploy to production, enabling Looker users to use the Explore
+- Set up various permissions in the Looker admin console to grant/restrict access to various groups of users on your Looker instance
 
 # Extending this block with additional fields, views and datasets
 This block is provided to help you get started and is designed to be amended, extended, or customized by customers or Qubit partners. 
