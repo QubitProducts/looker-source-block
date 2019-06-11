@@ -3,6 +3,9 @@ Qubit is the fastest and most scalable personalization platform available today.
 
 # Release notes
 
+**June 2019 - Release v2.6**
+- Updated `q_transaction` to ensure that measures `average_order_value`, `revenue_per_converter`, `revenue_per_visitor` are always calculated using sum_distinct.
+
 **March 2019 - Release v2.5**
 - Updated `q_experience`* and `q_goal_achieved`* views to provide latest _Experience Name_
 - Updated `q_experience`* and `q_goal_achieved`* views to fix a rare issue where _Experience Status_ was calculated incorrectly

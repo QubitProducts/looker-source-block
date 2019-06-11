@@ -156,14 +156,14 @@ view: q_transaction {
 
   measure: average_order_value {
     type: number
-    sql:  SAFE_DIVIDE(SUM(${TABLE}.basket_total_baseValue), COUNT(DISTINCT ${transaction_id})) ;;
+    sql:  SAFE_DIVIDE(${q_transaction_v01.sum_of_transaction_total}, COUNT(DISTINCT ${transaction_id})) ;;
     value_format_name: decimal_2
     description: "Average of transaction value of all transactions. QP fields: basket_total_baseValue"
   }
 
   measure: revenue_per_converter {
     type: number
-    sql:  SAFE_DIVIDE(SUM(${TABLE}.basket_total_baseValue), COUNT(DISTINCT ${TABLE}.context_id)) ;;
+    sql:  SAFE_DIVIDE(${q_transaction_v01.sum_of_transaction_total}, COUNT(DISTINCT ${TABLE}.context_id)) ;;
     value_format_name: decimal_2
     description: "Sum of transaction_total divided by count of unique visitor_ids. Only for views that are labeled with any non-null transaction_id. QP fields: basket_total_baseValue, context_id"
   }
@@ -212,7 +212,7 @@ view: q_transaction {
 
   measure: revenue_per_visitor {
     type: number
-    sql: ${q_transaction_v01.sum_of_transaction_total} / ${q_view_v01.view_visitors} ;;
+    sql: SAFE_DIVIDE(${q_transaction_v01.sum_of_transaction_total}, ${q_view_v01.view_visitors}) ;;
     value_format_name: decimal_2
     description: "Sum of transaction_total divided by count of unique visitor_ids. QP fields: basket_total_baseValue, context_id"
   }
